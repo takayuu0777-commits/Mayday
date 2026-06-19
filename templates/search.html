@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card search-bar">
+
+    <div class="search-wrap">
+        <span class="icon">🔍</span>
+        <input id="q" placeholder="思考を検索">
+    </div>
+
+    <div id="result"></div>
+
+</div>
+
+<script>
+q.oninput = async () => {
+    const res = await fetch("/api/search?q=" + q.value);
+    const data = await res.json();
+
+    result.innerHTML = data.length
+        ? data.map(x => `
+            <div class="card result-item">
+                ${x.text}
+            </div>
+        `).join("")
+        : `<div style="opacity:0.5;padding:10px;">何も見つかりません</div>`;
+}
+</script>
+
+{% endblock %}

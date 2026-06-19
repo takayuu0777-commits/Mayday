@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card input">
+<form method="post" action="/add">
+<textarea name="text" placeholder="思考を入力"></textarea>
+<button>残す</button>
+</form>
+</div>
+
+{% for log in logs %}
+<div class="card">
+    <div class="meta">{{ log.created_at }} / {{ log.category }}</div>
+    <div class="text">{{ log.text }}</div>
+</div>
+{% endfor %}
+
+{% endblock %}

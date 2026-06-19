@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+    <div style="font-weight:600;">分析</div>
+</div>
+
+<div class="card">
+    <canvas id="tagChart"></canvas>
+</div>
+
+<div class="card">
+    <canvas id="dayChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+new Chart(document.getElementById("tagChart"), {
+    type: "pie",
+    data: {
+        labels: {{ tag_labels | tojson }},
+        datasets: [{
+            data: {{ tag_values | tojson }},
+            backgroundColor: ["#c4b5fd","#a7f3d0","#fde68a","#fca5a5","#93c5fd","#e9d5ff","#d1d5db"]
+        }]
+    }
+});
+
+new Chart(document.getElementById("dayChart"), {
+    type: "line",
+    data: {
+        labels: {{ day_labels | tojson }},
+        datasets: [{
+            data: {{ day_values | tojson }},
+            borderColor: "#94a3b8",
+            backgroundColor: "rgba(148,163,184,0.2)",
+            fill: true,
+            tension: 0.3
+        }]
+    }
+});
+</script>
+
+{% endblock %}

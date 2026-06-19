@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card">
+
+<h3 style="margin-bottom:12px; opacity:0.7;">theme</h3>
+
+<div class="theme-list">
+
+    <form method="post">
+        <button class="theme-btn soft-text" name="theme" value="soft">
+            soft
+        </button>
+    </form>
+
+    <form method="post">
+        <button class="theme-btn calm-text" name="theme" value="calm">
+            calm
+        </button>
+    </form>
+
+    <form method="post">
+        <button class="theme-btn deep-text" name="theme" value="deep">
+            deep
+        </button>
+    </form>
+
+</div>
+
+</div>
+
+{% endblock %}

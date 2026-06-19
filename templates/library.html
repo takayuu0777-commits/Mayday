@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% for g, items in data.items() %}
+<div class="card">
+<h3>{{ g }}</h3>
+
+{% for i in items %}
+<div>{{ i }}</div>
+{% endfor %}
+
+</div>
+{% endfor %}
+
+{% endblock %}
