@@ -1,28 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Second Brain OS</title>
+<!-- CSS -->
 <link rel="stylesheet" href="/static/style.css">
+<!-- PWA -->
+<link rel="manifest" href="/static/manifest.json">
+<!-- Theme -->
+<meta name="theme-color" content="#101010">
+<!-- iPhone App Mode -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent">
+<meta name="apple-mobile-web-app-title"
+      content="Second Brain">
+<link rel="apple-touch-icon"
+      href="/static/icon-192.png">
 </head>
-
 <body class="{{ theme }}">
-
 <header>
-    <div class="title">Second Brain</div>
-
-    <nav class="tabs">
-        <a href="/">ホーム</a>
-        <a href="/search">検索</a>
-        <a href="/library">Library</a>
-        <a href="/calendar">カレンダー</a>
-        <a href="/settings">設定</a>
-    </nav>
+<div class="title">
+    Second Brain
+</div>
+<nav class="tabs">
+    <a href="/">
+        ホーム
+    </a>
+    <a href="/search">
+        検索
+    </a>
+    <a href="/library">
+        Library
+    </a>
+    <a href="/calendar">
+        カレンダー
+    </a>
+    <a href="/settings">
+        設定
+    </a>
+</nav>
 </header>
-
 <main>
-{% block content %}{% endblock %}
+{% block content %}
+{% endblock %}
 </main>
-
+<script src="/static/theme.js"></script>
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/static/sw.js")
+        .then(() => {
+            console.log("PWA Ready");
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    });
+}
+</script>
 </body>
 </html>
