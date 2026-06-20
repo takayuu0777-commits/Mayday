@@ -212,8 +212,8 @@ def settings():
 # 起動（Render対応・完成版）
 # =========================
 if __name__ == "__main__":
-    init_db()
-
+    # init_db() ← 一旦コメントアウト
+    import os
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
 
