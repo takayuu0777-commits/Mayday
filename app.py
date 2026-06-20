@@ -2,17 +2,22 @@ from flask import Flask, render_template, request, redirect, jsonify, session
 import sqlite3
 from datetime import datetime
 import uuid
+import os
 
 app = Flask(__name__)
 app.secret_key = "brain-os"
 
-DB = "brain.sqlite"
+# =========================
+# DB設定（Render対応）
+# =========================
+DB = os.path.join(os.getcwd(), "brain.sqlite")
+
 
 # =========================
 # DB接続
 # =========================
 def db():
-    conn = sqlite3.connect(DB)
+    conn = sqlite3.connect(DB, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -48,6 +53,9 @@ def init_db():
     conn.close()
 
 
+# =========================
+# テーマ初期化
+# =========================
 @app.before_request
 def set_theme():
     if "theme" not in session:
@@ -55,7 +63,7 @@ def set_theme():
 
 
 # =========================
-# ログ機能
+# ログ処理
 # =========================
 def classify(text):
     if "仕事" in text:
@@ -201,15 +209,10 @@ def settings():
 
 
 # =========================
-# 起動（これ1個だけ）
+# 起動（Render対応・完成版）
 # =========================
 if __name__ == "__main__":
     init_db()
-    
-    import os
-    port = int(os.environ.get("PORT", 10000))
 
-    app.run(
-        host="0.0.0.0",
-        port=port
-    )
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
