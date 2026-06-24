@@ -1,7 +1,14 @@
-{% extends "base.html" %}
+{% extends “base.html” %}
 
 {% block content %}
 
+<div class="card">
+    <h2>🧠 ユーザー</h2>
+<div>🏷 無称号</div>
+<div>🪙 100 コイン</div>
+<div>🏆 実績 0 / 1000</div>
+<div>📚 Library 0作品</div>
+</div>
 <div class="card input">
 <form method="post" action="/add">
 <textarea name="text" placeholder="思考を入力"></textarea>
@@ -10,6 +17,7 @@
 </div>
 
 {% for log in logs %}
+
 <div class="card">
     <div class="meta">{{ log.created_at }} / {{ log.category }}</div>
     <div class="text">{{ log.text }}</div>
