@@ -1,134 +1,172 @@
 body{
-    margin:0;
-    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
-                 "Hiragino Sans", "Yu Gothic", sans-serif;
-    background:#f5f5f5;
-    color:#222;
+margin:0;
+
+/* iPhoneノッチ対応 */
+padding-top: env(safe-area-inset-top);
+font-family:-apple-system,BlinkMacSystemFont,
+             "Helvetica Neue",
+             "Hiragino Sans",
+             "Yu Gothic",
+             sans-serif;
+background:#f5f5f5;
+color:#222;
+
 }
 
 main{
-    max-width:800px;
-    margin:auto;
-    padding:20px;
+max-width:800px;
+margin:auto;
+padding:20px;
 }
 
 /* ======================
-   THEME（最低限維持）
+THEME
 ====================== */
 
 .soft{
-    background:#f4efe6;
+background:#f4efe6;
 }
 
 .calm{
-    background:#eef2f6;
+background:#eef2f6;
 }
 
 .deep{
-    background:#161616;
-    color:#eee;
+background:#161616;
+color:#eee;
 }
 
 /* ======================
-   HEADER
+HEADER
 ====================== */
 
 header{
-    padding:16px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:rgba(255,255,255,0.8);
+
+/* iPhone安全領域対応 */
+padding:
+    calc(env(safe-area-inset-top) + 16px)
+    16px
+    16px
+    16px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+background:rgba(255,255,255,0.8);
+
 }
 
 .deep header{
-    background:#222;
+background:#222;
+}
+
+.title{
+font-size:20px;
+font-weight:600;
 }
 
 /* ======================
-   NAV（普通に戻す）
+NAV
 ====================== */
 
+.tabs{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+margin-top:10px;
+}
+
 nav a{
-    margin-right:10px;
-    text-decoration:none;
-    color:inherit;
-    font-size:14px;
-    opacity:0.8;
+text-decoration:none;
+color:inherit;
+font-size:14px;
+opacity:0.8;
+}
+
+nav a:hover{
+opacity:1;
 }
 
 /* ======================
-   CARD（標準UI）
+CARD
 ====================== */
 
 .card{
-    background:#fff;
-    border-radius:10px;
-    padding:12px;
-    margin:10px 0;
-    border:1px solid #eee;
+background:#fff;
+border-radius:10px;
+padding:12px;
+margin:10px 0;
+border:1px solid #eee;
 }
 
 .deep .card{
-    background:#2a2a2a;
-    border:none;
+background:#2a2a2a;
+border:none;
 }
 
 /* ======================
-   INPUT
+INPUT
 ====================== */
 
-textarea, input{
-    width:100%;
-    border:1px solid #ddd;
-    border-radius:8px;
-    padding:10px;
-    font-size:14px;
-    outline:none;
+textarea,
+input{
+width:100%;
+box-sizing:border-box;
+
+border:1px solid #ddd;
+border-radius:8px;
+padding:10px;
+font-size:14px;
+outline:none;
+
 }
 
 button{
-    margin-top:8px;
-    padding:8px 12px;
-    border:none;
-    border-radius:6px;
-    background:#333;
-    color:#fff;
-    cursor:pointer;
+margin-top:8px;
+padding:8px 12px;
+border:none;
+border-radius:6px;
+background:#333;
+color:#fff;
+cursor:pointer;
 }
+
+/* ======================
+SETTINGS
+====================== */
+
 .theme-list{
-    display:flex;
-    flex-direction:column;
-    gap:14px;
+display:flex;
+flex-direction:column;
+gap:14px;
 }
 
-/* ボタンを完全に「文字」にする */
 .theme-btn{
-    all:unset;
-    cursor:pointer;
+all:unset;
+cursor:pointer;
 
-    font-size:16px;
-    letter-spacing:1px;
-    opacity:0.6;
+font-size:16px;
+letter-spacing:1px;
+opacity:0.6;
+transition:0.2s;
 
-    transition:0.2s;
 }
 
-/* hover＝ほんの少しだけ反応 */
 .theme-btn:hover{
-    opacity:1;
+opacity:1;
 }
 
-/* 選択状態の視覚（控えめ） */
 .soft .soft-text,
 .calm .calm-text,
 .deep .deep-text{
-    opacity:1;
-    font-weight:500;
+opacity:1;
+font-weight:500;
 }
 
-/* フォント雰囲気調整 */
 .theme-btn{
-    font-family: -apple-system, BlinkMacSystemFont,
-                 "Hiragino Sans", "Yu Gothic", sans-serif;
+font-family:-apple-system,
+BlinkMacSystemFont,
+“Hiragino Sans”,
+“Yu Gothic”,
+sans-serif;
 }
