@@ -1,0 +1,26 @@
+[
+    {
+        "id": "login-1",
+        "name": "はじめの一歩",
+        "description": "初めてログインした",
+        "category": "ログイン",
+        "rank": "銅",
+        "reward": 10
+    },
+    {
+        "id": "log-1",
+        "name": "記録開始",
+        "description": "初めて記録を残した",
+        "category": "記録",
+        "rank": "銅",
+        "reward": 10
+    },
+    {
+        "id": "library-1",
+        "name": "コレクター",
+        "description": "Libraryへ作品を追加した",
+        "category": "Library",
+        "rank": "銅",
+        "reward": 10
+    }
+]

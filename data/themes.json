@@ -1,0 +1,38 @@
+[
+    {
+        "id": "soft",
+        "name": "Soft",
+        "description": "やさしい暖色系テーマ",
+        "price": 0
+    },
+    {
+        "id": "calm",
+        "name": "Calm",
+        "description": "落ち着いた青系テーマ",
+        "price": 0
+    },
+    {
+        "id": "deep",
+        "name": "Deep",
+        "description": "ダークテーマ",
+        "price": 0
+    },
+    {
+        "id": "forest",
+        "name": "Forest",
+        "description": "森林をイメージしたテーマ",
+        "price": 100
+    },
+    {
+        "id": "ocean",
+        "name": "Ocean",
+        "description": "海をイメージしたテーマ",
+        "price": 100
+    },
+    {
+        "id": "sunset",
+        "name": "Sunset",
+        "description": "夕焼けをイメージしたテーマ",
+        "price": 150
+    }
+]

@@ -1,0 +1,27 @@
+[
+    {
+        "id": "beginner",
+        "name": "はじまりの記録者",
+        "description": "Second Brainを始めた証"
+    },
+    {
+        "id": "collector",
+        "name": "作品収集家",
+        "description": "Libraryに作品を登録し始めた"
+    },
+    {
+        "id": "thinker",
+        "name": "思索家",
+        "description": "思考の記録を積み重ねた"
+    },
+    {
+        "id": "researcher",
+        "name": "探究者",
+        "description": "学習を継続している"
+    },
+    {
+        "id": "brain",
+        "name": "Second Brain Explorer",
+        "description": "Second Brainを使いこなし始めた"
+    }
+]
