@@ -11,15 +11,17 @@
         <div>
             <div class="sub">Profile</div>
             <h1>{{ profile.title }}</h1>
-            <p>称号を変更できます。</p>
+            <p>称号とアイコンを変更できます。</p>
         </div>
     </div>
 </section>
 
 <section class="card">
-    <h2>🏷 称号変更</h2>
+    <h2>🏷 プロフィール変更</h2>
 
     <form method="post" action="/profile" class="stack-form">
+
+        <label>称号</label>
         <select name="title">
             {% for title in titles %}
                 <option value="{{ title }}" {% if profile.title == title %}selected{% endif %}>
@@ -28,7 +30,16 @@
             {% endfor %}
         </select>
 
-        <button>称号を変更する ✨</button>
+        <label>アイコン</label>
+        <select name="icon">
+            {% for icon in icons %}
+                <option value="{{ icon }}" {% if profile.icon == icon %}selected{% endif %}>
+                    {{ icon }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button>プロフィールを保存する ✨</button>
     </form>
 </section>
 

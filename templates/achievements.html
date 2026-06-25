@@ -15,10 +15,17 @@
 
 <section class="achievement-grid">
     {% for achievement in achievements %}
-    <a class="card achievement-card" href="/achievements/{{ achievement.id }}">
+    <a class="card achievement-card {% if achievement.unlocked %}unlocked{% endif %}"
+       href="/achievements/{{ achievement.id }}">
+
         <div class="section-head">
-            <h3>🏆 {{ achievement.name }}</h3>
-            <span class="pill">{{ achievement.rank }}</span>
+            <h3>{{ achievement.rank }} {{ achievement.name }}</h3>
+
+            {% if achievement.unlocked %}
+                <span class="pill">達成済み</span>
+            {% else %}
+                <span class="pill">進行中</span>
+            {% endif %}
         </div>
 
         <p class="muted">{{ achievement.description }}</p>
@@ -29,13 +36,10 @@
 
         <div class="simple-row">
             <span>{{ achievement.progress.current }} / {{ achievement.progress.target }}</span>
-
-            {% if achievement.progress.unlocked %}
-                <strong>✅ 達成</strong>
-            {% else %}
-                <strong>進行中</strong>
-            {% endif %}
+            <strong>🪙 {{ achievement.reward }}</strong>
         </div>
+
+        <small>{{ achievement.category }}</small>
     </a>
     {% endfor %}
 </section>

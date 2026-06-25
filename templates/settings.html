@@ -9,30 +9,43 @@
     </div>
 
     <p class="muted">
-        Second Brainの見た目やテーマを変更できます。
+        購入済みのテーマをここから切り替えできます。
     </p>
 </section>
 
 <section class="card">
-    <h2>🎨 テーマ</h2>
+    <h2>🎨 テーマ変更</h2>
 
     <form method="post" action="/settings" class="theme-grid">
         {% for theme_item in themes %}
-            <label class="theme-card">
+            <label class="theme-card {% if theme_item.class not in owned %}locked-card{% endif %}">
                 <input
                     type="radio"
                     name="theme"
                     value="{{ theme_item.class }}"
                     {% if current_theme == theme_item.class %}checked{% endif %}
+                    {% if theme_item.class not in owned %}disabled{% endif %}
                 >
 
                 <div>
                     <strong>
-                        {% if theme_item.class == "dream" %}🌙{% elif theme_item.class == "gold" %}👑{% elif theme_item.class == "forest" %}🌳{% elif theme_item.class == "ocean" %}🌊{% elif theme_item.class == "deep" %}🌑{% else %}🎨{% endif %}
+                        {% if theme_item.class == "dream" %}🌙
+                        {% elif theme_item.class == "gold" %}👑
+                        {% elif theme_item.class == "forest" %}🌳
+                        {% elif theme_item.class == "ocean" %}🌊
+                        {% elif theme_item.class == "deep" %}🌑
+                        {% else %}🎨
+                        {% endif %}
                         {{ theme_item.name }}
                     </strong>
 
                     <small>{{ theme_item.description }}</small>
+
+                    {% if theme_item.class in owned %}
+                        <small>所持中</small>
+                    {% else %}
+                        <small>未購入：ショップで購入できます</small>
+                    {% endif %}
                 </div>
             </label>
         {% endfor %}
@@ -42,22 +55,7 @@
 </section>
 
 <section class="card">
-    <h2>📱 表示方針</h2>
-
-    <div class="simple-row">
-        <span>ホーム</span>
-        <strong>軽く・速く</strong>
-    </div>
-
-    <div class="simple-row">
-        <span>AI</span>
-        <strong>質問時だけ起動</strong>
-    </div>
-
-    <div class="simple-row">
-        <span>設計</span>
-        <strong>iPhone優先</strong>
-    </div>
+    <a class="card-link" href="/shop">🛍 ショップへ行く</a>
 </section>
 
 {% endblock %}

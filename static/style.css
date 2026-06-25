@@ -543,3 +543,231 @@ button{
         grid-template-columns:1fr;
     }
 }
+
+/* ======================
+   VERSION 2.5 FINAL POLISH
+====================== */
+
+html{
+    background:#090b1f;
+    min-height:100%;
+    overscroll-behavior:none;
+}
+
+body{
+    background-attachment:fixed;
+    overscroll-behavior:none;
+}
+
+.tabs a.active-tab{
+    opacity:1;
+    background:rgba(255,255,255,0.18);
+    box-shadow:0 10px 24px rgba(0,0,0,0.18);
+}
+
+.gold .tabs a.active-tab{
+    color:#111;
+    background:linear-gradient(135deg,#facc15,#f59e0b);
+}
+
+.dream .card{
+    box-shadow:
+        0 22px 70px rgba(0,0,0,0.32),
+        inset 0 1px 0 rgba(255,255,255,0.12);
+}
+
+.dream .profile-card{
+    background:
+        radial-gradient(circle at 85% 5%, rgba(216,180,254,0.32), transparent 35%),
+        radial-gradient(circle at 10% 80%, rgba(59,130,246,0.12), transparent 30%),
+        rgba(255,255,255,0.09);
+}
+
+.gold .title{
+    color:#facc15;
+}
+
+.gold .card{
+    background:
+        radial-gradient(circle at top right, rgba(250,204,21,0.12), transparent 35%),
+        rgba(255,255,255,0.07);
+}
+
+.gold .pill,
+.gold .section-head a,
+.gold .card-link{
+    color:#111;
+    background:linear-gradient(135deg,#facc15,#f59e0b);
+}
+
+.shop-card{
+    min-height:150px;
+}
+
+.login-mini{
+    text-align:center;
+    opacity:0.58;
+    font-size:13px;
+    padding:20px 0 34px;
+}
+
+@media (max-width:760px){
+    html,
+    body{
+        background:#090b1f;
+    }
+
+    .tabs{
+        scroll-behavior:smooth;
+    }
+}
+
+/* ==========================
+   SHOP VERSION2.5 FINAL
+========================== */
+
+.shop-card{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+
+    min-height:180px;
+}
+
+.shop-card form{
+    margin:0;
+}
+
+.shop-card button{
+    width:100%;
+}
+
+.locked-card{
+    opacity:.55;
+    filter:grayscale(.2);
+}
+
+.locked-card strong{
+    opacity:.85;
+}
+
+.theme-card{
+    transition:.2s;
+}
+
+.theme-card:hover{
+    transform:translateY(-3px);
+}
+
+.theme-card input{
+    margin-right:10px;
+}
+
+.theme-grid{
+    display:grid;
+    gap:18px;
+}
+
+.theme-grid button{
+    margin-top:8px;
+}
+
+.list-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:18px;
+}
+
+@media(max-width:760px){
+
+    .list-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+/* ==========================
+   ACHIEVEMENT FINAL
+========================== */
+
+.achievement-card{
+    position:relative;
+    transition:.25s;
+}
+
+.achievement-card:hover{
+    transform:translateY(-4px);
+}
+
+.achievement-card.unlocked{
+    border:1px solid rgba(255,215,0,.35);
+    box-shadow:
+        0 12px 32px rgba(255,215,0,.12),
+        inset 0 0 0 1px rgba(255,255,255,.05);
+}
+
+.achievement-detail-card.unlocked{
+    border:1px solid rgba(255,215,0,.45);
+}
+
+.achievement-card small{
+    opacity:.65;
+    display:block;
+    margin-top:8px;
+}
+
+.progress-bar{
+    overflow:hidden;
+}
+
+.progress-bar div{
+    transition:width .5s ease;
+}
+
+.progress-bar.big{
+    margin:18px 0;
+}
+
+.gold .achievement-card.unlocked{
+    box-shadow:
+        0 16px 40px rgba(250,204,21,.22);
+}
+
+.dream .achievement-card.unlocked{
+    box-shadow:
+        0 16px 42px rgba(168,85,247,.22);
+}
+
+/* ==========================
+   PROFILE FINAL
+========================== */
+
+.profile-card{
+    position:relative;
+    overflow:hidden;
+}
+
+.profile-card::after{
+    content:"";
+    position:absolute;
+    width:180px;
+    height:180px;
+    right:-60px;
+    top:-70px;
+    border-radius:999px;
+    background:rgba(196,181,253,.18);
+    filter:blur(8px);
+    pointer-events:none;
+}
+
+.gold .profile-card::after{
+    background:rgba(250,204,21,.18);
+}
+
+.profile-icon{
+    flex-shrink:0;
+}
+
+.profile-card .card-link{
+    margin-top:12px;
+}

@@ -5,25 +5,18 @@ import uuid
 from datetime import datetime, date
 
 from modules.database import init, connect
-from modules.logs import save, fetch_all
+from modules.logs import save
 from modules.search import search_logs
 from modules.library import (
-    fetch_grouped,
-    fetch_by_genre,
-    fetch_item,
-    fetch_reviews,
-    add_item,
-    update_item,
-    delete_item,
-    add_review,
-    GENRES
+    fetch_grouped, fetch_by_genre, fetch_item, fetch_reviews,
+    add_item, update_item, delete_item, add_review, GENRES
 )
 from modules.calendar import fetch_data, fetch_life_events, add_life_event
 from modules.stats import life_stats
 from modules.tips import today_tip
-from modules.themes import load_themes
+from modules.themes import load_themes, owned_themes, buy_theme, is_owned
 from modules.achievements import all_achievements, find_achievement
-from modules.profile import get_profile, available_titles, update_title
+from modules.profile import get_profile, available_titles, available_icons, update_profile
 
 app = Flask(__name__)
 app.secret_key = "brain-os"
@@ -72,6 +65,9 @@ def before():
     if "theme" not in session:
         session["theme"] = "dream"
 
+    if not is_owned(session["theme"]):
+        session["theme"] = "dream"
+
     give_login_bonus()
 
 
@@ -98,10 +94,7 @@ def add():
 
 @app.route("/search")
 def search():
-    return render_template(
-        "search.html",
-        theme=session["theme"]
-    )
+    return render_template("search.html", theme=session["theme"])
 
 
 @app.route("/api/search")
@@ -156,11 +149,12 @@ def library_detail(item_id):
 
 @app.route("/library/item/<item_id>/update", methods=["POST"])
 def library_update(item_id):
-    title = request.form.get("title")
-    genre = request.form.get("genre")
-    rating = request.form.get("rating", 0)
-
-    update_item(item_id, title, genre, rating)
+    update_item(
+        item_id,
+        request.form.get("title"),
+        request.form.get("genre"),
+        request.form.get("rating", 0)
+    )
 
     return redirect(f"/library/item/{item_id}")
 
@@ -227,9 +221,10 @@ def achievement_detail(achievement_id):
 def profile():
     if request.method == "POST":
         title = request.form.get("title")
+        icon = request.form.get("icon")
 
-        if title:
-            update_title(title)
+        if title and icon:
+            update_profile(title, icon)
 
         return redirect("/profile")
 
@@ -237,6 +232,7 @@ def profile():
         "profile.html",
         profile=get_profile(),
         titles=available_titles(),
+        icons=available_icons(),
         theme=session["theme"]
     )
 
@@ -257,7 +253,33 @@ def shop():
         "shop.html",
         shop_items=load_json("shop.json"),
         themes=load_themes(),
+        owned=owned_themes(),
         profile=get_profile(),
+        theme=session["theme"]
+    )
+
+
+@app.route("/shop/theme/<theme_class>/buy", methods=["POST"])
+def shop_theme_buy(theme_class):
+    buy_theme(theme_class)
+    return redirect("/shop")
+
+
+@app.route("/settings", methods=["GET", "POST"])
+def settings():
+    if request.method == "POST":
+        selected_theme = request.form.get("theme")
+
+        if selected_theme and is_owned(selected_theme):
+            session["theme"] = selected_theme
+
+        return redirect("/settings")
+
+    return render_template(
+        "settings.html",
+        themes=load_themes(),
+        owned=owned_themes(),
+        current_theme=session["theme"],
         theme=session["theme"]
     )
 
@@ -272,11 +294,7 @@ def goals():
 
     conn.close()
 
-    return render_template(
-        "goals.html",
-        goals=rows,
-        theme=session["theme"]
-    )
+    return render_template("goals.html", goals=rows, theme=session["theme"])
 
 
 @app.route("/goals/add", methods=["POST"])
@@ -291,11 +309,7 @@ def goals_add():
         INSERT INTO goals
         (id, title, done, created_at)
         VALUES (?, ?, 0, ?)
-        """, (
-            str(uuid.uuid4()),
-            title,
-            datetime.now().isoformat()
-        ))
+        """, (str(uuid.uuid4()), title, datetime.now().isoformat()))
 
         conn.commit()
         conn.close()
@@ -327,11 +341,7 @@ def shopping():
 
     conn.close()
 
-    return render_template(
-        "shopping.html",
-        items=rows,
-        theme=session["theme"]
-    )
+    return render_template("shopping.html", items=rows, theme=session["theme"])
 
 
 @app.route("/shopping/add", methods=["POST"])
@@ -346,11 +356,7 @@ def shopping_add():
         INSERT INTO shopping
         (id, name, done, created_at)
         VALUES (?, ?, 0, ?)
-        """, (
-            str(uuid.uuid4()),
-            name,
-            datetime.now().isoformat()
-        ))
+        """, (str(uuid.uuid4()), name, datetime.now().isoformat()))
 
         conn.commit()
         conn.close()
@@ -370,24 +376,6 @@ def shopping_done(item_id):
     conn.close()
 
     return redirect("/shopping")
-
-
-@app.route("/settings", methods=["GET", "POST"])
-def settings():
-    if request.method == "POST":
-        selected_theme = request.form.get("theme")
-
-        if selected_theme:
-            session["theme"] = selected_theme
-
-        return redirect("/settings")
-
-    return render_template(
-        "settings.html",
-        themes=load_themes(),
-        current_theme=session["theme"],
-        theme=session["theme"]
-    )
 
 
 @app.route("/test")

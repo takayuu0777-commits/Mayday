@@ -9,7 +9,23 @@ DEFAULT_TITLES = [
     "探究者",
     "Second Brain Explorer",
     "人生収集家",
-    "記録魔"
+    "記録魔",
+    "夢の記録者",
+    "黄金の脳"
+]
+
+
+DEFAULT_ICONS = [
+    "🧠",
+    "🌙",
+    "👑",
+    "📚",
+    "🎮",
+    "🎬",
+    "💎",
+    "🐺",
+    "🦊",
+    "🐧"
 ]
 
 
@@ -29,15 +45,20 @@ def available_titles():
     return DEFAULT_TITLES
 
 
-def update_title(title):
+def available_icons():
+    return DEFAULT_ICONS
+
+
+def update_profile(title, icon):
     conn = connect()
     c = conn.cursor()
 
     c.execute("""
     UPDATE profile
-    SET title = ?
+    SET title = ?,
+        icon = ?
     WHERE id = 1
-    """, (title,))
+    """, (title, icon))
 
     conn.commit()
     conn.close()

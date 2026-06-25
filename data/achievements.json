@@ -1,26 +1,137 @@
 [
     {
-        "id": "login-1",
-        "name": "はじめの一歩",
-        "description": "初めてログインした",
-        "category": "ログイン",
-        "rank": "銅",
-        "reward": 10
-    },
-    {
         "id": "log-1",
         "name": "記録開始",
-        "description": "初めて記録を残した",
-        "category": "記録",
-        "rank": "銅",
-        "reward": 10
+        "description": "記録を1件残す",
+        "category": "📝 記録",
+        "rank": "🥉 銅",
+        "reward": 10,
+        "target": 1
+    },
+    {
+        "id": "log-10",
+        "name": "記録の習慣",
+        "description": "記録を10件残す",
+        "category": "📝 記録",
+        "rank": "🥉 銅",
+        "reward": 30,
+        "target": 10
+    },
+    {
+        "id": "log-50",
+        "name": "思考の保管庫",
+        "description": "記録を50件残す",
+        "category": "📝 記録",
+        "rank": "🥈 銀",
+        "reward": 100,
+        "target": 50
+    },
+    {
+        "id": "log-100",
+        "name": "人生の記録者",
+        "description": "記録を100件残す",
+        "category": "📝 記録",
+        "rank": "🥇 金",
+        "reward": 300,
+        "target": 100
     },
     {
         "id": "library-1",
-        "name": "コレクター",
-        "description": "Libraryへ作品を追加した",
-        "category": "Library",
-        "rank": "銅",
-        "reward": 10
+        "name": "作品との出会い",
+        "description": "Libraryに1作品登録する",
+        "category": "📚 Library",
+        "rank": "🥉 銅",
+        "reward": 10,
+        "target": 1
+    },
+    {
+        "id": "library-10",
+        "name": "作品収集家",
+        "description": "Libraryに10作品登録する",
+        "category": "📚 Library",
+        "rank": "🥉 銅",
+        "reward": 50,
+        "target": 10
+    },
+    {
+        "id": "library-50",
+        "name": "小さな図書館",
+        "description": "Libraryに50作品登録する",
+        "category": "📚 Library",
+        "rank": "🥈 銀",
+        "reward": 150,
+        "target": 50
+    },
+    {
+        "id": "review-1",
+        "name": "はじめての感想",
+        "description": "感想を1件残す",
+        "category": "✍️ 感想",
+        "rank": "🥉 銅",
+        "reward": 10,
+        "target": 1
+    },
+    {
+        "id": "review-10",
+        "name": "感想家",
+        "description": "感想を10件残す",
+        "category": "✍️ 感想",
+        "rank": "🥈 銀",
+        "reward": 80,
+        "target": 10
+    },
+    {
+        "id": "goal-1",
+        "name": "目標設定",
+        "description": "目標を1件作る",
+        "category": "🎯 目標",
+        "rank": "🥉 銅",
+        "reward": 10,
+        "target": 1
+    },
+    {
+        "id": "goal-5",
+        "name": "目標を持つ人",
+        "description": "目標を5件作る",
+        "category": "🎯 目標",
+        "rank": "🥈 銀",
+        "reward": 60,
+        "target": 5
+    },
+    {
+        "id": "shopping-1",
+        "name": "買い物メモ開始",
+        "description": "買い物を1件登録する",
+        "category": "🛒 買い物",
+        "rank": "🥉 銅",
+        "reward": 5,
+        "target": 1
+    },
+    {
+        "id": "login-1",
+        "name": "はじめの一歩",
+        "description": "1日ログインする",
+        "category": "📅 ログイン",
+        "rank": "🥉 銅",
+        "reward": 10,
+        "target": 1
+    },
+    {
+        "id": "login-7",
+        "name": "一週間の記録者",
+        "description": "合計7日ログインする",
+        "category": "📅 ログイン",
+        "rank": "🥈 銀",
+        "reward": 100,
+        "target": 7
+    },
+    {
+        "id": "login-30",
+        "name": "月間記録者",
+        "description": "合計30日ログインする",
+        "category": "📅 ログイン",
+        "rank": "🥇 金",
+        "reward": 500,
+        "target": 30
     }
 ]

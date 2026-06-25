@@ -9,40 +9,31 @@
     <title>Second Brain OS</title>
 
     <link rel="stylesheet" href="/static/style.css">
-
     <link rel="manifest" href="/static/manifest.json">
 
-    <meta name="theme-color" content="#101010">
-
+    <meta name="theme-color" content="#090b1f">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Second Brain">
 
-    <meta name="apple-mobile-web-app-status-bar-style"
-          content="black-translucent">
-
-    <meta name="apple-mobile-web-app-title"
-          content="Second Brain">
-
-    <link rel="apple-touch-icon"
-          href="/static/icon-192.png">
+    <link rel="apple-touch-icon" href="/static/icon-192.png">
 </head>
 
 <body class="{{ theme }}">
 
 <header>
-    <div class="title">
-        🧠 Second Brain
-    </div>
+    <div class="title">🧠 Second Brain</div>
 
-    <nav class="tabs">
-        <a href="/">ホーム</a>
-        <a href="/library">Library</a>
-        <a href="/achievements">実績</a>
-        <a href="/stats">統計</a>
-        <a href="/calendar">カレンダー</a>
-        <a href="/goals">目標</a>
-        <a href="/shopping">買い物</a>
-        <a href="/shop">ショップ</a>
-        <a href="/settings">設定</a>
+    <nav class="tabs" id="tabs">
+        <a href="/" data-path="/">ホーム</a>
+        <a href="/library" data-path="/library">Library</a>
+        <a href="/achievements" data-path="/achievements">実績</a>
+        <a href="/stats" data-path="/stats">統計</a>
+        <a href="/calendar" data-path="/calendar">カレンダー</a>
+        <a href="/goals" data-path="/goals">目標</a>
+        <a href="/shopping" data-path="/shopping">買い物</a>
+        <a href="/shop" data-path="/shop">ショップ</a>
+        <a href="/settings" data-path="/settings">設定</a>
     </nav>
 </header>
 
@@ -54,15 +45,37 @@
 <script src="/static/theme.js"></script>
 
 <script>
+const currentPath = window.location.pathname;
+const tabs = document.getElementById("tabs");
+
+if (tabs) {
+    const links = tabs.querySelectorAll("a");
+
+    links.forEach(link => {
+        const path = link.dataset.path;
+
+        if (
+            currentPath === path ||
+            (path !== "/" && currentPath.startsWith(path))
+        ) {
+            link.classList.add("active-tab");
+
+            setTimeout(() => {
+                link.scrollIntoView({
+                    behavior: "smooth",
+                    inline: "center",
+                    block: "nearest"
+                });
+            }, 100);
+        }
+    });
+}
+
 if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
         navigator.serviceWorker.register("/static/sw.js")
-        .then(() => {
-            console.log("PWA Ready");
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+        .then(() => console.log("PWA Ready"))
+        .catch((err) => console.log(err));
     });
 }
 </script>

@@ -4,10 +4,15 @@
 
 {% if achievement %}
 
-<section class="card achievement-detail-card">
+<section class="card achievement-detail-card {% if achievement.unlocked %}unlocked{% endif %}">
     <div class="section-head">
-        <h2>🏆 {{ achievement.name }}</h2>
-        <span class="pill">{{ achievement.rank }}</span>
+        <h2>{{ achievement.rank }} {{ achievement.name }}</h2>
+
+        {% if achievement.unlocked %}
+            <span class="pill">達成済み</span>
+        {% else %}
+            <span class="pill">進行中</span>
+        {% endif %}
     </div>
 
     <p class="muted">
@@ -28,17 +33,15 @@
         <strong>{{ achievement.progress.percent }}%</strong>
     </div>
 
-    {% if achievement.progress.unlocked %}
-        <div class="simple-row">
-            <span>状態</span>
-            <strong>✅ 達成済み</strong>
-        </div>
-    {% else %}
-        <div class="simple-row">
-            <span>状態</span>
-            <strong>あと少し</strong>
-        </div>
-    {% endif %}
+    <div class="simple-row">
+        <span>報酬</span>
+        <strong>🪙 {{ achievement.reward }} コイン</strong>
+    </div>
+
+    <div class="simple-row">
+        <span>カテゴリ</span>
+        <strong>{{ achievement.category }}</strong>
+    </div>
 </section>
 
 <section class="card">
