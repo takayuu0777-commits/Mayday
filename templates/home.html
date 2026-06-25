@@ -11,9 +11,9 @@
             </div>
 
             <div>
-                <div class="sub">あなたのプロフィール</div>
+                <div class="sub">Second Brain OS</div>
                 <h1>{{ profile.title }}</h1>
-                <p>今日も小さく記録して、人生を集めましょう。</p>
+                <p>人生を記録して、少しずつ自分だけの世界に育てましょう。</p>
             </div>
         </div>
 
@@ -39,7 +39,7 @@
     </div>
 
     <div class="card bonus-card">
-        <div class="sub">🎁 今日のログインボーナス</div>
+        <div class="sub">🎁 今日のログイン</div>
         <h2>+1 コイン</h2>
         <p>今日もSecond Brainに来ました。</p>
     </div>
@@ -105,27 +105,33 @@
     <div class="card">
         <div class="section-head">
             <h2>🎯 今月の目標</h2>
-            <a href="/goals">すべて見る</a>
+            <a href="/goals">開く</a>
         </div>
 
         <p class="muted">
-            目標管理ページで、今月やりたいことを追加できます。
+            今月やりたいこと、続けたいことを管理します。
         </p>
 
-        <a class="card-link" href="/goals">目標を開く</a>
+        <div class="simple-row">
+            <span>登録中</span>
+            <strong>{{ stats.goals }}件</strong>
+        </div>
     </div>
 
     <div class="card">
         <div class="section-head">
-            <h2>🛒 買い物リスト</h2>
-            <a href="/shopping">すべて見る</a>
+            <h2>🛒 買い物</h2>
+            <a href="/shopping">開く</a>
         </div>
 
         <p class="muted">
             買い忘れを防ぐためのリストです。
         </p>
 
-        <a class="card-link" href="/shopping">買い物を開く</a>
+        <div class="simple-row">
+            <span>登録中</span>
+            <strong>{{ stats.shopping }}件</strong>
+        </div>
     </div>
 
 </section>
@@ -135,7 +141,7 @@
     <div class="card">
         <div class="section-head">
             <h2>📚 Library</h2>
-            <a href="/library">Libraryへ</a>
+            <a href="/library">開く</a>
         </div>
 
         <p class="muted">
@@ -151,7 +157,7 @@
     <div class="card">
         <div class="section-head">
             <h2>🏆 実績</h2>
-            <a href="/achievements">実績へ</a>
+            <a href="/achievements">開く</a>
         </div>
 
         <p class="muted">
@@ -166,26 +172,15 @@
 
 </section>
 
-<section class="card">
+<section class="card discovery-card">
     <div class="section-head">
-        <h2>🕒 最近の記録</h2>
+        <h2>💡 今日の発見</h2>
+        <span class="pill">{{ today_tip.category }}</span>
     </div>
 
-    {% if logs %}
-        {% for log in logs[:6] %}
-        <div class="log-item">
-            <div>
-                <strong>{{ log.category }}</strong>
-                <p>{{ log.text }}</p>
-            </div>
-            <small>{{ log.date_key }}</small>
-        </div>
-        {% endfor %}
-    {% else %}
-        <p class="muted">
-            まだ記録はありません。最初の記録を残してみましょう。
-        </p>
-    {% endif %}
+    <p class="discovery-text">
+        {{ today_tip.text }}
+    </p>
 </section>
 
 {% endblock %}

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="card">
+
+    <div class="section-head">
+        <h2>🛍 ショップ</h2>
+        <span class="pill">
+            🪙 {{ profile.coins }} コイン
+        </span>
+    </div>
+
+    <p class="muted">
+        コインを使って、自分だけのSecond Brainを育てましょう。
+    </p>
+
+</section>
+
+
+<section class="card">
+
+    <h2>🎨 テーマショップ</h2>
+
+    <div class="list-grid">
+
+        {% for theme in themes %}
+
+        <div class="list-card">
+
+            <h3>
+                {{ theme.name }}
+            </h3>
+
+            <p>
+                {{ theme.description }}
+            </p>
+
+            <div class="simple-row">
+
+                <span>
+                    🪙 {{ theme.price }}
+                </span>
+
+                {% if theme.price == 0 %}
+
+                    <span>無料</span>
+
+                {% else %}
+
+                    <span>購入可能</span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+<section class="card">
+
+    <h2>🧠 今後追加予定</h2>
+
+    <div class="list-grid">
+
+        <div class="list-card">
+            👤 プロフィールカード
+        </div>
+
+        <div class="list-card">
+            🏷 称号
+        </div>
+
+        <div class="list-card">
+            😀 アイコン
+        </div>
+
+        <div class="list-card">
+            ✨ 背景
+        </div>
+
+        <div class="list-card">
+            🌠 エフェクト
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="card">
+
+    <div class="section-head">
+        <h2>🏆 実績</h2>
+        <span class="pill">{{ stats.achievements }} / 1000</span>
+    </div>
+
+    <p class="muted">
+        あなたの人生の歩みが実績になります。
+    </p>
+
+</section>
+
+
+<section class="card">
+
+    <div class="profile-stats">
+
+        <div>
+            <span>🥉</span>
+            <strong>銅</strong>
+            <small>BEGINNER</small>
+        </div>
+
+        <div>
+            <span>🥈</span>
+            <strong>銀</strong>
+            <small>ADVANCED</small>
+        </div>
+
+        <div>
+            <span>🥇</span>
+            <strong>金</strong>
+            <small>MASTER</small>
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="card">
+
+    <div class="profile-stats">
+
+        <div>
+            <span>💚</span>
+            <strong>エメラルド</strong>
+        </div>
+
+        <div>
+            <span>❤️</span>
+            <strong>ルビー</strong>
+        </div>
+
+        <div>
+            <span>💎</span>
+            <strong>ダイヤ</strong>
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="card">
+
+    <div class="profile-stats">
+
+        <div>
+            <span>💙</span>
+            <strong>サファイア</strong>
+        </div>
+
+        <div>
+            <span>⚪</span>
+            <strong>プラチナ</strong>
+        </div>
+
+        <div>
+            <span>👑</span>
+            <strong>レジェンド</strong>
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="card">
+
+<h2>📜 実績一覧</h2>
+
+{% for achievement in achievements %}
+
+<div class="log-item">
+
+<div>
+
+<strong>
+
+🏆 {{ achievement.name }}
+
+</strong>
+
+<p>
+
+{{ achievement.description }}
+
+</p>
+
+</div>
+
+<small>
+
+{{ achievement.rank }}
+
+</small>
+
+</div>
+
+{% endfor %}
+
+</section>
+
+{% endblock %}

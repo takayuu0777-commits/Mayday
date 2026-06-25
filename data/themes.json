@@ -1,38 +1,32 @@
 [
     {
-        "id": "soft",
-        "name": "Soft",
-        "description": "やさしい暖色系テーマ",
-        "price": 0
+        "name": "Dream",
+        "class": "dream",
+        "price": 0,
+        "description": "薄紫と黒を基調にした、夢の中のような標準テーマ"
     },
     {
-        "id": "calm",
-        "name": "Calm",
-        "description": "落ち着いた青系テーマ",
-        "price": 0
+        "name": "Gold",
+        "class": "gold",
+        "price": 500,
+        "description": "黒と金を基調にした、Second Brainのブランドテーマ"
     },
     {
-        "id": "deep",
-        "name": "Deep",
-        "description": "ダークテーマ",
-        "price": 0
-    },
-    {
-        "id": "forest",
         "name": "Forest",
-        "description": "森林をイメージしたテーマ",
-        "price": 100
+        "class": "forest",
+        "price": 300,
+        "description": "森のように落ち着いた緑のテーマ"
     },
     {
-        "id": "ocean",
         "name": "Ocean",
-        "description": "海をイメージしたテーマ",
-        "price": 100
+        "class": "ocean",
+        "price": 300,
+        "description": "海のように静かで爽やかなテーマ"
     },
     {
-        "id": "sunset",
-        "name": "Sunset",
-        "description": "夕焼けをイメージしたテーマ",
-        "price": 150
+        "name": "Deep",
+        "class": "deep",
+        "price": 0,
+        "description": "黒を基調にしたシンプルなダークテーマ"
     }
 ]

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="card">
+    <div class="section-head">
+        <h2>🎯 目標管理</h2>
+        <span class="pill">達成で +10コイン</span>
+    </div>
+
+    <p class="muted">
+        今月やりたいこと、続けたいことを管理します。
+    </p>
+
+    <form method="post" action="/goals/add" class="stack-form">
+        <input name="title" placeholder="目標を入力 例：本を3冊読む">
+        <button>目標を追加</button>
+    </form>
+</section>
+
+<section class="card">
+    <h2>📌 目標一覧</h2>
+
+    {% if goals %}
+        {% for goal in goals %}
+            <div class="log-item">
+                <div>
+                    {% if goal.done %}
+                        <strong>✅ {{ goal.title }}</strong>
+                        <p class="muted">達成済み</p>
+                    {% else %}
+                        <strong>☐ {{ goal.title }}</strong>
+                        <p class="muted">未達成</p>
+                    {% endif %}
+                </div>
+
+                {% if not goal.done %}
+                    <form method="post" action="/goals/done/{{ goal.id }}">
+                        <button>達成</button>
+                    </form>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="muted">
+            まだ目標はありません。
+        </p>
+    {% endif %}
+</section>
+
+{% endblock %}

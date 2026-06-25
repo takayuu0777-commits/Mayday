@@ -9,20 +9,10 @@
 body{
     margin:0;
     padding-top:env(safe-area-inset-top);
-
-    font-family:-apple-system,BlinkMacSystemFont,
-                 "Helvetica Neue",
-                 "Hiragino Sans",
-                 "Yu Gothic",
-                 sans-serif;
-
-    background:
-        radial-gradient(circle at top left, rgba(196,181,253,0.28), transparent 32%),
-        radial-gradient(circle at top right, rgba(167,243,208,0.24), transparent 28%),
-        linear-gradient(180deg,#f8fafc 0%,#eef2ff 100%);
-
-    color:#172033;
+    font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue","Hiragino Sans","Yu Gothic",sans-serif;
+    color:#f8fafc;
     min-height:100vh;
+    background:#0b1020;
 }
 
 main{
@@ -33,30 +23,40 @@ main{
 }
 
 /* ======================
-   THEME
+   THEMES
 ====================== */
 
-.soft{
+.dream{
     background:
-        radial-gradient(circle at top left, rgba(253,230,138,0.28), transparent 30%),
-        radial-gradient(circle at top right, rgba(251,207,232,0.28), transparent 30%),
-        linear-gradient(180deg,#fff7ed 0%,#fef3c7 100%);
+        radial-gradient(circle at 20% 0%, rgba(196,181,253,0.35), transparent 32%),
+        radial-gradient(circle at 90% 10%, rgba(147,197,253,0.18), transparent 30%),
+        radial-gradient(circle at 50% 100%, rgba(236,72,153,0.14), transparent 30%),
+        linear-gradient(180deg,#120c2e 0%,#090b1f 100%);
 }
 
-.calm{
+.gold{
     background:
-        radial-gradient(circle at top left, rgba(147,197,253,0.28), transparent 30%),
-        radial-gradient(circle at top right, rgba(196,181,253,0.22), transparent 28%),
-        linear-gradient(180deg,#eff6ff 0%,#eef2ff 100%);
+        radial-gradient(circle at 30% 0%, rgba(245,158,11,0.28), transparent 30%),
+        radial-gradient(circle at 100% 20%, rgba(250,204,21,0.18), transparent 28%),
+        linear-gradient(180deg,#050505 0%,#16110a 100%);
+}
+
+.forest{
+    background:
+        radial-gradient(circle at 20% 0%, rgba(34,197,94,0.25), transparent 30%),
+        linear-gradient(180deg,#052e1a 0%,#071a12 100%);
+}
+
+.ocean{
+    background:
+        radial-gradient(circle at 20% 0%, rgba(56,189,248,0.28), transparent 30%),
+        linear-gradient(180deg,#082f49 0%,#07172a 100%);
 }
 
 .deep{
     background:
-        radial-gradient(circle at top left, rgba(99,102,241,0.22), transparent 30%),
-        radial-gradient(circle at top right, rgba(16,185,129,0.14), transparent 28%),
+        radial-gradient(circle at 20% 0%, rgba(99,102,241,0.18), transparent 30%),
         linear-gradient(180deg,#0f172a 0%,#111827 100%);
-
-    color:#f8fafc;
 }
 
 /* ======================
@@ -64,45 +64,25 @@ main{
 ====================== */
 
 header{
-    padding:
-        calc(env(safe-area-inset-top) + 18px)
-        22px
-        16px
-        22px;
-
+    padding:calc(env(safe-area-inset-top) + 18px) 22px 16px;
     display:flex;
     justify-content:space-between;
     align-items:center;
     gap:16px;
     flex-wrap:wrap;
-
     position:sticky;
     top:0;
     z-index:20;
-
-    background:rgba(255,255,255,0.72);
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
-
-    border-bottom:1px solid rgba(255,255,255,0.55);
-    box-shadow:0 10px 30px rgba(15,23,42,0.06);
-}
-
-.deep header{
-    background:rgba(15,23,42,0.72);
+    background:rgba(8,10,25,0.72);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
     border-bottom:1px solid rgba(255,255,255,0.08);
-    box-shadow:0 10px 30px rgba(0,0,0,0.25);
 }
 
 .title{
-    font-weight:800;
     font-size:20px;
-    letter-spacing:0.02em;
+    font-weight:800;
 }
-
-/* ======================
-   NAV
-====================== */
 
 .tabs{
     display:flex;
@@ -113,29 +93,13 @@ header{
 .tabs a{
     color:inherit;
     text-decoration:none;
-
     font-size:13px;
-    font-weight:600;
-
+    font-weight:700;
     padding:8px 12px;
     border-radius:999px;
-
-    background:rgba(255,255,255,0.55);
-    border:1px solid rgba(255,255,255,0.55);
-
-    opacity:0.82;
-    transition:0.2s ease;
-}
-
-.tabs a:hover{
-    opacity:1;
-    transform:translateY(-1px);
-    box-shadow:0 8px 20px rgba(15,23,42,0.08);
-}
-
-.deep .tabs a{
     background:rgba(255,255,255,0.08);
     border:1px solid rgba(255,255,255,0.08);
+    opacity:0.85;
 }
 
 /* ======================
@@ -143,37 +107,27 @@ header{
 ====================== */
 
 .card{
-    background:rgba(255,255,255,0.76);
-    border:1px solid rgba(255,255,255,0.65);
-    border-radius:24px;
-
-    padding:22px;
     margin:16px 0;
-
-    box-shadow:
-        0 20px 50px rgba(15,23,42,0.08),
-        inset 0 1px 0 rgba(255,255,255,0.65);
-
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
+    padding:22px;
+    border-radius:26px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.12);
+    box-shadow:0 20px 60px rgba(0,0,0,0.28);
+    backdrop-filter:blur(22px);
+    -webkit-backdrop-filter:blur(22px);
 }
 
-.deep .card{
-    background:rgba(30,41,59,0.74);
-    border:1px solid rgba(255,255,255,0.08);
-    box-shadow:
-        0 20px 50px rgba(0,0,0,0.25),
-        inset 0 1px 0 rgba(255,255,255,0.08);
+.gold .card{
+    border:1px solid rgba(250,204,21,0.22);
+    box-shadow:0 20px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(250,204,21,0.12);
 }
 
-.card h1,
-.card h2,
-.card h3{
-    margin:0 0 10px 0;
+.card h1,.card h2,.card h3{
+    margin:0 0 10px;
 }
 
 .card p{
-    line-height:1.75;
+    line-height:1.7;
 }
 
 /* ======================
@@ -200,44 +154,34 @@ header{
     margin-bottom:14px;
 }
 
-.section-head a,
-.card-link{
+.section-head a,.card-link{
     color:inherit;
     text-decoration:none;
     font-size:13px;
-    font-weight:700;
-
+    font-weight:800;
     padding:8px 12px;
     border-radius:999px;
-
-    background:rgba(99,102,241,0.1);
-}
-
-.card-link{
-    display:inline-block;
-    margin-top:10px;
+    background:rgba(255,255,255,0.10);
 }
 
 .sub{
     font-size:12px;
-    font-weight:700;
+    font-weight:800;
     letter-spacing:0.08em;
-    opacity:0.62;
-    text-transform:uppercase;
+    opacity:0.65;
 }
 
 .muted{
-    opacity:0.65;
+    opacity:0.68;
     font-size:14px;
 }
 
 .pill{
     font-size:12px;
-    font-weight:700;
+    font-weight:800;
     padding:6px 10px;
     border-radius:999px;
-
-    background:rgba(99,102,241,0.12);
+    background:rgba(255,255,255,0.10);
 }
 
 /* ======================
@@ -246,14 +190,14 @@ header{
 
 .profile-card{
     background:
-        radial-gradient(circle at top right, rgba(129,140,248,0.30), transparent 38%),
-        rgba(255,255,255,0.78);
+        radial-gradient(circle at top right, rgba(196,181,253,0.28), transparent 40%),
+        rgba(255,255,255,0.09);
 }
 
-.deep .profile-card{
+.gold .profile-card{
     background:
-        radial-gradient(circle at top right, rgba(129,140,248,0.20), transparent 38%),
-        rgba(30,41,59,0.78);
+        radial-gradient(circle at top right, rgba(250,204,21,0.22), transparent 40%),
+        rgba(255,255,255,0.07);
 }
 
 .profile-top{
@@ -263,18 +207,20 @@ header{
 }
 
 .profile-icon{
-    width:64px;
-    height:64px;
-
+    width:66px;
+    height:66px;
     display:flex;
     align-items:center;
     justify-content:center;
+    border-radius:24px;
+    font-size:34px;
+    background:linear-gradient(135deg,#c4b5fd,#7c3aed);
+    box-shadow:0 16px 40px rgba(124,58,237,0.35);
+}
 
-    border-radius:22px;
-    font-size:32px;
-
-    background:linear-gradient(135deg,#c4b5fd,#a7f3d0);
-    box-shadow:0 14px 30px rgba(99,102,241,0.20);
+.gold .profile-icon{
+    background:linear-gradient(135deg,#facc15,#a16207);
+    box-shadow:0 16px 40px rgba(250,204,21,0.28);
 }
 
 .profile-card h1{
@@ -283,7 +229,7 @@ header{
 
 .profile-card p{
     margin:0;
-    opacity:0.7;
+    opacity:0.72;
 }
 
 .profile-stats{
@@ -293,58 +239,52 @@ header{
     margin-top:20px;
 }
 
-.profile-stats div,
-.mini-stat{
-    background:rgba(255,255,255,0.58);
-    border:1px solid rgba(255,255,255,0.55);
-    border-radius:18px;
+.profile-stats div,.mini-stat{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.10);
+    border-radius:20px;
     padding:14px;
-
     display:flex;
     flex-direction:column;
     gap:4px;
 }
 
-.deep .profile-stats div,
-.deep .mini-stat{
-    background:rgba(255,255,255,0.07);
-    border:1px solid rgba(255,255,255,0.08);
-}
-
-.profile-stats span,
-.mini-stat span{
+.profile-stats span,.mini-stat span{
     font-size:20px;
 }
 
-.profile-stats strong,
-.mini-stat strong{
+.profile-stats strong,.mini-stat strong{
     font-size:22px;
 }
 
-.profile-stats small,
-.mini-stat small{
+.profile-stats small,.mini-stat small{
     opacity:0.62;
 }
 
 /* ======================
-   BONUS
+   BONUS / DISCOVERY
 ====================== */
 
 .bonus-card{
     background:
-        radial-gradient(circle at top right, rgba(251,191,36,0.34), transparent 40%),
-        rgba(255,255,255,0.76);
-}
-
-.deep .bonus-card{
-    background:
-        radial-gradient(circle at top right, rgba(251,191,36,0.18), transparent 40%),
-        rgba(30,41,59,0.74);
+        radial-gradient(circle at top right, rgba(250,204,21,0.25), transparent 40%),
+        rgba(255,255,255,0.08);
 }
 
 .bonus-card h2{
     font-size:34px;
     margin:8px 0;
+}
+
+.discovery-card{
+    background:
+        radial-gradient(circle at top right, rgba(167,139,250,0.22), transparent 38%),
+        rgba(255,255,255,0.08);
+}
+
+.discovery-text{
+    font-size:16px;
+    margin-bottom:0;
 }
 
 /* ======================
@@ -357,83 +297,57 @@ header{
     gap:12px;
 }
 
-.mini-stat{
-    align-items:flex-start;
-}
-
 .simple-row{
     display:flex;
     justify-content:space-between;
     align-items:center;
-
+    gap:12px;
     margin-top:14px;
     padding:14px;
-
-    border-radius:16px;
-    background:rgba(99,102,241,0.08);
+    border-radius:18px;
+    background:rgba(255,255,255,0.08);
 }
 
 /* ======================
-   FORMS
+   FORM
 ====================== */
 
-.input-card textarea{
-    min-height:120px;
-}
-
-textarea,
-input,
-select{
+textarea,input,select{
     width:100%;
-    box-sizing:border-box;
-
     border:none;
     outline:none;
-
     border-radius:18px;
     padding:14px 15px;
-
     font-size:15px;
     font-family:inherit;
-
     color:inherit;
-    background:rgba(255,255,255,0.75);
-
-    border:1px solid rgba(255,255,255,0.7);
-}
-
-.deep textarea,
-.deep input,
-.deep select{
-    background:rgba(255,255,255,0.08);
-    border:1px solid rgba(255,255,255,0.08);
+    background:rgba(255,255,255,0.10);
+    border:1px solid rgba(255,255,255,0.10);
 }
 
 textarea{
+    min-height:120px;
     resize:vertical;
 }
 
 button{
     margin-top:10px;
-
     border:none;
     border-radius:999px;
-
     padding:12px 18px;
-
     color:white;
-    font-weight:700;
+    font-weight:800;
     font-size:14px;
     font-family:inherit;
-
-    background:linear-gradient(135deg,#6366f1,#8b5cf6);
-    box-shadow:0 12px 26px rgba(99,102,241,0.22);
-
+    background:linear-gradient(135deg,#8b5cf6,#6366f1);
+    box-shadow:0 14px 30px rgba(99,102,241,0.25);
     cursor:pointer;
 }
 
-button:hover{
-    transform:translateY(-1px);
+.gold button{
+    color:#111;
+    background:linear-gradient(135deg,#facc15,#f59e0b);
+    box-shadow:0 14px 30px rgba(250,204,21,0.22);
 }
 
 .stack-form{
@@ -450,9 +364,8 @@ button:hover{
     display:flex;
     justify-content:space-between;
     gap:12px;
-
     padding:14px 0;
-    border-bottom:1px solid rgba(148,163,184,0.22);
+    border-bottom:1px solid rgba(255,255,255,0.10);
 }
 
 .log-item:last-child{
@@ -460,11 +373,10 @@ button:hover{
 }
 
 .log-item p{
-    margin:6px 0 0 0;
+    margin:6px 0 0;
 }
 
-.log-item small,
-.meta{
+.log-item small,.meta{
     opacity:0.55;
     font-size:12px;
 }
@@ -476,88 +388,63 @@ button:hover{
 }
 
 .list-card{
+    color:inherit;
+    text-decoration:none;
+    padding:16px;
+    border-radius:20px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.10);
     display:flex;
     flex-direction:column;
     gap:8px;
-
-    color:inherit;
-    text-decoration:none;
-
-    padding:16px;
-    border-radius:18px;
-
-    background:rgba(255,255,255,0.55);
-    border:1px solid rgba(255,255,255,0.55);
-
-    transition:0.2s ease;
 }
-
-.list-card:hover{
-    transform:translateY(-2px);
-    box-shadow:0 12px 28px rgba(15,23,42,0.08);
-}
-
-.deep .list-card{
-    background:rgba(255,255,255,0.07);
-    border:1px solid rgba(255,255,255,0.08);
-}
-
-/* ======================
-   BUTTON TYPES
-====================== */
 
 .danger-button{
     background:linear-gradient(135deg,#ef4444,#f97316);
 }
 
 /* ======================
-   SETTINGS
+   THEME SETTINGS
 ====================== */
 
-.theme-list{
+.theme-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.theme-card{
     display:flex;
-    flex-direction:column;
-    gap:14px;
-}
-
-.theme-btn{
-    all:unset;
+    gap:12px;
+    padding:16px;
+    border-radius:20px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.10);
     cursor:pointer;
-
-    font-size:16px;
-    letter-spacing:1px;
-    opacity:0.6;
-
-    transition:0.2s;
 }
 
-.theme-btn:hover{
-    opacity:1;
+.theme-card input{
+    width:auto;
 }
 
-.soft .soft-text,
-.calm .calm-text,
-.deep .deep-text{
-    opacity:1;
-    font-weight:700;
+.theme-card small{
+    display:block;
+    margin-top:6px;
+    opacity:0.65;
 }
 
 /* ======================
    MOBILE
 ====================== */
 
-@media (max-width: 760px){
+@media (max-width:760px){
 
     main{
         padding:16px;
     }
 
     header{
-        padding:
-            calc(env(safe-area-inset-top) + 14px)
-            14px
-            12px
-            14px;
+        padding:calc(env(safe-area-inset-top) + 14px) 14px 12px;
     }
 
     .title{
@@ -575,14 +462,24 @@ button:hover{
         white-space:nowrap;
     }
 
-    .hero-grid,
-    .two-column{
+    .hero-grid,.two-column{
         grid-template-columns:1fr;
+    }
+
+    .stat-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .list-grid,.theme-grid{
+        grid-template-columns:1fr;
+    }
+
+    .card{
+        padding:18px;
+        border-radius:24px;
     }
 
     .profile-top{
         align-items:flex-start;
     }
-
-    .profile-stats{
-        grid-template-columns:repeat(3,1fr
+}

@@ -20,6 +20,8 @@ from modules.library import (
 )
 from modules.calendar import fetch_data, fetch_life_events, add_life_event
 from modules.stats import life_stats, profile_data
+from modules.tips import today_tip
+from modules.themes import load_themes
 
 app = Flask(__name__)
 app.secret_key = "brain-os"
@@ -31,22 +33,8 @@ def load_json(file_name):
     if not os.path.exists(path):
         return []
 
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
-
-
-def add_coin(amount):
-    conn = connect()
-    c = conn.cursor()
-
-    c.execute("""
-    UPDATE profile
-    SET coins = coins + ?
-    WHERE id = 1
-    """, (amount,))
-
-    conn.commit()
-    conn.close()
+    with open(path, "r", encoding="utf-8") as file:
+        return json.load(file)
 
 
 def give_login_bonus():
@@ -80,7 +68,7 @@ def before():
     init()
 
     if "theme" not in session:
-        session["theme"] = "soft"
+        session["theme"] = "dream"
 
     give_login_bonus()
 
@@ -92,6 +80,7 @@ def home():
         logs=fetch_all(),
         stats=life_stats(),
         profile=profile_data(),
+        today_tip=today_tip(),
         theme=session["theme"]
     )
 
@@ -240,7 +229,7 @@ def shop():
     return render_template(
         "shop.html",
         shop_items=load_json("shop.json"),
-        themes=load_json("themes.json"),
+        themes=load_themes(),
         profile=profile_data(),
         theme=session["theme"]
     )
@@ -359,11 +348,17 @@ def shopping_done(item_id):
 @app.route("/settings", methods=["GET", "POST"])
 def settings():
     if request.method == "POST":
-        session["theme"] = request.form.get("theme")
+        selected_theme = request.form.get("theme")
+
+        if selected_theme:
+            session["theme"] = selected_theme
+
         return redirect("/settings")
 
     return render_template(
         "settings.html",
+        themes=load_themes(),
+        current_theme=session["theme"],
         theme=session["theme"]
     )
 

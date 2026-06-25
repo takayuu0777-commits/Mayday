@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="card">
+    <div class="section-head">
+        <h2>📊 人生統計</h2>
+        <span class="pill">Life Stats</span>
+    </div>
+
+    <p class="muted">
+        あなたの記録・作品・行動を数字で振り返る場所です。
+    </p>
+</section>
+
+<section class="card">
+    <h2>📈 全体統計</h2>
+
+    <div class="stat-grid">
+        <div class="mini-stat">
+            <span>📝</span>
+            <strong>{{ stats.logs }}</strong>
+            <small>記録</small>
+        </div>
+
+        <div class="mini-stat">
+            <span>📚</span>
+            <strong>{{ stats.library }}</strong>
+            <small>Library</small>
+        </div>
+
+        <div class="mini-stat">
+            <span>✍️</span>
+            <strong>{{ stats.reviews }}</strong>
+            <small>感想</small>
+        </div>
+
+        <div class="mini-stat">
+            <span>🎯</span>
+            <strong>{{ stats.goals }}</strong>
+            <small>目標</small>
+        </div>
+
+        <div class="mini-stat">
+            <span>🛒</span>
+            <strong>{{ stats.shopping }}</strong>
+            <small>買い物</small>
+        </div>
+
+        <div class="mini-stat">
+            <span>🏆</span>
+            <strong>{{ stats.achievements }}</strong>
+            <small>実績</small>
+        </div>
+    </div>
+</section>
+
+<section class="card">
+    <h2>🧠 カテゴリ別記録</h2>
+
+    {% if stats.categories %}
+        {% for item in stats.categories %}
+            <div class="log-item">
+                <div>
+                    <strong>
+                        {% if item.category == "思考" %}💭
+                        {% elif item.category == "学習" %}📚
+                        {% elif item.category == "メディア" %}🎨
+                        {% elif item.category == "仕事" %}💼
+                        {% elif item.category == "買い物" %}🛒
+                        {% elif item.category == "目標" %}🎯
+                        {% else %}📝
+                        {% endif %}
+                        {{ item.category }}
+                    </strong>
+                </div>
+
+                <small>{{ item.count }}件</small>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="muted">
+            まだカテゴリ別の記録はありません。
+        </p>
+    {% endif %}
+</section>
+
+<section class="card">
+    <h2>👤 プロフィール統計</h2>
+
+    <div class="simple-row">
+        <span>🏷 称号</span>
+        <strong>{{ profile.title }}</strong>
+    </div>
+
+    <div class="simple-row">
+        <span>🪙 所持コイン</span>
+        <strong>{{ profile.coins }}</strong>
+    </div>
+
+    <div class="simple-row">
+        <span>📅 総ログイン日数</span>
+        <strong>{{ stats.login }}</strong>
+    </div>
+</section>
+
+{% endblock %}

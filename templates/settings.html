@@ -2,32 +2,62 @@
 
 {% block content %}
 
-<div class="card">
+<section class="card">
+    <div class="section-head">
+        <h2>⚙️ 設定</h2>
+        <span class="pill">Customize</span>
+    </div>
 
-<h3 style="margin-bottom:12px; opacity:0.7;">theme</h3>
+    <p class="muted">
+        Second Brainの見た目やテーマを変更できます。
+    </p>
+</section>
 
-<div class="theme-list">
+<section class="card">
+    <h2>🎨 テーマ</h2>
 
-    <form method="post">
-        <button class="theme-btn soft-text" name="theme" value="soft">
-            soft
-        </button>
+    <form method="post" action="/settings" class="theme-grid">
+        {% for theme_item in themes %}
+            <label class="theme-card">
+                <input
+                    type="radio"
+                    name="theme"
+                    value="{{ theme_item.class }}"
+                    {% if current_theme == theme_item.class %}checked{% endif %}
+                >
+
+                <div>
+                    <strong>
+                        {% if theme_item.class == "dream" %}🌙{% elif theme_item.class == "gold" %}👑{% elif theme_item.class == "forest" %}🌳{% elif theme_item.class == "ocean" %}🌊{% elif theme_item.class == "deep" %}🌑{% else %}🎨{% endif %}
+                        {{ theme_item.name }}
+                    </strong>
+
+                    <small>{{ theme_item.description }}</small>
+                </div>
+            </label>
+        {% endfor %}
+
+        <button>テーマを変更する ✨</button>
     </form>
+</section>
 
-    <form method="post">
-        <button class="theme-btn calm-text" name="theme" value="calm">
-            calm
-        </button>
-    </form>
+<section class="card">
+    <h2>📱 表示方針</h2>
 
-    <form method="post">
-        <button class="theme-btn deep-text" name="theme" value="deep">
-            deep
-        </button>
-    </form>
+    <div class="simple-row">
+        <span>ホーム</span>
+        <strong>軽く・速く</strong>
+    </div>
 
-</div>
+    <div class="simple-row">
+        <span>AI</span>
+        <strong>質問時だけ起動</strong>
+    </div>
 
-</div>
+    <div class="simple-row">
+        <span>設計</span>
+        <strong>iPhone優先</strong>
+    </div>
+</section>
 
 {% endblock %}

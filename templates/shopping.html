@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="card">
+
+    <div class="section-head">
+        <h2>🛒 買い物リスト</h2>
+        <span class="pill">完了で +1コイン</span>
+    </div>
+
+    <p class="muted">
+        忘れたくない買い物を管理できます。
+    </p>
+
+    <form method="post"
+          action="/shopping/add"
+          class="stack-form">
+
+        <input
+            name="name"
+            placeholder="例：牛乳">
+
+        <button>
+            買い物を追加
+        </button>
+
+    </form>
+
+</section>
+
+
+<section class="card">
+
+<h2>📋 買い物一覧</h2>
+
+{% if items %}
+
+{% for item in items %}
+
+<div class="log-item">
+
+<div>
+
+{% if item.done %}
+
+<strong>
+✅ {{ item.name }}
+</strong>
+
+<p class="muted">
+購入済み
+</p>
+
+{% else %}
+
+<strong>
+🛍 {{ item.name }}
+</strong>
+
+<p class="muted">
+未購入
+</p>
+
+{% endif %}
+
+</div>
+
+{% if not item.done %}
+
+<form
+method="post"
+action="/shopping/done/{{ item.id }}">
+
+<button>
+購入した
+</button>
+
+</form>
+
+{% endif %}
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<p class="muted">
+
+まだ何もありません。
+
+</p>
+
+{% endif %}
+
+</section>
+
+{% endblock %}
