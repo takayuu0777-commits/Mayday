@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if achievement %}
+
+<section class="card achievement-detail-card">
+    <div class="section-head">
+        <h2>🏆 {{ achievement.name }}</h2>
+        <span class="pill">{{ achievement.rank }}</span>
+    </div>
+
+    <p class="muted">
+        {{ achievement.description }}
+    </p>
+
+    <div class="progress-bar big">
+        <div style="width: {{ achievement.progress.percent }}%;"></div>
+    </div>
+
+    <div class="simple-row">
+        <span>進捗</span>
+        <strong>{{ achievement.progress.current }} / {{ achievement.progress.target }}</strong>
+    </div>
+
+    <div class="simple-row">
+        <span>達成率</span>
+        <strong>{{ achievement.progress.percent }}%</strong>
+    </div>
+
+    {% if achievement.progress.unlocked %}
+        <div class="simple-row">
+            <span>状態</span>
+            <strong>✅ 達成済み</strong>
+        </div>
+    {% else %}
+        <div class="simple-row">
+            <span>状態</span>
+            <strong>あと少し</strong>
+        </div>
+    {% endif %}
+</section>
+
+<section class="card">
+    <a class="card-link" href="/achievements">実績一覧へ戻る</a>
+</section>
+
+{% else %}
+
+<section class="card">
+    <h2>実績が見つかりません</h2>
+    <a class="card-link" href="/achievements">実績一覧へ戻る</a>
+</section>
+
+{% endif %}
+
+{% endblock %}

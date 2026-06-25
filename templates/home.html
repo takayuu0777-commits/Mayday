@@ -2,48 +2,123 @@
 
 {% block content %}
 
-<section class="hero-grid">
+<section class="card input-card">
+    <h2>✍️ 今日の記録を書く</h2>
 
-    <div class="card profile-card">
-        <div class="profile-top">
-            <div class="profile-icon">
-                {{ profile.icon }}
-            </div>
+    <form method="post" action="/add">
+        <textarea name="text" placeholder="今日の出来事や考えたことを自由に書きましょう..."></textarea>
+        <button>記録する ✨</button>
+    </form>
+</section>
 
-            <div>
-                <div class="sub">Second Brain OS</div>
-                <h1>{{ profile.title }}</h1>
-                <p>人生を記録して、少しずつ自分だけの世界に育てましょう。</p>
-            </div>
+<section class="two-column">
+
+    <div class="card">
+        <div class="section-head">
+            <h2>🎯 目標</h2>
+            <a href="/goals">開く</a>
         </div>
 
-        <div class="profile-stats">
-            <div>
-                <span>🪙</span>
-                <strong>{{ profile.coins }}</strong>
-                <small>コイン</small>
-            </div>
+        <p class="muted">
+            今月やりたいこと、続けたいことを管理します。
+        </p>
 
-            <div>
-                <span>🏆</span>
-                <strong>{{ stats.achievements }}</strong>
-                <small>実績</small>
-            </div>
-
-            <div>
-                <span>📅</span>
-                <strong>{{ stats.login }}</strong>
-                <small>ログイン</small>
-            </div>
+        <div class="simple-row">
+            <span>登録中</span>
+            <strong>{{ stats.goals }}件</strong>
         </div>
     </div>
 
-    <div class="card bonus-card">
-        <div class="sub">🎁 今日のログイン</div>
-        <h2>+1 コイン</h2>
-        <p>今日もSecond Brainに来ました。</p>
+    <div class="card">
+        <div class="section-head">
+            <h2>🛒 買い物</h2>
+            <a href="/shopping">開く</a>
+        </div>
+
+        <p class="muted">
+            買い忘れを防ぐためのリストです。
+        </p>
+
+        <div class="simple-row">
+            <span>登録中</span>
+            <strong>{{ stats.shopping }}件</strong>
+        </div>
     </div>
 
+</section>
+
+<section class="two-column">
+
+    <div class="card">
+        <div class="section-head">
+            <h2>🏆 実績</h2>
+            <a href="/achievements">開く</a>
+        </div>
+
+        <p class="muted">
+            記録や行動に応じて、人生の実績が増えていきます。
+        </p>
+
+        <div class="simple-row">
+            <span>解除済み</span>
+            <strong>{{ stats.achievements }} / 1000</strong>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="section-head">
+            <h2>📚 Library</h2>
+            <a href="/library">開く</a>
+        </div>
+
+        <p class="muted">
+            アニメ・漫画・映画・ゲームなどを集める場所です。
+        </p>
+
+        <div class="simple-row">
+            <span>登録作品</span>
+            <strong>{{ stats.library }}作品</strong>
+        </div>
+    </div>
+
+</section>
+
+<section class="card profile-card">
+    <div class="profile-top">
+        <div class="profile-icon">
+            {{ profile.icon }}
+        </div>
+
+        <div>
+            <div class="sub">Second Brain OS</div>
+            <h1>{{ profile.title }}</h1>
+            <p>人生を記録して、少しずつ自分だけの世界に育てましょう。</p>
+
+            <a class="card-link" href="/profile">
+                🏷 称号を変更する
+            </a>
+        </div>
+    </div>
+
+    <div class="profile-stats">
+        <div>
+            <span>🪙</span>
+            <strong>{{ profile.coins }}</strong>
+            <small>コイン</small>
+        </div>
+
+        <div>
+            <span>🏆</span>
+            <strong>{{ stats.achievements }}</strong>
+            <small>実績</small>
+        </div>
+
+        <div>
+            <span>📅</span>
+            <strong>{{ stats.login }}</strong>
+            <small>ログイン</small>
+        </div>
+    </div>
 </section>
 
 <section class="card">
@@ -91,87 +166,6 @@
     </div>
 </section>
 
-<section class="card input-card">
-    <h2>✍️ 今日の記録を書く</h2>
-
-    <form method="post" action="/add">
-        <textarea name="text" placeholder="今日の出来事や考えたことを自由に書きましょう..."></textarea>
-        <button>記録する ✨</button>
-    </form>
-</section>
-
-<section class="two-column">
-
-    <div class="card">
-        <div class="section-head">
-            <h2>🎯 今月の目標</h2>
-            <a href="/goals">開く</a>
-        </div>
-
-        <p class="muted">
-            今月やりたいこと、続けたいことを管理します。
-        </p>
-
-        <div class="simple-row">
-            <span>登録中</span>
-            <strong>{{ stats.goals }}件</strong>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="section-head">
-            <h2>🛒 買い物</h2>
-            <a href="/shopping">開く</a>
-        </div>
-
-        <p class="muted">
-            買い忘れを防ぐためのリストです。
-        </p>
-
-        <div class="simple-row">
-            <span>登録中</span>
-            <strong>{{ stats.shopping }}件</strong>
-        </div>
-    </div>
-
-</section>
-
-<section class="two-column">
-
-    <div class="card">
-        <div class="section-head">
-            <h2>📚 Library</h2>
-            <a href="/library">開く</a>
-        </div>
-
-        <p class="muted">
-            アニメ・漫画・映画・ゲームなどを集める場所です。
-        </p>
-
-        <div class="simple-row">
-            <span>登録作品</span>
-            <strong>{{ stats.library }}作品</strong>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="section-head">
-            <h2>🏆 実績</h2>
-            <a href="/achievements">開く</a>
-        </div>
-
-        <p class="muted">
-            記録や行動に応じて、人生の実績が増えていきます。
-        </p>
-
-        <div class="simple-row">
-            <span>解除済み</span>
-            <strong>{{ stats.achievements }} / 1000</strong>
-        </div>
-    </div>
-
-</section>
-
 <section class="card discovery-card">
     <div class="section-head">
         <h2>💡 今日の発見</h2>
@@ -181,6 +175,10 @@
     <p class="discovery-text">
         {{ today_tip.text }}
     </p>
+</section>
+
+<section class="login-mini">
+    🎁 今日のログインボーナス +1コイン
 </section>
 
 {% endblock %}

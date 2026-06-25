@@ -483,3 +483,63 @@ button{
         align-items:flex-start;
     }
 }
+
+/* ======================
+   ACHIEVEMENTS / PROFILE
+====================== */
+
+.achievement-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:16px;
+}
+
+.achievement-card{
+    color:inherit;
+    text-decoration:none;
+    transition:0.2s ease;
+}
+
+.achievement-card:hover{
+    transform:translateY(-2px);
+}
+
+.progress-bar{
+    width:100%;
+    height:10px;
+    border-radius:999px;
+    overflow:hidden;
+    background:rgba(255,255,255,0.12);
+    margin:14px 0;
+}
+
+.progress-bar div{
+    height:100%;
+    border-radius:999px;
+    background:linear-gradient(135deg,#c4b5fd,#8b5cf6);
+}
+
+.gold .progress-bar div{
+    background:linear-gradient(135deg,#facc15,#f59e0b);
+}
+
+.progress-bar.big{
+    height:16px;
+}
+
+.achievement-detail-card{
+    min-height:260px;
+}
+
+.login-mini{
+    text-align:center;
+    opacity:0.55;
+    font-size:13px;
+    padding:18px 0 30px;
+}
+
+@media (max-width:760px){
+    .achievement-grid{
+        grid-template-columns:1fr;
+    }
+}

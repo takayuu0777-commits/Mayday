@@ -9,9 +9,9 @@ GENRES = [
     "映画",
     "ゲーム",
     "小説",
-    "音楽",
     "ドラマ",
-    "YouTube",
+    "音楽",
+    "舞台",
     "その他"
 ]
 
@@ -19,11 +19,14 @@ GENRES = [
 def guess_genre(title):
     text = title
 
-    if "映画" in text:
-        return "映画"
+    if "アニメ" in text:
+        return "アニメ"
 
     if "漫画" in text or "マンガ" in text:
         return "漫画"
+
+    if "映画" in text:
+        return "映画"
 
     if "ゲーム" in text:
         return "ゲーム"
@@ -31,17 +34,14 @@ def guess_genre(title):
     if "小説" in text or "本" in text:
         return "小説"
 
-    if "音楽" in text or "曲" in text:
-        return "音楽"
-
     if "ドラマ" in text:
         return "ドラマ"
 
-    if "YouTube" in text or "youtube" in text:
-        return "YouTube"
+    if "音楽" in text or "曲" in text:
+        return "音楽"
 
-    if "アニメ" in text:
-        return "アニメ"
+    if "舞台" in text or "演劇" in text:
+        return "舞台"
 
     return "その他"
 
@@ -151,7 +151,7 @@ def fetch_grouped():
         genre = row["genre"] or "その他"
 
         if genre not in data:
-            data[genre] = []
+            genre = "その他"
 
         data[genre].append(row)
 

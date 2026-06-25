@@ -19,9 +19,11 @@ from modules.library import (
     GENRES
 )
 from modules.calendar import fetch_data, fetch_life_events, add_life_event
-from modules.stats import life_stats, profile_data
+from modules.stats import life_stats
 from modules.tips import today_tip
 from modules.themes import load_themes
+from modules.achievements import all_achievements, find_achievement
+from modules.profile import get_profile, available_titles, update_title
 
 app = Flask(__name__)
 app.secret_key = "brain-os"
@@ -77,9 +79,8 @@ def before():
 def home():
     return render_template(
         "home.html",
-        logs=fetch_all(),
         stats=life_stats(),
-        profile=profile_data(),
+        profile=get_profile(),
         today_tip=today_tip(),
         theme=session["theme"]
     )
@@ -167,7 +168,6 @@ def library_update(item_id):
 @app.route("/library/item/<item_id>/delete", methods=["POST"])
 def library_delete(item_id):
     delete_item(item_id)
-
     return redirect("/library")
 
 
@@ -208,8 +208,35 @@ def calendar_event_add():
 def achievements():
     return render_template(
         "achievements.html",
-        achievements=load_json("achievements.json"),
+        achievements=all_achievements(),
         stats=life_stats(),
+        theme=session["theme"]
+    )
+
+
+@app.route("/achievements/<achievement_id>")
+def achievement_detail(achievement_id):
+    return render_template(
+        "achievement-detail.html",
+        achievement=find_achievement(achievement_id),
+        theme=session["theme"]
+    )
+
+
+@app.route("/profile", methods=["GET", "POST"])
+def profile():
+    if request.method == "POST":
+        title = request.form.get("title")
+
+        if title:
+            update_title(title)
+
+        return redirect("/profile")
+
+    return render_template(
+        "profile.html",
+        profile=get_profile(),
+        titles=available_titles(),
         theme=session["theme"]
     )
 
@@ -219,7 +246,7 @@ def stats():
     return render_template(
         "stats.html",
         stats=life_stats(),
-        profile=profile_data(),
+        profile=get_profile(),
         theme=session["theme"]
     )
 
@@ -230,7 +257,7 @@ def shop():
         "shop.html",
         shop_items=load_json("shop.json"),
         themes=load_themes(),
-        profile=profile_data(),
+        profile=get_profile(),
         theme=session["theme"]
     )
 
