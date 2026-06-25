@@ -6,19 +6,38 @@ from modules.database import connect
 def classify(text):
     if "仕事" in text:
         return "仕事"
+
     if "勉強" in text or "学習" in text or "読書" in text:
         return "学習"
+
     if "映画" in text or "漫画" in text or "アニメ" in text or "ゲーム" in text:
         return "メディア"
+
     if "買い物" in text or "購入" in text:
         return "買い物"
+
     if "目標" in text:
         return "目標"
+
     return "思考"
 
 
 def summarize(text):
     return text[:40]
+
+
+def add_coin(amount):
+    conn = connect()
+    c = conn.cursor()
+
+    c.execute("""
+    UPDATE profile
+    SET coins = coins + ?
+    WHERE id = 1
+    """, (amount,))
+
+    conn.commit()
+    conn.close()
 
 
 def save(text):
@@ -42,6 +61,8 @@ def save(text):
 
     conn.commit()
     conn.close()
+
+    add_coin(1)
 
 
 def fetch_all():

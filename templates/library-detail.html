@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if item %}
+
+<section class="card">
+    <div class="section-head">
+        <h2>📚 {{ item.title }}</h2>
+        <a href="/library">Libraryへ戻る</a>
+    </div>
+
+    <form method="post" action="/library/item/{{ item.id }}/update" class="stack-form">
+        <input name="title" value="{{ item.title }}">
+
+        <select name="genre">
+            {% for genre in genres %}
+                <option value="{{ genre }}" {% if item.genre == genre %}selected{% endif %}>
+                    {{ genre }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <select name="rating">
+            <option value="0" {% if item.rating == 0 %}selected{% endif %}>評価なし</option>
+            <option value="1" {% if item.rating == 1 %}selected{% endif %}>⭐ 1</option>
+            <option value="2" {% if item.rating == 2 %}selected{% endif %}>⭐⭐ 2</option>
+            <option value="3" {% if item.rating == 3 %}selected{% endif %}>⭐⭐⭐ 3</option>
+            <option value="4" {% if item.rating == 4 %}selected{% endif %}>⭐⭐⭐⭐ 4</option>
+            <option value="5" {% if item.rating == 5 %}selected{% endif %}>⭐⭐⭐⭐⭐ 5</option>
+        </select>
+
+        <button>作品情報を保存</button>
+    </form>
+
+    <form method="post" action="/library/item/{{ item.id }}/delete">
+        <button class="danger-button">削除する</button>
+    </form>
+</section>
+
+<section class="card">
+    <h2>✍️ 感想を追加</h2>
+
+    <form method="post" action="/library/item/{{ item.id }}/review" class="stack-form">
+        <textarea name="text" placeholder="この作品について感じたことを書きましょう"></textarea>
+        <button>感想を残す</button>
+    </form>
+</section>
+
+<section class="card">
+    <h2>📖 感想履歴</h2>
+
+    {% if reviews %}
+        {% for review in reviews %}
+            <div class="log-item">
+                <div>
+                    <p>{{ review.text }}</p>
+                </div>
+                <small>{{ review.created_at }}</small>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="muted">
+            まだ感想はありません。
+        </p>
+    {% endif %}
+</section>
+
+{% else %}
+
+<section class="card">
+    <h2>作品が見つかりません</h2>
+    <a href="/library">Libraryへ戻る</a>
+</section>
+
+{% endif %}
+
+{% endblock %}

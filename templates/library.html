@@ -2,15 +2,71 @@
 
 {% block content %}
 
-{% for g, items in data.items() %}
-<div class="card">
-<h3>{{ g }}</h3>
+<section class="card">
+    <div class="section-head">
+        <h2>📚 Library</h2>
+        <span class="pill">作品図鑑</span>
+    </div>
 
-{% for i in items %}
-<div>{{ i }}</div>
-{% endfor %}
+    <p class="muted">
+        アニメ・漫画・映画・ゲームなど、人生で触れた作品を集める場所です。
+    </p>
 
-</div>
+    <form method="post" action="/library/add" class="stack-form">
+        <input name="title" placeholder="作品名を入力">
+
+        <select name="genre">
+            {% for genre in genres %}
+                <option value="{{ genre }}">{{ genre }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="rating">
+            <option value="0">評価なし</option>
+            <option value="1">⭐ 1</option>
+            <option value="2">⭐⭐ 2</option>
+            <option value="3">⭐⭐⭐ 3</option>
+            <option value="4">⭐⭐⭐⭐ 4</option>
+            <option value="5">⭐⭐⭐⭐⭐ 5</option>
+        </select>
+
+        <button>Libraryに追加 ✨</button>
+    </form>
+</section>
+
+{% for genre, items in data.items() %}
+<section class="card">
+    <div class="section-head">
+        <h2>
+            {% if genre == "アニメ" %}📺{% elif genre == "漫画" %}📖{% elif genre == "映画" %}🎬{% elif genre == "ゲーム" %}🎮{% elif genre == "小説" %}📚{% elif genre == "音楽" %}🎵{% elif genre == "ドラマ" %}📺{% elif genre == "YouTube" %}▶️{% else %}📦{% endif %}
+            {{ genre }}
+        </h2>
+
+        <span class="pill">{{ items|length }}件</span>
+    </div>
+
+    {% if items %}
+        <div class="list-grid">
+            {% for item in items %}
+                <a class="list-card" href="/library/item/{{ item.id }}">
+                    <strong>{{ item.title }}</strong>
+
+                    <small>
+                        {% if item.rating and item.rating > 0 %}
+                            {% for i in range(item.rating) %}⭐{% endfor %}
+                        {% else %}
+                            評価なし
+                        {% endif %}
+                    </small>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="muted">
+            まだ登録されていません。
+        </p>
+    {% endif %}
+</section>
 {% endfor %}
 
 {% endblock %}
