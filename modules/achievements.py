@@ -1,12 +1,25 @@
 import json
 import os
 from datetime import datetime
-
 from modules.database import connect
 from modules.stats import life_stats
 
 
 ACHIEVEMENT_FILE = os.path.join(os.getcwd(), "data", "achievements.json")
+
+
+RANKS = [
+    "銅",
+    "銀",
+    "金",
+    "水晶",
+    "サファイア",
+    "ルビー",
+    "エメラルド",
+    "アメジスト",
+    "プラチナ",
+    "ダイヤ"
+]
 
 
 def load_achievements():
@@ -17,7 +30,7 @@ def load_achievements():
         return json.load(file)
 
 
-def unlocked_ids():
+def ensure_table():
     conn = connect()
     c = conn.cursor()
 
@@ -28,6 +41,16 @@ def unlocked_ids():
     )
     """)
 
+    conn.commit()
+    conn.close()
+
+
+def unlocked_ids():
+    ensure_table()
+
+    conn = connect()
+    c = conn.cursor()
+
     rows = c.execute("SELECT id FROM achievements_unlocked").fetchall()
 
     conn.close()
@@ -35,33 +58,11 @@ def unlocked_ids():
     return [row["id"] for row in rows]
 
 
-def progress_value(achievement_id):
-    stats = life_stats()
-
-    if achievement_id.startswith("log"):
-        return stats["logs"]
-
-    if achievement_id.startswith("library"):
-        return stats["library"]
-
-    if achievement_id.startswith("goal"):
-        return stats["goals"]
-
-    if achievement_id.startswith("shopping"):
-        return stats["shopping"]
-
-    if achievement_id.startswith("login"):
-        return stats["login"]
-
-    if achievement_id.startswith("review"):
-        return stats["reviews"]
-
-    return 0
-
-
 def achievement_progress(achievement):
-    current = progress_value(achievement["id"])
+    stats = life_stats()
+    stat = achievement.get("stat")
     target = int(achievement.get("target", 1))
+    current = int(stats.get(stat, 0))
 
     if current > target:
         current = target
@@ -77,13 +78,13 @@ def achievement_progress(achievement):
 
 
 def sync_achievements():
+    ensure_table()
+
     achievements = load_achievements()
     already = unlocked_ids()
 
     conn = connect()
     c = conn.cursor()
-
-    reward_total = 0
 
     for achievement in achievements:
         progress = achievement_progress(achievement)
@@ -98,15 +99,6 @@ def sync_achievements():
                 datetime.now().isoformat()
             ))
 
-            reward_total += int(achievement.get("reward", 0))
-
-    if reward_total > 0:
-        c.execute("""
-        UPDATE profile
-        SET coins = coins + ?
-        WHERE id = 1
-        """, (reward_total,))
-
     conn.commit()
     conn.close()
 
@@ -118,15 +110,42 @@ def all_achievements():
     result = []
 
     for achievement in load_achievements():
-        progress = achievement_progress(achievement)
-
         item = dict(achievement)
-        item["progress"] = progress
-        item["unlocked"] = achievement["id"] in unlocked
-
+        item["progress"] = achievement_progress(achievement)
+        item["unlocked"] = item["id"] in unlocked
         result.append(item)
 
     return result
+
+
+def achievement_categories():
+    achievements = all_achievements()
+    categories = {}
+
+    for achievement in achievements:
+        category = achievement["category"]
+
+        if category not in categories:
+            categories[category] = {
+                "name": category,
+                "total": 0,
+                "unlocked": 0
+            }
+
+        categories[category]["total"] += 1
+
+        if achievement["unlocked"]:
+            categories[category]["unlocked"] += 1
+
+    return list(categories.values())
+
+
+def achievements_by_category(category):
+    return [
+        achievement
+        for achievement in all_achievements()
+        if achievement["category"] == category
+    ]
 
 
 def find_achievement(achievement_id):

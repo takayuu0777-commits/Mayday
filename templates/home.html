@@ -11,157 +11,46 @@
     </form>
 </section>
 
-<section class="two-column">
-
-    <div class="card">
-        <div class="section-head">
-            <h2>🎯 目標</h2>
-            <a href="/goals">開く</a>
-        </div>
-
-        <p class="muted">
-            今月やりたいこと、続けたいことを管理します。
-        </p>
-
-        <div class="simple-row">
-            <span>登録中</span>
-            <strong>{{ stats.goals }}件</strong>
-        </div>
+<section class="card compact-card">
+    <div class="section-head">
+        <h2>🎯 目標</h2>
+        <a href="/goals">開く</a>
     </div>
 
-    <div class="card">
-        <div class="section-head">
-            <h2>🛒 買い物</h2>
-            <a href="/shopping">開く</a>
-        </div>
-
-        <p class="muted">
-            買い忘れを防ぐためのリストです。
-        </p>
-
-        <div class="simple-row">
-            <span>登録中</span>
-            <strong>{{ stats.shopping }}件</strong>
-        </div>
-    </div>
-
+    {% if stats.latest_goals %}
+        {% for goal in stats.latest_goals %}
+            <div class="compact-item">☐ {{ goal.title }}</div>
+        {% endfor %}
+    {% else %}
+        <p class="muted">目標はまだありません。</p>
+    {% endif %}
 </section>
 
-<section class="two-column">
-
-    <div class="card">
-        <div class="section-head">
-            <h2>🏆 実績</h2>
-            <a href="/achievements">開く</a>
-        </div>
-
-        <p class="muted">
-            記録や行動に応じて、人生の実績が増えていきます。
-        </p>
-
-        <div class="simple-row">
-            <span>解除済み</span>
-            <strong>{{ stats.achievements }} / 1000</strong>
-        </div>
+<section class="card compact-card">
+    <div class="section-head">
+        <h2>🛒 買い物</h2>
+        <a href="/shopping">開く</a>
     </div>
 
-    <div class="card">
-        <div class="section-head">
-            <h2>📚 Library</h2>
-            <a href="/library">開く</a>
-        </div>
-
-        <p class="muted">
-            アニメ・漫画・映画・ゲームなどを集める場所です。
-        </p>
-
-        <div class="simple-row">
-            <span>登録作品</span>
-            <strong>{{ stats.library }}作品</strong>
-        </div>
-    </div>
-
+    {% if stats.latest_shopping %}
+        {% for item in stats.latest_shopping %}
+            <div class="compact-item">🛍 {{ item.name }}</div>
+        {% endfor %}
+    {% else %}
+        <p class="muted">買い物リストは空です。</p>
+    {% endif %}
 </section>
 
-<section class="card profile-card">
+<section class="card profile-card compact-profile">
     <div class="profile-top">
         <div class="profile-icon">
             {{ profile.icon }}
         </div>
 
         <div>
-            <div class="sub">Second Brain OS</div>
+            <div class="sub">Profile</div>
             <h1>{{ profile.title }}</h1>
-            <p>人生を記録して、少しずつ自分だけの世界に育てましょう。</p>
-
-            <a class="card-link" href="/profile">
-                🏷 称号を変更する
-            </a>
-        </div>
-    </div>
-
-    <div class="profile-stats">
-        <div>
-            <span>🪙</span>
-            <strong>{{ profile.coins }}</strong>
-            <small>コイン</small>
-        </div>
-
-        <div>
-            <span>🏆</span>
-            <strong>{{ stats.achievements }}</strong>
-            <small>実績</small>
-        </div>
-
-        <div>
-            <span>📅</span>
-            <strong>{{ stats.login }}</strong>
-            <small>ログイン</small>
-        </div>
-    </div>
-</section>
-
-<section class="card">
-    <div class="section-head">
-        <h2>📊 人生統計</h2>
-        <a href="/stats">詳細を見る</a>
-    </div>
-
-    <div class="stat-grid">
-        <div class="mini-stat">
-            <span>📝</span>
-            <strong>{{ stats.logs }}</strong>
-            <small>記録</small>
-        </div>
-
-        <div class="mini-stat">
-            <span>📚</span>
-            <strong>{{ stats.library }}</strong>
-            <small>Library</small>
-        </div>
-
-        <div class="mini-stat">
-            <span>✍️</span>
-            <strong>{{ stats.reviews }}</strong>
-            <small>感想</small>
-        </div>
-
-        <div class="mini-stat">
-            <span>🎯</span>
-            <strong>{{ stats.goals }}</strong>
-            <small>目標</small>
-        </div>
-
-        <div class="mini-stat">
-            <span>🛒</span>
-            <strong>{{ stats.shopping }}</strong>
-            <small>買い物</small>
-        </div>
-
-        <div class="mini-stat">
-            <span>🏆</span>
-            <strong>{{ stats.achievements }}</strong>
-            <small>実績</small>
+            <a class="card-link" href="/profile">プロフィールを編集</a>
         </div>
     </div>
 </section>

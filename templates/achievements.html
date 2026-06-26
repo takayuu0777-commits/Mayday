@@ -5,43 +5,57 @@
 <section class="card">
     <div class="section-head">
         <h2>🏆 実績</h2>
-        <span class="pill">{{ stats.achievements }} / 1000</span>
+        <span class="pill">{{ stats.achievements }} 達成</span>
     </div>
 
     <p class="muted">
-        記録・Library・目標・買い物など、あなたの行動が実績になります。
+        カテゴリごとに実績を確認できます。
     </p>
 </section>
 
-<section class="achievement-grid">
-    {% for achievement in achievements %}
-    <a class="card achievement-card {% if achievement.unlocked %}unlocked{% endif %}"
-       href="/achievements/{{ achievement.id }}">
+<section class="card">
+    <h2>📂 実績カテゴリ</h2>
 
-        <div class="section-head">
-            <h3>{{ achievement.rank }} {{ achievement.name }}</h3>
-
-            {% if achievement.unlocked %}
-                <span class="pill">達成済み</span>
-            {% else %}
-                <span class="pill">進行中</span>
-            {% endif %}
-        </div>
-
-        <p class="muted">{{ achievement.description }}</p>
-
-        <div class="progress-bar">
-            <div style="width: {{ achievement.progress.percent }}%;"></div>
-        </div>
-
-        <div class="simple-row">
-            <span>{{ achievement.progress.current }} / {{ achievement.progress.target }}</span>
-            <strong>🪙 {{ achievement.reward }}</strong>
-        </div>
-
-        <small>{{ achievement.category }}</small>
-    </a>
-    {% endfor %}
+    <div class="achievement-category-list">
+        {% for category in categories %}
+            <a class="achievement-category-item"
+               href="/achievements/category/{{ category.name }}">
+                <span>{{ category.name }}</span>
+                <strong>{{ category.unlocked }} / {{ category.total }}</strong>
+            </a>
+        {% endfor %}
+    </div>
 </section>
+
+{% if achievements %}
+
+<section class="card">
+    <div class="section-head">
+        <h2>{{ selected_category }}</h2>
+        <span class="pill">一覧</span>
+    </div>
+
+    <div class="achievement-compact-list">
+        {% for achievement in achievements %}
+            <a class="achievement-compact-item {% if achievement.unlocked %}unlocked{% endif %}"
+               href="/achievements/{{ achievement.id }}">
+
+                <div>
+                    {% if achievement.unlocked %}
+                        <strong>✅ {{ achievement.name }}</strong>
+                    {% else %}
+                        <strong>□ {{ achievement.name }}</strong>
+                    {% endif %}
+
+                    <small>{{ achievement.rank }} / {{ achievement.progress.current }} / {{ achievement.progress.target }}</small>
+                </div>
+
+                <span>{{ achievement.progress.percent }}%</span>
+            </a>
+        {% endfor %}
+    </div>
+</section>
+
+{% endif %}
 
 {% endblock %}

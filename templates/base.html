@@ -22,7 +22,18 @@
 <body class="{{ theme }}">
 
 <header>
-    <div class="title">🧠 Second Brain</div>
+    <div class="title-row">
+        <div class="title">🧠 Second Brain</div>
+
+        {% if profile and stats %}
+        <div class="top-mini-stats">
+            <span>🏆 {{ stats.achievements }}</span>
+            <span>📚 {{ stats.library }}</span>
+            <span>🪙 {{ profile.coins }}</span>
+            <span>📅 {{ stats.login }}</span>
+        </div>
+        {% endif %}
+    </div>
 
     <nav class="tabs" id="tabs">
         <a href="/" data-path="/">ホーム</a>
@@ -31,7 +42,6 @@
         <a href="/stats" data-path="/stats">統計</a>
         <a href="/calendar" data-path="/calendar">カレンダー</a>
         <a href="/goals" data-path="/goals">目標</a>
-        <a href="/shopping" data-path="/shopping">買い物</a>
         <a href="/shop" data-path="/shop">ショップ</a>
         <a href="/settings" data-path="/settings">設定</a>
     </nav>
@@ -41,8 +51,6 @@
     {% block content %}
     {% endblock %}
 </main>
-
-<script src="/static/theme.js"></script>
 
 <script>
 const currentPath = window.location.pathname;
@@ -68,14 +76,6 @@ if (tabs) {
                 });
             }, 100);
         }
-    });
-}
-
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-        navigator.serviceWorker.register("/static/sw.js")
-        .then(() => console.log("PWA Ready"))
-        .catch((err) => console.log(err));
     });
 }
 </script>

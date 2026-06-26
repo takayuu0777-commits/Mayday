@@ -1,27 +1,11 @@
 [
-    {
-        "id": "beginner",
-        "name": "はじまりの記録者",
-        "description": "Second Brainを始めた証"
-    },
-    {
-        "id": "collector",
-        "name": "作品収集家",
-        "description": "Libraryに作品を登録し始めた"
-    },
-    {
-        "id": "thinker",
-        "name": "思索家",
-        "description": "思考の記録を積み重ねた"
-    },
-    {
-        "id": "researcher",
-        "name": "探究者",
-        "description": "学習を継続している"
-    },
-    {
-        "id": "brain",
-        "name": "Second Brain Explorer",
-        "description": "Second Brainを使いこなし始めた"
-    }
+    "無称号",
+    "はじまりの記録者",
+    "作品収集家",
+    "思索家",
+    "探究者",
+    "Second Brain Explorer",
+    "人生収集家",
+    "夢の記録者",
+    "黄金の脳"
 ]

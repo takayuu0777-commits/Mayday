@@ -7,8 +7,18 @@
 <section class="card">
     <div class="section-head">
         <h2>📚 {{ item.title }}</h2>
-        <a href="/library">Libraryへ戻る</a>
+        <span class="pill">{{ item.genre }}</span>
     </div>
+
+    {% if item.rating and item.rating|int > 0 %}
+        <p>{{ "⭐" * item.rating|int }}</p>
+    {% else %}
+        <p class="muted">未評価</p>
+    {% endif %}
+</section>
+
+<section class="card">
+    <h2>✏️ 作品情報を編集</h2>
 
     <form method="post" action="/library/item/{{ item.id }}/update" class="stack-form">
         <input name="title" value="{{ item.title }}">
@@ -22,33 +32,36 @@
         </select>
 
         <select name="rating">
-            <option value="0" {% if item.rating == 0 %}selected{% endif %}>評価なし</option>
-            <option value="1" {% if item.rating == 1 %}selected{% endif %}>⭐ 1</option>
-            <option value="2" {% if item.rating == 2 %}selected{% endif %}>⭐⭐ 2</option>
-            <option value="3" {% if item.rating == 3 %}selected{% endif %}>⭐⭐⭐ 3</option>
-            <option value="4" {% if item.rating == 4 %}selected{% endif %}>⭐⭐⭐⭐ 4</option>
-            <option value="5" {% if item.rating == 5 %}selected{% endif %}>⭐⭐⭐⭐⭐ 5</option>
+            <option value="0" {% if item.rating == 0 %}selected{% endif %}>未評価</option>
+            {% for n in [1,2,3,4,5] %}
+                <option value="{{ n }}" {% if item.rating == n %}selected{% endif %}>
+                    {{ "⭐" * n }}
+                </option>
+            {% endfor %}
         </select>
 
-        <button>作品情報を保存</button>
-    </form>
-
-    <form method="post" action="/library/item/{{ item.id }}/delete">
-        <button class="danger-button">削除する</button>
+        <button>保存する</button>
     </form>
 </section>
 
 <section class="card">
-    <h2>✍️ 感想を追加</h2>
+    <h2>✍️ 感想を書く</h2>
 
     <form method="post" action="/library/item/{{ item.id }}/review" class="stack-form">
-        <textarea name="text" placeholder="この作品について感じたことを書きましょう"></textarea>
-        <button>感想を残す</button>
+        <select name="rating">
+            <option value="">評価は変更しない</option>
+            {% for n in [1,2,3,4,5] %}
+                <option value="{{ n }}">{{ "⭐" * n }}</option>
+            {% endfor %}
+        </select>
+
+        <textarea name="text" placeholder="感想を書きましょう"></textarea>
+        <button>感想を追加する ✨</button>
     </form>
 </section>
 
 <section class="card">
-    <h2>📖 感想履歴</h2>
+    <h2>📖 感想一覧</h2>
 
     {% if reviews %}
         {% for review in reviews %}
@@ -56,21 +69,25 @@
                 <div>
                     <p>{{ review.text }}</p>
                 </div>
-                <small>{{ review.created_at }}</small>
+                <small>{{ review.created_at[:10] }}</small>
             </div>
         {% endfor %}
     {% else %}
-        <p class="muted">
-            まだ感想はありません。
-        </p>
+        <p class="muted">まだ感想はありません。</p>
     {% endif %}
+</section>
+
+<section class="card">
+    <form method="post" action="/library/item/{{ item.id }}/delete">
+        <button class="danger-button">削除する</button>
+    </form>
 </section>
 
 {% else %}
 
 <section class="card">
     <h2>作品が見つかりません</h2>
-    <a href="/library">Libraryへ戻る</a>
+    <a class="card-link" href="/library">Libraryへ戻る</a>
 </section>
 
 {% endif %}

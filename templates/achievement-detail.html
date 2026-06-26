@@ -11,12 +11,12 @@
         {% if achievement.unlocked %}
             <span class="pill">達成済み</span>
         {% else %}
-            <span class="pill">進行中</span>
+            <span class="pill">未達成</span>
         {% endif %}
     </div>
 
     <p class="muted">
-        {{ achievement.description }}
+        {{ achievement.category }}
     </p>
 
     <div class="progress-bar big">
@@ -31,16 +31,6 @@
     <div class="simple-row">
         <span>達成率</span>
         <strong>{{ achievement.progress.percent }}%</strong>
-    </div>
-
-    <div class="simple-row">
-        <span>報酬</span>
-        <strong>🪙 {{ achievement.reward }} コイン</strong>
-    </div>
-
-    <div class="simple-row">
-        <span>カテゴリ</span>
-        <strong>{{ achievement.category }}</strong>
     </div>
 </section>
 

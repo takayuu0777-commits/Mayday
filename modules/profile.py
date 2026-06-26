@@ -1,32 +1,27 @@
+import json
+import os
+
 from modules.database import connect
 
 
-DEFAULT_TITLES = [
-    "無称号",
-    "はじまりの記録者",
-    "作品収集家",
-    "思索家",
-    "探究者",
-    "Second Brain Explorer",
-    "人生収集家",
-    "記録魔",
-    "夢の記録者",
-    "黄金の脳"
-]
+TITLE_FILE = os.path.join("data", "titles.json")
+ICON_FILE = os.path.join("data", "icons.json")
 
 
-DEFAULT_ICONS = [
-    "🧠",
-    "🌙",
-    "👑",
-    "📚",
-    "🎮",
-    "🎬",
-    "💎",
-    "🐺",
-    "🦊",
-    "🐧"
-]
+def load_titles():
+    if not os.path.exists(TITLE_FILE):
+        return ["無称号"]
+
+    with open(TITLE_FILE, "r", encoding="utf-8") as file:
+        return json.load(file)
+
+
+def load_icons():
+    if not os.path.exists(ICON_FILE):
+        return ["🧠"]
+
+    with open(ICON_FILE, "r", encoding="utf-8") as file:
+        return json.load(file)
 
 
 def get_profile():
@@ -34,19 +29,11 @@ def get_profile():
     c = conn.cursor()
 
     c.execute("SELECT * FROM profile WHERE id = 1")
-    row = c.fetchone()
+    profile = c.fetchone()
 
     conn.close()
 
-    return dict(row)
-
-
-def available_titles():
-    return DEFAULT_TITLES
-
-
-def available_icons():
-    return DEFAULT_ICONS
+    return dict(profile)
 
 
 def update_profile(title, icon):
@@ -58,7 +45,10 @@ def update_profile(title, icon):
     SET title = ?,
         icon = ?
     WHERE id = 1
-    """, (title, icon))
+    """, (
+        title,
+        icon
+    ))
 
     conn.commit()
     conn.close()

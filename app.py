@@ -15,8 +15,8 @@ from modules.calendar import fetch_data, fetch_life_events, add_life_event
 from modules.stats import life_stats
 from modules.tips import today_tip
 from modules.themes import load_themes, owned_themes, buy_theme, is_owned
-from modules.achievements import all_achievements, find_achievement
-from modules.profile import get_profile, available_titles, available_icons, update_profile
+from modules.achievements import achievement_categories, achievements_by_category, find_achievement
+from modules.profile import get_profile, load_titles, load_icons, update_profile
 
 app = Flask(__name__)
 app.secret_key = "brain-os"
@@ -118,9 +118,15 @@ def library_add():
     title = request.form.get("title")
     genre = request.form.get("genre")
     rating = request.form.get("rating", 0)
+    review = request.form.get("review")
 
-    if title:
-        add_item(title, genre, rating)
+    item_id = add_item(title, genre, rating)
+
+    if item_id and review:
+        add_review(item_id, review, rating)
+
+    if item_id:
+        return redirect(f"/library/item/{item_id}")
 
     return redirect("/library")
 
@@ -202,11 +208,21 @@ def calendar_event_add():
 def achievements():
     return render_template(
         "achievements.html",
-        achievements=all_achievements(),
+        categories=achievement_categories(),
         stats=life_stats(),
         theme=session["theme"]
     )
 
+@app.route("/achievements/category/<category>")
+def achievement_category(category):
+    return render_template(
+        "achievements.html",
+        categories=achievement_categories(),
+        achievements=achievements_by_category(category),
+        selected_category=category,
+        stats=life_stats(),
+        theme=session["theme"]
+    )
 
 @app.route("/achievements/<achievement_id>")
 def achievement_detail(achievement_id):
@@ -231,8 +247,8 @@ def profile():
     return render_template(
         "profile.html",
         profile=get_profile(),
-        titles=available_titles(),
-        icons=available_icons(),
+        titles=load_titles(),
+        icons=load_icons(),
         theme=session["theme"]
     )
 

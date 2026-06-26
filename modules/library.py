@@ -16,53 +16,34 @@ GENRES = [
 ]
 
 
-def guess_genre(title):
-    text = title
-
-    if "アニメ" in text:
-        return "アニメ"
-
-    if "漫画" in text or "マンガ" in text:
-        return "漫画"
-
-    if "映画" in text:
-        return "映画"
-
-    if "ゲーム" in text:
-        return "ゲーム"
-
-    if "小説" in text or "本" in text:
-        return "小説"
-
-    if "ドラマ" in text:
-        return "ドラマ"
-
-    if "音楽" in text or "曲" in text:
-        return "音楽"
-
-    if "舞台" in text or "演劇" in text:
-        return "舞台"
-
-    return "その他"
-
-
 def add_coin(amount):
     conn = connect()
     c = conn.cursor()
 
-    c.execute("""
-    UPDATE profile
-    SET coins = coins + ?
-    WHERE id = 1
-    """, (amount,))
+    c.execute(
+        "UPDATE profile SET coins = coins + ? WHERE id = 1",
+        (amount,)
+    )
 
     conn.commit()
     conn.close()
 
 
-def add_item(title, genre=None, rating=0):
-    if not genre:
-        genre = guess_genre(title)
+def normalize_genre(genre):
+    if genre in GENRES:
+        return genre
+
+    return "その他"
+
+
+def add_item(title, genre="その他", rating=0):
+    title = (title or "").strip()
+    genre = normalize_genre(genre)
+
+    if not title:
+        return None
+
+    item_id = str(uuid.uuid4())
 
     conn = connect()
     c = conn.cursor()
@@ -72,10 +53,10 @@ def add_item(title, genre=None, rating=0):
     (id, title, genre, rating, created_at)
     VALUES (?, ?, ?, ?, ?)
     """, (
-        str(uuid.uuid4()),
+        item_id,
         title,
         genre,
-        rating,
+        rating or 0,
         datetime.now().isoformat()
     ))
 
@@ -83,6 +64,32 @@ def add_item(title, genre=None, rating=0):
     conn.close()
 
     add_coin(2)
+
+    return item_id
+
+
+def update_item(item_id, title, genre, rating):
+    title = (title or "").strip()
+    genre = normalize_genre(genre)
+
+    conn = connect()
+    c = conn.cursor()
+
+    c.execute("""
+    UPDATE library
+    SET title = ?,
+        genre = ?,
+        rating = ?
+    WHERE id = ?
+    """, (
+        title,
+        genre,
+        rating or 0,
+        item_id
+    ))
+
+    conn.commit()
+    conn.close()
 
 
 def delete_item(item_id):
@@ -96,23 +103,12 @@ def delete_item(item_id):
     conn.close()
 
 
-def update_item(item_id, title, genre, rating):
-    conn = connect()
-    c = conn.cursor()
+def add_review(item_id, text, rating=None):
+    text = (text or "").strip()
 
-    c.execute("""
-    UPDATE library
-    SET title = ?,
-        genre = ?,
-        rating = ?
-    WHERE id = ?
-    """, (title, genre, rating, item_id))
+    if not text:
+        return
 
-    conn.commit()
-    conn.close()
-
-
-def add_review(item_id, text):
     conn = connect()
     c = conn.cursor()
 
@@ -126,6 +122,13 @@ def add_review(item_id, text):
         text,
         datetime.now().isoformat()
     ))
+
+    if rating is not None and rating != "":
+        c.execute("""
+        UPDATE library
+        SET rating = ?
+        WHERE id = ?
+        """, (rating, item_id))
 
     conn.commit()
     conn.close()
@@ -149,16 +152,15 @@ def fetch_grouped():
 
     for row in rows:
         genre = row["genre"] or "その他"
-
-        if genre not in data:
-            genre = "その他"
-
+        genre = normalize_genre(genre)
         data[genre].append(row)
 
     return data
 
 
 def fetch_by_genre(genre):
+    genre = normalize_genre(genre)
+
     conn = connect()
     c = conn.cursor()
 
@@ -172,6 +174,7 @@ def fetch_by_genre(genre):
     rows = c.fetchall()
 
     conn.close()
+
     return rows
 
 
@@ -183,6 +186,7 @@ def fetch_item(item_id):
     item = c.fetchone()
 
     conn.close()
+
     return item
 
 
@@ -200,4 +204,5 @@ def fetch_reviews(item_id):
     rows = c.fetchall()
 
     conn.close()
+
     return rows

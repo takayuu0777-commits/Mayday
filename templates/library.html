@@ -5,11 +5,11 @@
 <section class="card">
     <div class="section-head">
         <h2>📚 Library</h2>
-        <span class="pill">作品図鑑</span>
+        <span class="pill">作品管理</span>
     </div>
 
     <p class="muted">
-        アニメ・漫画・映画・ゲームなど、人生で触れた作品を集める場所です。
+        アニメ・漫画・映画・ゲームなど、見た作品や遊んだ作品を記録します。
     </p>
 
     <form method="post" action="/library/add" class="stack-form">
@@ -22,26 +22,25 @@
         </select>
 
         <select name="rating">
-            <option value="0">評価なし</option>
-            <option value="1">⭐ 1</option>
-            <option value="2">⭐⭐ 2</option>
-            <option value="3">⭐⭐⭐ 3</option>
-            <option value="4">⭐⭐⭐⭐ 4</option>
-            <option value="5">⭐⭐⭐⭐⭐ 5</option>
+            <option value="0">未評価</option>
+            <option value="1">⭐</option>
+            <option value="2">⭐⭐</option>
+            <option value="3">⭐⭐⭐</option>
+            <option value="4">⭐⭐⭐⭐</option>
+            <option value="5">⭐⭐⭐⭐⭐</option>
         </select>
 
-        <button>Libraryに追加 ✨</button>
+        <textarea name="review" placeholder="追加後すぐに感想を書くこともできます"></textarea>
+
+        <button>作品を追加する ✨</button>
     </form>
 </section>
 
 {% for genre, items in data.items() %}
+
 <section class="card">
     <div class="section-head">
-        <h2>
-            {% if genre == "アニメ" %}📺{% elif genre == "漫画" %}📖{% elif genre == "映画" %}🎬{% elif genre == "ゲーム" %}🎮{% elif genre == "小説" %}📚{% elif genre == "音楽" %}🎵{% elif genre == "ドラマ" %}📺{% elif genre == "YouTube" %}▶️{% else %}📦{% endif %}
-            {{ genre }}
-        </h2>
-
+        <h2>{{ genre }}</h2>
         <span class="pill">{{ items|length }}件</span>
     </div>
 
@@ -51,22 +50,19 @@
                 <a class="list-card" href="/library/item/{{ item.id }}">
                     <strong>{{ item.title }}</strong>
 
-                    <small>
-                        {% if item.rating and item.rating > 0 %}
-                            {% for i in range(item.rating) %}⭐{% endfor %}
-                        {% else %}
-                            評価なし
-                        {% endif %}
-                    </small>
+                    {% if item.rating and item.rating|int > 0 %}
+                        <small>{{ "⭐" * item.rating|int }}</small>
+                    {% else %}
+                        <small>未評価</small>
+                    {% endif %}
                 </a>
             {% endfor %}
         </div>
     {% else %}
-        <p class="muted">
-            まだ登録されていません。
-        </p>
+        <p class="muted">まだ登録はありません。</p>
     {% endif %}
 </section>
+
 {% endfor %}
 
 {% endblock %}
