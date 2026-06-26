@@ -19,7 +19,14 @@ from modules.achievements import (
     achievement_categories,
     achievements_by_category,
     find_achievement
-)from modules.profile import get_profile, load_titles, load_icons, update_profile
+)
+
+from modules.profile import (
+    get_profile,
+    load_titles,
+    load_icons,
+    update_profile
+)
 
 app = Flask(__name__)
 app.secret_key = "brain-os"
