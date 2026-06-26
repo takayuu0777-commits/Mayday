@@ -77,8 +77,6 @@ def latest_shopping(limit=3):
 
 
 def life_stats():
-    def life_stats():
-
     conn = connect()
     c = conn.cursor()
 
@@ -101,6 +99,7 @@ def life_stats():
         genres[f"genre_{genre}"] = c.fetchone()["count"]
 
     conn.close()
+
     return {
         "logs": count_table("logs"),
         "library": count_table("library"),
@@ -112,6 +111,6 @@ def life_stats():
         "login": count_table("login_days"),
         "categories": category_counts(),
         "latest_goals": latest_goals(),
-        "latest_shopping": latest_shopping()
+        "latest_shopping": latest_shopping(),
         **genres
     }
