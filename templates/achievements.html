@@ -35,25 +35,73 @@
         <span class="pill">一覧</span>
     </div>
 
-    <div class="achievement-compact-list">
-        {% for achievement in achievements %}
-            <a class="achievement-compact-item {% if achievement.unlocked %}unlocked{% endif %}"
-               href="/achievements/{{ achievement.id }}">
+    <div class="achievement-rank-group">
 
-                <div>
-                    {% if achievement.unlocked %}
-                        <strong>✅ {{ achievement.name }}</strong>
-                    {% else %}
-                        <strong>□ {{ achievement.name }}</strong>
-                    {% endif %}
+    {% for rank in [
+        "銅",
+        "銀",
+        "金",
+        "水晶",
+        "サファイア",
+        "ルビー",
+        "エメラルド",
+        "アメジスト",
+        "プラチナ",
+        "ダイヤ"
+    ] %}
 
-                    <small>{{ achievement.rank }} / {{ achievement.progress.current }} / {{ achievement.progress.target }}</small>
-                </div>
+        {% set rank_items = achievements | selectattr("rank", "equalto", rank) | list %}
 
-                <span>{{ achievement.progress.percent }}%</span>
-            </a>
-        {% endfor %}
-    </div>
+        {% if rank_items %}
+
+        <div class="rank-section">
+
+            <div class="rank-title">
+                {{ rank }}
+            </div>
+
+            <div class="achievement-compact-list">
+
+                {% for achievement in rank_items %}
+
+                <a
+                    class="achievement-compact-item {% if achievement.unlocked %}unlocked{% endif %}"
+                    href="/achievements/{{ achievement.id }}"
+                >
+
+                    <div>
+
+                        {% if achievement.unlocked %}
+                            <strong>✅ {{ achievement.name }}</strong>
+                        {% else %}
+                            <strong>⬜ {{ achievement.name }}</strong>
+                        {% endif %}
+
+                        <small>
+                            {{ achievement.progress.current }}
+                            /
+                            {{ achievement.progress.target }}
+                        </small>
+
+                    </div>
+
+                    <span>
+                        {{ achievement.progress.percent }}%
+                    </span>
+
+                </a>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    {% endfor %}
+
+</div>
 </section>
 
 {% endif %}

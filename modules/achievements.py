@@ -1,11 +1,12 @@
 import json
 import os
-from datetime import datetime
+from datetime import datetime, date
 from modules.database import connect
 from modules.stats import life_stats
 
 
 ACHIEVEMENT_FILE = os.path.join(os.getcwd(), "data", "achievements.json")
+EVENT_FILE = os.path.join(os.getcwd(), "data", "events.json")
 
 
 RANKS = [

@@ -1,0 +1,37 @@
+[
+  {
+    "id": "event-new-year",
+    "name": "新年の始まり",
+    "category": "特別",
+    "rank": "銀",
+    "date": "01-01"
+  },
+  {
+    "id": "event-valentine",
+    "name": "バレンタイン",
+    "category": "特別",
+    "rank": "銅",
+    "date": "02-14"
+  },
+  {
+    "id": "event-birthday",
+    "name": "誕生日の記録",
+    "category": "特別",
+    "rank": "金",
+    "date": "birthday"
+  },
+  {
+    "id": "event-halloween",
+    "name": "ハロウィン",
+    "category": "特別",
+    "rank": "銅",
+    "date": "10-31"
+  },
+  {
+    "id": "event-christmas",
+    "name": "クリスマス",
+    "category": "特別",
+    "rank": "銀",
+    "date": "12-25"
+  }
+]

@@ -886,3 +886,15 @@ body{
         padding:4px 7px;
     }
 }
+
+.rank-section{
+    margin-top:24px;
+}
+
+.rank-title{
+    font-size:18px;
+    font-weight:700;
+    margin-bottom:12px;
+    padding-left:4px;
+    opacity:.9;
+}

@@ -15,8 +15,11 @@ from modules.calendar import fetch_data, fetch_life_events, add_life_event
 from modules.stats import life_stats
 from modules.tips import today_tip
 from modules.themes import load_themes, owned_themes, buy_theme, is_owned
-from modules.achievements import achievement_categories, achievements_by_category, find_achievement
-from modules.profile import get_profile, load_titles, load_icons, update_profile
+from modules.achievements import (
+    achievement_categories,
+    achievements_by_category,
+    find_achievement
+)from modules.profile import get_profile, load_titles, load_icons, update_profile
 
 app = Flask(__name__)
 app.secret_key = "brain-os"
@@ -226,9 +229,13 @@ def achievement_category(category):
 
 @app.route("/achievements/<achievement_id>")
 def achievement_detail(achievement_id):
+    achievement = find_achievement(achievement_id)
+
     return render_template(
         "achievement-detail.html",
-        achievement=find_achievement(achievement_id),
+        achievement=achievement,
+        stats=life_stats(),
+        profile=get_profile(),
         theme=session["theme"]
     )
 
