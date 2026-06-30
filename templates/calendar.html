@@ -4,79 +4,56 @@
 
 <section class="card">
     <div class="section-head">
-        <h2>📅 人生ログカレンダー</h2>
-        <span class="pill">日ごとの記録</span>
+        <h2>📅 カレンダー</h2>
+        <span class="pill">Life Calendar</span>
     </div>
 
     <p class="muted">
-        予定管理ではなく、人生の出来事を振り返るためのカレンダーです。
+        記録がある日にはアイコンが表示されます。
     </p>
 </section>
 
 <section class="card">
-    <h2>📆 記録された日</h2>
+    <h2>📆 人生ログカレンダー</h2>
 
-    {% if data %}
-        {% for date, categories in data.items() %}
-            <div class="log-item">
-                <div>
-                    <strong>{{ date }}</strong>
+    <div class="calendar-grid">
+        {% for date_key, day_icons in icons.items() %}
+            <div class="calendar-cell">
+                <strong>{{ date_key[5:] }}</strong>
 
-                    <p>
-                        {% for category, count in categories.items() %}
-                            {% if category == "思考" %}💭
-                            {% elif category == "学習" %}📚
-                            {% elif category == "メディア" %}🎨
-                            {% elif category == "仕事" %}💼
-                            {% elif category == "買い物" %}🛒
-                            {% elif category == "目標" %}🎯
-                            {% else %}📝
-                            {% endif %}
-                            {{ category }} {{ count }}件　
-                        {% endfor %}
-                    </p>
+                <div class="calendar-icons">
+                    {% for icon in day_icons %}
+                        <span>{{ icon }}</span>
+                    {% endfor %}
                 </div>
             </div>
         {% endfor %}
-    {% else %}
-        <p class="muted">
-            まだカレンダーに表示できる記録はありません。
-        </p>
-    {% endif %}
+    </div>
 </section>
 
 <section class="card">
-    <div class="section-head">
-        <h2>🕰 人生年表</h2>
-        <span class="pill">過去の出来事</span>
-    </div>
+    <h2>人生年表</h2>
 
     <form method="post" action="/calendar/event/add" class="stack-form">
-        <input name="title" placeholder="出来事のタイトル 例：Second Brain開始">
-        <input name="emoji" placeholder="絵文字 例：💻">
-        <input name="event_date" type="date">
-        <textarea name="description" placeholder="説明や思い出"></textarea>
-        <button>人生イベントを追加</button>
+        <input name="title" placeholder="出来事のタイトル">
+        <input name="event_date" placeholder="年月日 例：2026-07-01">
+        <textarea name="description" placeholder="内容"></textarea>
+        <button>年表に追加する</button>
     </form>
 </section>
 
 <section class="card">
-    <h2>📖 登録済みの人生イベント</h2>
+    <h2>年表一覧</h2>
 
     {% if life_events %}
         {% for event in life_events %}
             <div class="log-item">
-                <div>
-                    <strong>{{ event.emoji }} {{ event.title }}</strong>
-                    <p>{{ event.description }}</p>
-                </div>
-                <small>{{ event.event_date }}</small>
+                <strong>{{ event.event_date }}　{{ event.title }}</strong>
+                <p>{{ event.description }}</p>
             </div>
         {% endfor %}
     {% else %}
-        <p class="muted">
-            まだ人生イベントは登録されていません。
-        </p>
+        <p class="muted">年表はまだありません。</p>
     {% endif %}
 </section>
 

@@ -6,17 +6,19 @@
 
 <section class="card achievement-detail-card {% if achievement.unlocked %}unlocked{% endif %}">
     <div class="section-head">
-        <h2>{{ achievement.rank }} {{ achievement.name }}</h2>
+        <h2>
+            {% if achievement.unlocked %}
+                ✅ {{ achievement.name }}
+            {% else %}
+                □ {{ achievement.name }}
+            {% endif %}
+        </h2>
 
-        {% if achievement.unlocked %}
-            <span class="pill">達成済み</span>
-        {% else %}
-            <span class="pill">未達成</span>
-        {% endif %}
+        <span class="pill">{{ achievement.rank }}</span>
     </div>
 
     <p class="muted">
-        {{ achievement.category }}
+        {{ achievement.description }}
     </p>
 
     <div class="progress-bar big">

@@ -16,6 +16,12 @@ GENRES = [
 ]
 
 
+def normalize_genre(genre):
+    if genre in GENRES:
+        return genre
+    return "その他"
+
+
 def add_coin(amount):
     conn = connect()
     c = conn.cursor()
@@ -29,14 +35,7 @@ def add_coin(amount):
     conn.close()
 
 
-def normalize_genre(genre):
-    if genre in GENRES:
-        return genre
-
-    return "その他"
-
-
-def add_item(title, genre="その他", rating=0):
+def add_item(title, genre="その他", rating=0, review=""):
     title = (title or "").strip()
     genre = normalize_genre(genre)
 
@@ -56,9 +55,23 @@ def add_item(title, genre="その他", rating=0):
         item_id,
         title,
         genre,
-        rating or 0,
+        int(rating or 0),
         datetime.now().isoformat()
     ))
+
+    review = (review or "").strip()
+
+    if review:
+        c.execute("""
+        INSERT INTO reviews
+        (id, library_id, text, created_at)
+        VALUES (?, ?, ?, ?)
+        """, (
+            str(uuid.uuid4()),
+            item_id,
+            review,
+            datetime.now().isoformat()
+        ))
 
     conn.commit()
     conn.close()
@@ -84,7 +97,7 @@ def update_item(item_id, title, genre, rating):
     """, (
         title,
         genre,
-        rating or 0,
+        int(rating or 0),
         item_id
     ))
 
@@ -128,7 +141,10 @@ def add_review(item_id, text, rating=None):
         UPDATE library
         SET rating = ?
         WHERE id = ?
-        """, (rating, item_id))
+        """, (
+            int(rating),
+            item_id
+        ))
 
     conn.commit()
     conn.close()
@@ -151,31 +167,10 @@ def fetch_grouped():
         data[genre] = []
 
     for row in rows:
-        genre = row["genre"] or "その他"
-        genre = normalize_genre(genre)
+        genre = normalize_genre(row["genre"])
         data[genre].append(row)
 
     return data
-
-
-def fetch_by_genre(genre):
-    genre = normalize_genre(genre)
-
-    conn = connect()
-    c = conn.cursor()
-
-    c.execute("""
-    SELECT *
-    FROM library
-    WHERE genre = ?
-    ORDER BY title ASC
-    """, (genre,))
-
-    rows = c.fetchall()
-
-    conn.close()
-
-    return rows
 
 
 def fetch_item(item_id):
@@ -186,7 +181,6 @@ def fetch_item(item_id):
     item = c.fetchone()
 
     conn.close()
-
     return item
 
 
@@ -204,5 +198,4 @@ def fetch_reviews(item_id):
     rows = c.fetchall()
 
     conn.close()
-
     return rows

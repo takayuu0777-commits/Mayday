@@ -2,22 +2,25 @@
 
 {% block content %}
 
-<section class="card profile-card">
+<section class="card profile-card {{ profile.background }}">
     <div class="profile-top">
-        <div class="profile-icon">
-            {{ profile.icon }}
-        </div>
+        <div class="profile-icon">{{ profile.icon }}</div>
 
         <div>
             <div class="sub">Profile</div>
             <h1>{{ profile.title }}</h1>
-            <p>称号とアイコンを変更できます。</p>
+
+            {% if profile.bio %}
+                <p>{{ profile.bio }}</p>
+            {% else %}
+                <p class="muted">自己紹介はまだありません。</p>
+            {% endif %}
         </div>
     </div>
 </section>
 
 <section class="card">
-    <h2>🏷 プロフィール変更</h2>
+    <h2>👤 プロフィール編集</h2>
 
     <form method="post" action="/profile" class="stack-form">
 
@@ -39,12 +42,20 @@
             {% endfor %}
         </select>
 
-        <button>プロフィールを保存する ✨</button>
-    </form>
-</section>
+        <label>背景</label>
+        <select name="background">
+            {% for background in backgrounds %}
+                <option value="{{ background.class }}" {% if profile.background == background.class %}selected{% endif %}>
+                    {{ background.name }}
+                </option>
+            {% endfor %}
+        </select>
 
-<section class="card">
-    <a class="card-link" href="/">ホームへ戻る</a>
+        <label>自己紹介</label>
+        <textarea name="bio" placeholder="自己紹介を書きましょう">{{ profile.bio }}</textarea>
+
+        <button>保存する ✨</button>
+    </form>
 </section>
 
 {% endblock %}

@@ -9,101 +9,42 @@
     </div>
 
     <p class="muted">
-        カテゴリごとに実績を確認できます。
+        達成済み・未達成が一目で分かるコンパクト一覧です。
     </p>
 </section>
 
 <section class="card">
-    <h2>📂 実績カテゴリ</h2>
+    <div class="achievement-filter-row">
+        <a href="/achievements" class="{% if selected_group == 'all' %}active-filter{% endif %}">すべて</a>
 
-    <div class="achievement-category-list">
         {% for category in categories %}
-            <a class="achievement-category-item"
-               href="/achievements/category/{{ category.name }}">
-                <span>{{ category.name }}</span>
-                <strong>{{ category.unlocked }} / {{ category.total }}</strong>
+            <a href="/achievements/group/{{ category.name }}" class="{% if selected_group == category.name %}active-filter{% endif %}">
+                {{ category.icon }} {{ category.name }}
             </a>
         {% endfor %}
     </div>
 </section>
 
-{% if achievements %}
-
 <section class="card">
-    <div class="section-head">
-        <h2>{{ selected_category }}</h2>
-        <span class="pill">一覧</span>
+    <div class="achievement-text-list">
+        {% for achievement in achievements %}
+            <a class="achievement-text-item {% if achievement.unlocked %}unlocked{% endif %}"
+               href="/achievements/{{ achievement.id }}">
+
+                <div>
+                    {% if achievement.unlocked %}
+                        <strong>✅ {{ achievement.name }}</strong>
+                    {% else %}
+                        <strong>□ {{ achievement.name }}</strong>
+                    {% endif %}
+
+                    <small>{{ achievement.description }}</small>
+                </div>
+
+                <span>{{ achievement.progress.current }} / {{ achievement.progress.target }}</span>
+            </a>
+        {% endfor %}
     </div>
-
-    <div class="achievement-rank-group">
-
-    {% for rank in [
-        "銅",
-        "銀",
-        "金",
-        "水晶",
-        "サファイア",
-        "ルビー",
-        "エメラルド",
-        "アメジスト",
-        "プラチナ",
-        "ダイヤ"
-    ] %}
-
-        {% set rank_items = achievements | selectattr("rank", "equalto", rank) | list %}
-
-        {% if rank_items %}
-
-        <div class="rank-section">
-
-            <div class="rank-title">
-                {{ rank }}
-            </div>
-
-            <div class="achievement-compact-list">
-
-                {% for achievement in rank_items %}
-
-                <a
-                    class="achievement-compact-item {% if achievement.unlocked %}unlocked{% endif %}"
-                    href="/achievements/{{ achievement.id }}"
-                >
-
-                    <div>
-
-                        {% if achievement.unlocked %}
-                            <strong>✅ {{ achievement.name }}</strong>
-                        {% else %}
-                            <strong>⬜ {{ achievement.name }}</strong>
-                        {% endif %}
-
-                        <small>
-                            {{ achievement.progress.current }}
-                            /
-                            {{ achievement.progress.target }}
-                        </small>
-
-                    </div>
-
-                    <span>
-                        {{ achievement.progress.percent }}%
-                    </span>
-
-                </a>
-
-                {% endfor %}
-
-            </div>
-
-        </div>
-
-        {% endif %}
-
-    {% endfor %}
-
-</div>
 </section>
-
-{% endif %}
 
 {% endblock %}

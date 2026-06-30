@@ -1,26 +1,12 @@
 import json
 import os
-from datetime import datetime, date
+from datetime import datetime
+
 from modules.database import connect
 from modules.stats import life_stats
 
 
-ACHIEVEMENT_FILE = os.path.join(os.getcwd(), "data", "achievements.json")
-EVENT_FILE = os.path.join(os.getcwd(), "data", "events.json")
-
-
-RANKS = [
-    "銅",
-    "銀",
-    "金",
-    "水晶",
-    "サファイア",
-    "ルビー",
-    "エメラルド",
-    "アメジスト",
-    "プラチナ",
-    "ダイヤ"
-]
+ACHIEVEMENT_FILE = "data/achievements.json"
 
 
 def load_achievements():
@@ -61,6 +47,7 @@ def unlocked_ids():
 
 def achievement_progress(achievement):
     stats = life_stats()
+
     stat = achievement.get("stat")
     target = int(achievement.get("target", 1))
     current = int(stats.get(stat, 0))
@@ -79,8 +66,6 @@ def achievement_progress(achievement):
 
 
 def sync_achievements():
-    ensure_table()
-
     achievements = load_achievements()
     already = unlocked_ids()
 
@@ -119,33 +104,53 @@ def all_achievements():
     return result
 
 
-def achievement_categories():
-    achievements = all_achievements()
-    categories = {}
+def compact_categories():
+    categories = {
+        "アプリ": {
+            "name": "アプリ",
+            "icon": "✦",
+            "total": 0,
+            "unlocked": 0
+        },
+        "作品": {
+            "name": "作品",
+            "icon": "📚",
+            "total": 0,
+            "unlocked": 0
+        },
+        "人生": {
+            "name": "人生",
+            "icon": "🌍",
+            "total": 0,
+            "unlocked": 0
+        },
+        "特別": {
+            "name": "特別",
+            "icon": "⭐",
+            "total": 0,
+            "unlocked": 0
+        }
+    }
 
-    for achievement in achievements:
-        category = achievement["category"]
+    for achievement in all_achievements():
+        group = achievement.get("group", "アプリ")
 
-        if category not in categories:
-            categories[category] = {
-                "name": category,
-                "total": 0,
-                "unlocked": 0
-            }
+        if group not in categories:
+            group = "アプリ"
 
-        categories[category]["total"] += 1
+        categories[group]["total"] += 1
 
         if achievement["unlocked"]:
-            categories[category]["unlocked"] += 1
+            categories[group]["unlocked"] += 1
 
     return list(categories.values())
 
 
-def achievements_by_category(category):
+def achievements_by_group(group):
     return [
         achievement
         for achievement in all_achievements()
-        if achievement["category"] == category
+        if achievement.get("group", "アプリ") == group
     ]
 
 
@@ -155,7 +160,3 @@ def find_achievement(achievement_id):
             return achievement
 
     return None
-
-
-def unlocked_count():
-    return len(unlocked_ids())

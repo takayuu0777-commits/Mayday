@@ -4,24 +4,24 @@ import os
 from modules.database import connect
 
 
-TITLE_FILE = os.path.join("data", "titles.json")
-ICON_FILE = os.path.join("data", "icons.json")
+def load_json(path, fallback):
+    if not os.path.exists(path):
+        return fallback
+
+    with open(path, "r", encoding="utf-8") as file:
+        return json.load(file)
 
 
 def load_titles():
-    if not os.path.exists(TITLE_FILE):
-        return ["無称号"]
-
-    with open(TITLE_FILE, "r", encoding="utf-8") as file:
-        return json.load(file)
+    return load_json("data/titles.json", ["無称号"])
 
 
 def load_icons():
-    if not os.path.exists(ICON_FILE):
-        return ["🧠"]
+    return load_json("data/icons.json", ["✦"])
 
-    with open(ICON_FILE, "r", encoding="utf-8") as file:
-        return json.load(file)
+
+def load_backgrounds():
+    return load_json("data/backgrounds.json", [])
 
 
 def get_profile():
@@ -29,25 +29,28 @@ def get_profile():
     c = conn.cursor()
 
     c.execute("SELECT * FROM profile WHERE id = 1")
-    profile = c.fetchone()
+    row = c.fetchone()
 
     conn.close()
+    return dict(row)
 
-    return dict(profile)
 
-
-def update_profile(title, icon):
+def update_profile(title, icon, background, bio):
     conn = connect()
     c = conn.cursor()
 
     c.execute("""
     UPDATE profile
     SET title = ?,
-        icon = ?
+        icon = ?,
+        background = ?,
+        bio = ?
     WHERE id = 1
     """, (
         title,
-        icon
+        icon,
+        background,
+        bio
     ))
 
     conn.commit()

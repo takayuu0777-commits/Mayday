@@ -8,12 +8,8 @@
         <span class="pill">作品管理</span>
     </div>
 
-    <p class="muted">
-        アニメ・漫画・映画・ゲームなど、見た作品や遊んだ作品を記録します。
-    </p>
-
     <form method="post" action="/library/add" class="stack-form">
-        <input name="title" placeholder="作品名を入力">
+        <input name="title" placeholder="作品名">
 
         <select name="genre">
             {% for genre in genres %}
@@ -23,21 +19,18 @@
 
         <select name="rating">
             <option value="0">未評価</option>
-            <option value="1">⭐</option>
-            <option value="2">⭐⭐</option>
-            <option value="3">⭐⭐⭐</option>
-            <option value="4">⭐⭐⭐⭐</option>
-            <option value="5">⭐⭐⭐⭐⭐</option>
+            {% for n in [1,2,3,4,5] %}
+                <option value="{{ n }}">{{ "⭐" * n }}</option>
+            {% endfor %}
         </select>
 
-        <textarea name="review" placeholder="追加後すぐに感想を書くこともできます"></textarea>
+        <textarea name="review" placeholder="感想も一緒に書けます"></textarea>
 
         <button>作品を追加する ✨</button>
     </form>
 </section>
 
 {% for genre, items in data.items() %}
-
 <section class="card">
     <div class="section-head">
         <h2>{{ genre }}</h2>
@@ -62,7 +55,6 @@
         <p class="muted">まだ登録はありません。</p>
     {% endif %}
 </section>
-
 {% endfor %}
 
 {% endblock %}

@@ -1,0 +1,50 @@
+[
+    {
+        "id": "bike",
+        "name": "自転車",
+        "icon": "🚴",
+        "enabled": false
+    },
+    {
+        "id": "running",
+        "name": "ランニング",
+        "icon": "🏃",
+        "enabled": false
+    },
+    {
+        "id": "training",
+        "name": "筋トレ",
+        "icon": "🏋️",
+        "enabled": false
+    },
+    {
+        "id": "reading",
+        "name": "読書",
+        "icon": "📚",
+        "enabled": false
+    },
+    {
+        "id": "shrine",
+        "name": "神社・寺",
+        "icon": "⛩️",
+        "enabled": false
+    },
+    {
+        "id": "museum",
+        "name": "博物館",
+        "icon": "🏛️",
+        "enabled": false
+    },
+    {
+        "id": "aquarium",
+        "name": "水族館",
+        "icon": "🐠",
+        "enabled": false
+    },
+    {
+        "id": "zoo",
+        "name": "動物園",
+        "icon": "🦁",
+        "enabled": false
+    }
+]

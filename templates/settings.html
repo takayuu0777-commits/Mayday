@@ -7,55 +7,51 @@
         <h2>⚙️ 設定</h2>
         <span class="pill">Customize</span>
     </div>
-
-    <p class="muted">
-        購入済みのテーマをここから切り替えできます。
-    </p>
 </section>
 
-<section class="card">
-    <h2>🎨 テーマ変更</h2>
+<form method="post" action="/settings">
 
-    <form method="post" action="/settings" class="theme-grid">
+<section class="card">
+    <h2>🎨 テーマ</h2>
+
+    <div class="theme-grid">
         {% for theme_item in themes %}
-            <label class="theme-card {% if theme_item.class not in owned %}locked-card{% endif %}">
+            <label class="theme-card">
                 <input
                     type="radio"
                     name="theme"
                     value="{{ theme_item.class }}"
                     {% if current_theme == theme_item.class %}checked{% endif %}
-                    {% if theme_item.class not in owned %}disabled{% endif %}
                 >
 
                 <div>
-                    <strong>
-                        {% if theme_item.class == "dream" %}🌙
-                        {% elif theme_item.class == "gold" %}👑
-                        {% elif theme_item.class == "forest" %}🌳
-                        {% elif theme_item.class == "ocean" %}🌊
-                        {% elif theme_item.class == "deep" %}🌑
-                        {% else %}🎨
-                        {% endif %}
-                        {{ theme_item.name }}
-                    </strong>
-
+                    <strong>{{ theme_item.name }}</strong>
                     <small>{{ theme_item.description }}</small>
-
-                    {% if theme_item.class in owned %}
-                        <small>所持中</small>
-                    {% else %}
-                        <small>未購入：ショップで購入できます</small>
-                    {% endif %}
+                    <small>無料</small>
                 </div>
             </label>
         {% endfor %}
-
-        <button>テーマを変更する ✨</button>
-    </form>
+    </div>
 </section>
 
 <section class="card">
-    <a class="card-link" href="/shop">🛍 ショップへ行く</a>
+    <h2>⚙️ 任意カテゴリ</h2>
+    <p class="muted">使うものだけONにします。ONにした項目だけ今後ホーム・実績・入力欄に表示します。</p>
+
+    <div class="setting-list">
+        {% for category in categories %}
+            <label class="setting-row">
+                <span>{{ category.icon }} {{ category.name }}</span>
+                <input type="checkbox" name="{{ category.id }}" {% if category.enabled %}checked{% endif %}>
+            </label>
+        {% endfor %}
+    </div>
 </section>
+
+<section class="card">
+    <button>設定を保存する ✨</button>
+</section>
+
+</form>
 
 {% endblock %}

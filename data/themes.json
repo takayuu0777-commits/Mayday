@@ -3,30 +3,42 @@
         "name": "Dream",
         "class": "dream",
         "price": 0,
-        "description": "薄紫と黒を基調にした、夢の中のような標準テーマ"
+        "description": "薄紫と黒を基調にした夢のようなテーマ"
     },
     {
         "name": "Gold",
         "class": "gold",
-        "price": 500,
-        "description": "黒と金を基調にした、Second Brainのブランドテーマ"
-    },
-    {
-        "name": "Forest",
-        "class": "forest",
-        "price": 300,
-        "description": "森のように落ち着いた緑のテーマ"
-    },
-    {
-        "name": "Ocean",
-        "class": "ocean",
-        "price": 300,
-        "description": "海のように静かな青のテーマ"
+        "price": 0,
+        "description": "黒と金を基調にした高級ブランド風テーマ"
     },
     {
         "name": "Deep",
         "class": "deep",
         "price": 0,
-        "description": "黒を基調にしたシンプルなダークテーマ"
+        "description": "黒を基調にした集中用テーマ"
+    },
+    {
+        "name": "Forest",
+        "class": "forest",
+        "price": 0,
+        "description": "森のように落ち着いた緑のテーマ"
+    },
+    {
+        "name": "Ocean",
+        "class": "ocean",
+        "price": 0,
+        "description": "海のように静かな青のテーマ"
+    },
+    {
+        "name": "Sakura",
+        "class": "sakura",
+        "price": 0,
+        "description": "桜のように柔らかいピンクのテーマ"
+    },
+    {
+        "name": "Space",
+        "class": "space",
+        "price": 0,
+        "description": "宇宙のように深い幻想的なテーマ"
     }
 ]

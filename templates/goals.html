@@ -4,47 +4,41 @@
 
 <section class="card">
     <div class="section-head">
-        <h2>🎯 目標管理</h2>
-        <span class="pill">達成で +10コイン</span>
+        <h2>🎯 目標</h2>
+        <span class="pill">短期・中期・長期</span>
     </div>
 
-    <p class="muted">
-        今月やりたいこと、続けたいことを管理します。
-    </p>
-
     <form method="post" action="/goals/add" class="stack-form">
-        <input name="title" placeholder="目標を入力 例：本を3冊読む">
-        <button>目標を追加</button>
+        <input name="title" placeholder="目標を書く">
+
+        <select name="goal_type">
+            {% for goal_type in goal_types %}
+                <option value="{{ goal_type }}">{{ goal_type }}</option>
+            {% endfor %}
+        </select>
+
+        <button>目標を追加する</button>
     </form>
 </section>
 
 <section class="card">
-    <h2>📌 目標一覧</h2>
+    <h2>未達成の目標</h2>
 
     {% if goals %}
         {% for goal in goals %}
-            <div class="log-item">
-                <div>
-                    {% if goal.done %}
-                        <strong>✅ {{ goal.title }}</strong>
-                        <p class="muted">達成済み</p>
-                    {% else %}
-                        <strong>☐ {{ goal.title }}</strong>
-                        <p class="muted">未達成</p>
-                    {% endif %}
-                </div>
+            <form method="post" action="/goals/done/{{ goal.id }}" class="compact-form-row">
+                <span>
+                    {% if goal.goal_type == "短期" %}⚡{% endif %}
+                    {% if goal.goal_type == "中期" %}🌙{% endif %}
+                    {% if goal.goal_type == "長期" %}🌅{% endif %}
+                    {{ goal.goal_type }}：{{ goal.title }}
+                </span>
 
-                {% if not goal.done %}
-                    <form method="post" action="/goals/done/{{ goal.id }}">
-                        <button>達成</button>
-                    </form>
-                {% endif %}
-            </div>
+                <button>達成</button>
+            </form>
         {% endfor %}
     {% else %}
-        <p class="muted">
-            まだ目標はありません。
-        </p>
+        <p class="muted">未達成の目標はありません。</p>
     {% endif %}
 </section>
 

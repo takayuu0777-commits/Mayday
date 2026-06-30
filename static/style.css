@@ -898,3 +898,318 @@ body{
     padding-left:4px;
     opacity:.9;
 }
+
+/* ==========================
+   VERSION 2.7 FINAL
+========================== */
+
+.title{
+    letter-spacing:.04em;
+}
+
+.goal-home-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.goal-home-item{
+    padding:12px;
+    border-radius:16px;
+    background:rgba(255,255,255,.07);
+}
+
+.goal-home-item small{
+    display:block;
+    opacity:.6;
+    margin-bottom:6px;
+}
+
+.mini-chip-grid{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.mini-chip-grid span{
+    padding:8px 12px;
+    border-radius:999px;
+    background:rgba(255,255,255,.08);
+    font-size:13px;
+}
+
+.compact-form-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    padding:12px 0;
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.compact-form-row:last-child{
+    border-bottom:none;
+}
+
+.compact-form-row button{
+    width:auto;
+    white-space:nowrap;
+}
+
+.setting-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.setting-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px;
+    border-radius:16px;
+    background:rgba(255,255,255,.08);
+}
+
+.calendar-grid{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:8px;
+}
+
+.calendar-cell{
+    min-height:72px;
+    padding:8px;
+    border-radius:14px;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.calendar-cell strong{
+    font-size:12px;
+    opacity:.75;
+}
+
+.calendar-icons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:3px;
+    margin-top:8px;
+}
+
+.achievement-filter-row{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    padding-bottom:4px;
+}
+
+.achievement-filter-row a{
+    flex-shrink:0;
+    color:inherit;
+    text-decoration:none;
+    padding:8px 12px;
+    border-radius:999px;
+    background:rgba(255,255,255,.08);
+    font-size:13px;
+}
+
+.achievement-filter-row a.active-filter{
+    background:linear-gradient(135deg,#d4af37,#f4e2a1);
+    color:#111;
+}
+
+.achievement-text-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.achievement-text-item{
+    color:inherit;
+    text-decoration:none;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:14px;
+    padding:14px;
+    border-radius:16px;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.achievement-text-item small{
+    display:block;
+    margin-top:4px;
+    opacity:.65;
+}
+
+.achievement-text-item.unlocked{
+    border-color:rgba(212,175,55,.45);
+    background:rgba(212,175,55,.08);
+}
+
+/* PROFILE BACKGROUNDS */
+
+.bg-default{
+    background:rgba(255,255,255,.08);
+}
+
+.bg-black-gold{
+    background:
+        radial-gradient(circle at top right, rgba(212,175,55,.22), transparent 40%),
+        rgba(255,255,255,.07);
+}
+
+.bg-dream-night{
+    background:
+        radial-gradient(circle at top right, rgba(168,85,247,.24), transparent 40%),
+        rgba(255,255,255,.07);
+}
+
+.bg-deep-space{
+    background:
+        radial-gradient(circle at top right, rgba(59,130,246,.22), transparent 40%),
+        rgba(255,255,255,.07);
+}
+
+.bg-royal-purple{
+    background:
+        radial-gradient(circle at top right, rgba(126,34,206,.26), transparent 40%),
+        rgba(255,255,255,.07);
+}
+
+/* THEMES */
+
+.forest{
+    background:
+        radial-gradient(circle at 20% 0%, rgba(34,197,94,.24), transparent 30%),
+        linear-gradient(180deg,#06140d,#020705);
+}
+
+.ocean{
+    background:
+        radial-gradient(circle at 20% 0%, rgba(56,189,248,.24), transparent 30%),
+        linear-gradient(180deg,#06111f,#020617);
+}
+
+.sakura{
+    background:
+        radial-gradient(circle at 20% 0%, rgba(244,114,182,.28), transparent 30%),
+        linear-gradient(180deg,#211019,#08040a);
+}
+
+.space{
+    background:
+        radial-gradient(circle at 20% 0%, rgba(99,102,241,.28), transparent 30%),
+        radial-gradient(circle at 85% 20%, rgba(236,72,153,.16), transparent 30%),
+        linear-gradient(180deg,#070718,#020204);
+}
+
+/* LAUNCH SCREEN */
+
+#launch-screen{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    background:#050505;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    transition:opacity .9s ease, transform .9s ease;
+}
+
+#launch-screen.hide{
+    opacity:0;
+    transform:scale(1.04);
+    pointer-events:none;
+}
+
+.launch-glow{
+    position:absolute;
+    width:260px;
+    height:260px;
+    border-radius:999px;
+    background:radial-gradient(circle, rgba(212,175,55,.45), transparent 65%);
+    filter:blur(22px);
+    animation:launchPulse 3s ease-in-out infinite;
+}
+
+.launch-content{
+    position:relative;
+    text-align:center;
+    color:#d4af37;
+    opacity:0;
+    transform:translateY(20px);
+    animation:launchReveal 2.4s ease forwards;
+}
+
+.launch-mark{
+    font-size:42px;
+    margin-bottom:16px;
+    text-shadow:0 0 24px rgba(212,175,55,.6);
+}
+
+.launch-content h1{
+    font-size:34px;
+    letter-spacing:.08em;
+    margin:0;
+    font-weight:700;
+}
+
+.launch-content p{
+    margin:10px 0 30px;
+    color:#f4e2a1;
+    font-size:13px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+}
+
+.launch-content span{
+    font-size:12px;
+    opacity:0;
+    color:#fff7d6;
+    letter-spacing:.12em;
+    animation:tapReveal .8s ease forwards;
+    animation-delay:2.6s;
+}
+
+@keyframes launchReveal{
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes tapReveal{
+    to{
+        opacity:.75;
+    }
+}
+
+@keyframes launchPulse{
+    0%,100%{
+        transform:scale(.9);
+        opacity:.6;
+    }
+    50%{
+        transform:scale(1.25);
+        opacity:1;
+    }
+}
+
+@media(max-width:760px){
+    .goal-home-grid{
+        grid-template-columns:1fr;
+    }
+
+    .calendar-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .achievement-text-item{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+}

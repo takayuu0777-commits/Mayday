@@ -5,62 +5,30 @@
 <section class="card">
     <div class="section-head">
         <h2>🛍 ショップ</h2>
-        <span class="pill">🪙 {{ profile.coins }} コイン</span>
+        <span class="pill">無料開放中</span>
     </div>
 
     <p class="muted">
-        コインでテーマを購入して、自分だけのSecond Brainに育てましょう。
+        Version2.7では、テーマはすべて無料で試せます。
     </p>
 </section>
 
 <section class="card">
-    <h2>🎨 テーマショップ</h2>
+    <h2>🎨 テーマ一覧</h2>
 
     <div class="list-grid">
-        {% for theme_item in themes %}
+        {% for theme in themes %}
             <div class="list-card shop-card">
-                <strong>
-                    {% if theme_item.class == "dream" %}🌙
-                    {% elif theme_item.class == "gold" %}👑
-                    {% elif theme_item.class == "forest" %}🌳
-                    {% elif theme_item.class == "ocean" %}🌊
-                    {% elif theme_item.class == "deep" %}🌑
-                    {% else %}🎨
-                    {% endif %}
-                    {{ theme_item.name }}
-                </strong>
-
-                <small>{{ theme_item.description }}</small>
-
-                <div class="simple-row">
-                    {% if theme_item.price == 0 %}
-                        <span>無料</span>
-                    {% else %}
-                        <span>🪙 {{ theme_item.price }}</span>
-                    {% endif %}
-
-                    {% if theme_item.class in owned %}
-                        <strong>所持中</strong>
-                    {% else %}
-                        <form method="post" action="/shop/theme/{{ theme_item.class }}/buy">
-                            <button>購入する</button>
-                        </form>
-                    {% endif %}
-                </div>
+                <strong>{{ theme.name }}</strong>
+                <small>{{ theme.description }}</small>
+                <small>無料</small>
             </div>
         {% endfor %}
     </div>
 </section>
 
 <section class="card">
-    <h2>🧠 今後追加予定</h2>
-
-    <div class="list-grid">
-        <div class="list-card">👤 プロフィールカード</div>
-        <div class="list-card">🏷 称号</div>
-        <div class="list-card">😀 アイコン</div>
-        <div class="list-card">✨ 背景</div>
-    </div>
+    <a class="card-link" href="/settings">設定でテーマを変更する</a>
 </section>
 
 {% endblock %}

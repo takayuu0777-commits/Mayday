@@ -1,18 +1,14 @@
 import sqlite3
 import os
-from datetime import datetime
 
-DB = os.path.join(os.getcwd(), "brain.sqlite")
+
+DB_PATH = os.environ.get("DB_PATH", "brain.sqlite")
 
 
 def connect():
-    conn = sqlite3.connect(DB, check_same_thread=False)
+    conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
-
-
-def now_text():
-    return datetime.now().isoformat()
 
 
 def init():
@@ -54,7 +50,8 @@ def init():
         id TEXT PRIMARY KEY,
         title TEXT,
         done INTEGER DEFAULT 0,
-        created_at TEXT
+        created_at TEXT,
+        goal_type TEXT DEFAULT '短期'
     )
     """)
 
@@ -70,12 +67,18 @@ def init():
     c.execute("""
     CREATE TABLE IF NOT EXISTS profile (
         id INTEGER PRIMARY KEY,
-        username TEXT,
-        title TEXT,
-        icon TEXT,
-        coins INTEGER DEFAULT 100,
-        created_at TEXT
+        title TEXT DEFAULT '無称号',
+        icon TEXT DEFAULT '✦',
+        background TEXT DEFAULT 'default',
+        bio TEXT DEFAULT '',
+        coins INTEGER DEFAULT 0
     )
+    """)
+
+    c.execute("""
+    INSERT OR IGNORE INTO profile
+    (id, title, icon, background, bio, coins)
+    VALUES (1, '無称号', '✦', 'default', '', 0)
     """)
 
     c.execute("""
@@ -91,24 +94,6 @@ def init():
         unlocked_at TEXT
     )
     """)
-
-    c.execute("""
-    CREATE TABLE IF NOT EXISTS life_events (
-        id TEXT PRIMARY KEY,
-        title TEXT,
-        emoji TEXT,
-        event_date TEXT,
-        description TEXT,
-        created_at TEXT
-    )
-    """)
-
-    c.execute("""
-    INSERT OR IGNORE INTO profile
-    (id, username, title, icon, coins, created_at)
-    VALUES
-    (1, 'ユーザー', '無称号', '🧠', 100, ?)
-    """, (now_text(),))
 
     conn.commit()
     conn.close()

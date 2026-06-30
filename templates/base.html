@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/static/style.css">
     <link rel="manifest" href="/static/manifest.json">
 
-    <meta name="theme-color" content="#090b1f">
+    <meta name="theme-color" content="#050505">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Second Brain">
@@ -21,9 +21,20 @@
 
 <body class="{{ theme }}">
 
+<div id="launch-screen">
+    <div class="launch-glow"></div>
+
+    <div class="launch-content">
+        <div class="launch-mark">◈</div>
+        <h1>Second Brain</h1>
+        <p>Personal Life OS</p>
+        <span>Tap to Enter</span>
+    </div>
+</div>
+
 <header>
     <div class="title-row">
-        <div class="title">🧠 Second Brain</div>
+        <div class="title">◈ Second Brain</div>
 
         {% if profile and stats %}
         <div class="top-mini-stats">
@@ -39,7 +50,6 @@
         <a href="/" data-path="/">ホーム</a>
         <a href="/library" data-path="/library">Library</a>
         <a href="/achievements" data-path="/achievements">実績</a>
-        <a href="/stats" data-path="/stats">統計</a>
         <a href="/calendar" data-path="/calendar">カレンダー</a>
         <a href="/goals" data-path="/goals">目標</a>
         <a href="/shop" data-path="/shop">ショップ</a>
@@ -51,6 +61,8 @@
     {% block content %}
     {% endblock %}
 </main>
+
+<script src="/static/launch.js"></script>
 
 <script>
 const currentPath = window.location.pathname;

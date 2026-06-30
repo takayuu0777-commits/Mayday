@@ -17,13 +17,19 @@
         <a href="/goals">開く</a>
     </div>
 
-    {% if stats.latest_goals %}
-        {% for goal in stats.latest_goals %}
-            <div class="compact-item">☐ {{ goal.title }}</div>
+    <div class="goal-home-grid">
+        {% for label, goal in goals.items() %}
+            <div class="goal-home-item">
+                <small>{{ label }}</small>
+
+                {% if goal %}
+                    <strong>{{ goal.title }}</strong>
+                {% else %}
+                    <span class="muted">未設定</span>
+                {% endif %}
+            </div>
         {% endfor %}
-    {% else %}
-        <p class="muted">目標はまだありません。</p>
-    {% endif %}
+    </div>
 </section>
 
 <section class="card compact-card">
@@ -32,16 +38,33 @@
         <a href="/shopping">開く</a>
     </div>
 
-    {% if stats.latest_shopping %}
-        {% for item in stats.latest_shopping %}
-            <div class="compact-item">🛍 {{ item.name }}</div>
+    {% if shopping %}
+        {% for item in shopping %}
+            <div class="compact-item">
+                {{ guess_icon(item.name) }} {{ item.name }}
+            </div>
         {% endfor %}
     {% else %}
         <p class="muted">買い物リストは空です。</p>
     {% endif %}
 </section>
 
-<section class="card profile-card compact-profile">
+{% if enabled_categories %}
+<section class="card compact-card">
+    <div class="section-head">
+        <h2>⚙️ 追加カテゴリ</h2>
+        <a href="/settings">設定</a>
+    </div>
+
+    <div class="mini-chip-grid">
+        {% for category in enabled_categories %}
+            <span>{{ category.icon }} {{ category.name }}</span>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<section class="card profile-card compact-profile {{ profile.background }}">
     <div class="profile-top">
         <div class="profile-icon">
             {{ profile.icon }}
@@ -50,6 +73,11 @@
         <div>
             <div class="sub">Profile</div>
             <h1>{{ profile.title }}</h1>
+
+            {% if profile.bio %}
+                <p>{{ profile.bio }}</p>
+            {% endif %}
+
             <a class="card-link" href="/profile">プロフィールを編集</a>
         </div>
     </div>

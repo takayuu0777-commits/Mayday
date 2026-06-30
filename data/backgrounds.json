@@ -1,0 +1,27 @@
+[
+    {
+        "id": "default",
+        "name": "Default",
+        "class": "bg-default"
+    },
+    {
+        "id": "black-gold",
+        "name": "Black Gold",
+        "class": "bg-black-gold"
+    },
+    {
+        "id": "dream-night",
+        "name": "Dream Night",
+        "class": "bg-dream-night"
+    },
+    {
+        "id": "deep-space",
+        "name": "Deep Space",
+        "class": "bg-deep-space"
+    },
+    {
+        "id": "royal-purple",
+        "name": "Royal Purple",
+        "class": "bg-royal-purple"
+    }
+]

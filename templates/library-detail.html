@@ -18,7 +18,7 @@
 </section>
 
 <section class="card">
-    <h2>✏️ 作品情報を編集</h2>
+    <h2>✏️ 編集</h2>
 
     <form method="post" action="/library/item/{{ item.id }}/update" class="stack-form">
         <input name="title" value="{{ item.title }}">
@@ -32,7 +32,7 @@
         </select>
 
         <select name="rating">
-            <option value="0" {% if item.rating == 0 %}selected{% endif %}>未評価</option>
+            <option value="0">未評価</option>
             {% for n in [1,2,3,4,5] %}
                 <option value="{{ n }}" {% if item.rating == n %}selected{% endif %}>
                     {{ "⭐" * n }}
@@ -66,9 +66,7 @@
     {% if reviews %}
         {% for review in reviews %}
             <div class="log-item">
-                <div>
-                    <p>{{ review.text }}</p>
-                </div>
+                <p>{{ review.text }}</p>
                 <small>{{ review.created_at[:10] }}</small>
             </div>
         {% endfor %}
