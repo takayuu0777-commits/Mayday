@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="card">
+    <h2>📊 人生統計</h2>
+
+    <div class="stats-grid">
+        {% for item in basic_stats %}
+        <div class="stat-box">
+            <div>{{ item.icon }}</div>
+            <strong>{{ item.value }}</strong>
+            <small>{{ item.label }}</small>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="card">
+    <div class="section-head">
+        <h2>🗾 日本制覇マップ</h2>
+        <span class="pill">{{ japan_progress.percent }}%</span>
+    </div>
+
+    <p class="muted">
+        都道府県ごとに状態を登録すると、地図の色が変わります。
+    </p>
+
+    <div class="japan-progress-line">
+        <strong>{{ japan_progress.visited }} / {{ japan_progress.total }}</strong>
+        <span>都道府県</span>
+    </div>
+
+    <div class="japan-legend">
+        <span class="jp-lived">🏠 住んだ</span>
+        <span class="jp-stayed">🛏 泊まった</span>
+        <span class="jp-visited">🎒 遊んだ</span>
+        <span class="jp-passed">🚄 通過した</span>
+        <span class="jp-none">⬜ 未訪問</span>
+    </div>
+</section>
+
+<section class="card">
+    <div class="japan-map-board">
+
+        {% set regions = {
+            "北海道": ["北海道"],
+            "東北": ["青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県"],
+            "関東": ["茨城県", "栃木県", "群馬県", "埼玉県", "千葉県", "東京都", "神奈川県"],
+            "中部": ["新潟県", "富山県", "石川県", "福井県", "山梨県", "長野県", "岐阜県", "静岡県", "愛知県"],
+            "近畿": ["三重県", "滋賀県", "京都府", "大阪府", "兵庫県", "奈良県", "和歌山県"],
+            "中国": ["鳥取県", "島根県", "岡山県", "広島県", "山口県"],
+            "四国": ["徳島県", "香川県", "愛媛県", "高知県"],
+            "九州・沖縄": ["福岡県", "佐賀県", "長崎県", "熊本県", "大分県", "宮崎県", "鹿児島県", "沖縄県"]
+        } %}
+
+        {% for region_name, names in regions.items() %}
+        <div class="japan-region">
+            <h3>{{ region_name }}</h3>
+
+            <div class="pref-map-grid">
+                {% for pref in prefectures %}
+                    {% if pref.name in names %}
+                        {% set info = status_data(pref.status) %}
+
+                        <div class="pref-map-cell {{ info.class }}">
+                            <span>{{ pref.name.replace("県", "").replace("府", "").replace("都", "") }}</span>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</section>
+
+<section class="card">
+    <h2>🗺 都道府県一覧</h2>
+
+    <div class="pref-list">
+        {% for pref in prefectures %}
+            {% set info = status_data(pref.status) %}
+
+            <form
+                method="post"
+                action="/statistics/prefecture/update"
+                class="pref-row"
+            >
+                <input
+                    type="hidden"
+                    name="name"
+                    value="{{ pref.name }}"
+                >
+
+                <span>
+                    {{ pref.name }}
+                </span>
+
+                <select
+                    name="status"
+                    onchange="this.form.submit()"
+                >
+                    {% for key, item in status_options.items() %}
+                        <option
+                            value="{{ key }}"
+                            {% if pref.status == key %}
+                            selected
+                            {% endif %}
+                        >
+                            {{ item.icon }} {{ item.label }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="card">
+    <h2>📚 Library統計</h2>
+
+    {% for item in library_stats %}
+        <div class="simple-row">
+            <span>
+                {{ item.icon }}
+                {{ item.label }}
+            </span>
+
+            <strong>
+                {{ item.value }}
+            </strong>
+        </div>
+    {% endfor %}
+</section>
+
+<section class="card">
+    <h2>📌 ToDo統計</h2>
+
+    <div class="simple-row">
+        <span>完了済み</span>
+        <strong>{{ todo_stats.done }}</strong>
+    </div>
+
+    <div class="simple-row">
+        <span>未完了</span>
+        <strong>{{ todo_stats.active }}</strong>
+    </div>
+</section>
+
+{% endblock %}

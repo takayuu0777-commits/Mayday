@@ -22,6 +22,21 @@ def normalize_genre(genre):
     return "その他"
 
 
+def safe_rating(value):
+    try:
+        rating = int(value)
+    except Exception:
+        return 0
+
+    if rating < 0:
+        return 0
+
+    if rating > 5:
+        return 5
+
+    return rating
+
+
 def add_coin(amount):
     conn = connect()
     c = conn.cursor()
@@ -38,11 +53,14 @@ def add_coin(amount):
 def add_item(title, genre="その他", rating=0, review=""):
     title = (title or "").strip()
     genre = normalize_genre(genre)
+    rating = safe_rating(rating)
+    review = (review or "").strip()
 
     if not title:
         return None
 
     item_id = str(uuid.uuid4())
+    now = datetime.now().isoformat()
 
     conn = connect()
     c = conn.cursor()
@@ -55,11 +73,9 @@ def add_item(title, genre="その他", rating=0, review=""):
         item_id,
         title,
         genre,
-        int(rating or 0),
-        datetime.now().isoformat()
+        rating,
+        now
     ))
-
-    review = (review or "").strip()
 
     if review:
         c.execute("""
@@ -70,7 +86,7 @@ def add_item(title, genre="その他", rating=0, review=""):
             str(uuid.uuid4()),
             item_id,
             review,
-            datetime.now().isoformat()
+            now
         ))
 
     conn.commit()
@@ -84,6 +100,10 @@ def add_item(title, genre="その他", rating=0, review=""):
 def update_item(item_id, title, genre, rating):
     title = (title or "").strip()
     genre = normalize_genre(genre)
+    rating = safe_rating(rating)
+
+    if not title:
+        return
 
     conn = connect()
     c = conn.cursor()
@@ -97,7 +117,7 @@ def update_item(item_id, title, genre, rating):
     """, (
         title,
         genre,
-        int(rating or 0),
+        rating,
         item_id
     ))
 
@@ -118,6 +138,7 @@ def delete_item(item_id):
 
 def add_review(item_id, text, rating=None):
     text = (text or "").strip()
+    rating = safe_rating(rating)
 
     if not text:
         return
@@ -136,15 +157,14 @@ def add_review(item_id, text, rating=None):
         datetime.now().isoformat()
     ))
 
-    if rating is not None and rating != "":
-        c.execute("""
-        UPDATE library
-        SET rating = ?
-        WHERE id = ?
-        """, (
-            int(rating),
-            item_id
-        ))
+    c.execute("""
+    UPDATE library
+    SET rating = ?
+    WHERE id = ?
+    """, (
+        rating,
+        item_id
+    ))
 
     conn.commit()
     conn.close()

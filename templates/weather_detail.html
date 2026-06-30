@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="card">
+    <h2>
+        {{ weather.icon }}
+        {{ weather.location }}
+    </h2>
+
+    <div class="weather-big">
+        {{ weather.temperature }}
+    </div>
+
+    <p>
+        {{ weather.condition }}
+    </p>
+
+    <p>
+        降水確率：{{ weather.rain }}
+    </p>
+
+    <p>
+        最高：{{ weather.high }}
+        ／
+        最低：{{ weather.low }}
+    </p>
+</section>
+
+<section class="card">
+    <h2>🕒 時間別予報</h2>
+
+    {% for item in hourly %}
+        <div class="simple-row">
+            <span>{{ item.time }}</span>
+            <span>{{ item.icon }}</span>
+            <span>{{ item.temp }}</span>
+        </div>
+    {% endfor %}
+</section>
+
+<section class="card">
+    <h2>📅 週間予報</h2>
+
+    {% for item in weekly %}
+        <div class="simple-row">
+            <span>{{ item.day }}</span>
+            <span>{{ item.icon }}</span>
+            <span>
+                {{ item.high }}
+                /
+                {{ item.low }}
+            </span>
+        </div>
+    {% endfor %}
+</section>
+
+{% endblock %}

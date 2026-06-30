@@ -4,9 +4,10 @@
 
 {% if achievement %}
 
-<section class="card achievement-detail-card {% if achievement.unlocked %}unlocked{% endif %}">
+<section class="card achievement-detail-card rank-{{ achievement.rank_key }} {% if achievement.unlocked %}unlocked{% endif %}">
     <div class="section-head">
         <h2>
+            {{ achievement.icon }}
             {% if achievement.unlocked %}
                 ✅ {{ achievement.name }}
             {% else %}

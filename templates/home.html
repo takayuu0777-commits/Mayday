@@ -13,27 +13,6 @@
 
 <section class="card compact-card">
     <div class="section-head">
-        <h2>🎯 目標</h2>
-        <a href="/goals">開く</a>
-    </div>
-
-    <div class="goal-home-grid">
-        {% for label, goal in goals.items() %}
-            <div class="goal-home-item">
-                <small>{{ label }}</small>
-
-                {% if goal %}
-                    <strong>{{ goal.title }}</strong>
-                {% else %}
-                    <span class="muted">未設定</span>
-                {% endif %}
-            </div>
-        {% endfor %}
-    </div>
-</section>
-
-<section class="card compact-card">
-    <div class="section-head">
         <h2>🛒 買い物</h2>
         <a href="/shopping">開く</a>
     </div>
@@ -49,37 +28,83 @@
     {% endif %}
 </section>
 
-{% if enabled_categories %}
 <section class="card compact-card">
     <div class="section-head">
-        <h2>⚙️ 追加カテゴリ</h2>
-        <a href="/settings">設定</a>
+        <h2>📌 ToDo</h2>
     </div>
 
-    <div class="mini-chip-grid">
-        {% for category in enabled_categories %}
-            <span>{{ category.icon }} {{ category.name }}</span>
+    <form method="post" action="/todo/add" class="todo-mini-form">
+        <input name="title" placeholder="やること">
+
+        <select name="priority">
+            <option value="high">🔴 高</option>
+            <option value="middle" selected>🟡 中</option>
+            <option value="low">🟢 低</option>
+        </select>
+
+        <input type="date" name="deadline">
+
+        <button>追加</button>
+    </form>
+
+    {% if todos %}
+        {% for todo in todos %}
+            <form method="post" action="/todo/done/{{ todo.id }}" class="compact-form-row">
+                <span>
+                    {{ priority_icon(todo.priority) }}
+                    {{ todo.title }}
+                    <small>{{ days_left(todo.deadline) }}</small>
+                </span>
+
+                <button>完了</button>
+            </form>
         {% endfor %}
-    </div>
+    {% else %}
+        <p class="muted">ToDoはありません。</p>
+    {% endif %}
 </section>
-{% endif %}
 
-<section class="card profile-card compact-profile {{ profile.background }}">
-    <div class="profile-top">
-        <div class="profile-icon">
-            {{ profile.icon }}
+<a href="/weather" class="weather-home-card">
+    <section class="card compact-card">
+        <div class="section-head">
+            <h2>🌤 天気</h2>
+            <span class="pill">詳細</span>
         </div>
 
-        <div>
-            <div class="sub">Profile</div>
-            <h1>{{ profile.title }}</h1>
+        <div class="weather-home-main">
+            <span class="weather-home-icon">{{ weather.icon }}</span>
 
-            {% if profile.bio %}
-                <p>{{ profile.bio }}</p>
-            {% endif %}
-
-            <a class="card-link" href="/profile">プロフィールを編集</a>
+            <div>
+                <strong>{{ weather.location }}</strong>
+                <p>
+                    {{ weather.temperature }}
+                    /
+                    {{ weather.condition }}
+                </p>
+                <small>降水確率：{{ weather.rain }}</small>
+            </div>
         </div>
+    </section>
+</a>
+
+<section class="card compact-card">
+    <div class="section-head">
+        <h2>🎯 目標</h2>
+        <a href="/goals">開く</a>
+    </div>
+
+    <div class="goal-mini-list">
+        {% for label, goal in goals.items() %}
+            <div class="goal-mini-item">
+                <small>{{ label }}</small>
+
+                {% if goal %}
+                    <span>{{ goal.title }}</span>
+                {% else %}
+                    <span class="muted">未設定</span>
+                {% endif %}
+            </div>
+        {% endfor %}
     </div>
 </section>
 

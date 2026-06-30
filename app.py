@@ -16,7 +16,13 @@ from modules.library import (
     add_review,
     GENRES
 )
-from modules.calendar import fetch_data, calendar_icons, fetch_life_events, add_life_event
+from modules.calendar import (
+    fetch_data,
+    calendar_icons,
+    month_calendar,
+    day_detail,
+    add_calendar_memo
+)
 from modules.stats import life_stats
 from modules.tips import today_tip
 from modules.themes import load_themes, is_owned, owned_themes
@@ -25,6 +31,23 @@ from modules.profile import get_profile, load_titles, load_icons, load_backgroun
 from modules.shopping import fetch_items as fetch_shopping, add_item as add_shopping, complete_item as complete_shopping, guess_icon
 from modules.goals import fetch_goals, fetch_home_goals, add_goal, complete_goal, GOAL_TYPES
 from modules.life_settings import load_categories, update_categories, enabled_categories
+
+from modules.todo import (
+    fetch_todos,
+    add_todo,
+    complete_todo,
+    priority_icon,
+    days_left
+)
+from modules.weather import weather_summary, hourly_forecast, weekly_forecast
+from modules.statistics import basic_statistics, library_statistics, todo_statistics
+from modules.japan_map import (
+    fetch_prefectures,
+    update_prefecture,
+    japan_progress,
+    status_data,
+    STATUS_OPTIONS
+)
 
 
 app = Flask(__name__)
@@ -86,11 +109,14 @@ def home():
         "home.html",
         stats=life_stats(),
         profile=get_profile(),
-        goals=fetch_home_goals(),
         shopping=fetch_shopping()[:3],
+        todos=fetch_todos(3),
+        weather=weather_summary(),
+        goals=fetch_home_goals(),
         guess_icon=guess_icon,
+        priority_icon=priority_icon,
+        days_left=days_left,
         today_tip=today_tip(),
-        enabled_categories=enabled_categories(),
         theme=session["theme"]
     )
 
@@ -192,26 +218,38 @@ def library_review(item_id):
 
 @app.route("/calendar")
 def calendar():
+    year = request.args.get("year")
+    month = request.args.get("month")
+    selected = request.args.get("date")
+
+    cal_data = month_calendar(year, month)
+
+    if not selected:
+        selected = date.today().strftime("%Y-%m-%d")
+
     return render_template(
         "calendar.html",
-        data=fetch_data(),
-        icons=calendar_icons(),
-        life_events=fetch_life_events(),
+        calendar_data=cal_data,
+        selected_day=day_detail(selected),
         stats=life_stats(),
         profile=get_profile(),
         theme=session["theme"]
     )
 
 
-@app.route("/calendar/event/add", methods=["POST"])
-def calendar_event_add():
-    add_life_event(
-        request.form.get("title"),
-        request.form.get("event_date"),
-        request.form.get("description")
+@app.route("/calendar/memo/add", methods=["POST"])
+def calendar_memo_add():
+    add_calendar_memo(
+        request.form.get("date_key"),
+        request.form.get("text"),
+        request.form.get("icon", "📝")
     )
 
-    return redirect("/calendar")
+    year = request.form.get("year")
+    month = request.form.get("month")
+    date_key = request.form.get("date_key")
+
+    return redirect(f"/calendar?year={year}&month={month}&date={date_key}")
 
 
 @app.route("/achievements")
@@ -282,6 +320,33 @@ def stats():
         profile=get_profile(),
         theme=session["theme"]
     )
+
+
+@app.route("/statistics")
+def statistics():
+    return render_template(
+        "statistics.html",
+        basic_stats=basic_statistics(),
+        library_stats=library_statistics(),
+        todo_stats=todo_statistics(),
+        prefectures=fetch_prefectures(),
+        japan_progress=japan_progress(),
+        status_options=STATUS_OPTIONS,
+        status_data=status_data,
+        stats=life_stats(),
+        profile=get_profile(),
+        theme=session["theme"]
+    )
+
+
+@app.route("/statistics/prefecture/update", methods=["POST"])
+def prefecture_update():
+    update_prefecture(
+        request.form.get("name"),
+        request.form.get("status")
+    )
+
+    return redirect("/statistics")
 
 
 @app.route("/shop")
@@ -358,27 +423,3 @@ def shopping():
         stats=life_stats(),
         theme=session["theme"]
     )
-
-
-@app.route("/shopping/add", methods=["POST"])
-def shopping_add():
-    add_shopping(request.form.get("name"))
-    return redirect("/shopping")
-
-
-@app.route("/shopping/done/<item_id>", methods=["POST"])
-def shopping_done(item_id):
-    complete_shopping(item_id)
-    return redirect("/shopping")
-
-
-@app.route("/test")
-def test():
-    return "OK"
-
-
-if __name__ == "__main__":
-    init()
-
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)

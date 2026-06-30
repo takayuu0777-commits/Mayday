@@ -28,6 +28,11 @@
         <div class="launch-mark">◈</div>
         <h1>Second Brain</h1>
         <p>Personal Life OS</p>
+
+        {% if stats %}
+            <div class="launch-day">DAY {{ stats.login }}</div>
+        {% endif %}
+
         <span>Tap to Enter</span>
     </div>
 </div>
@@ -49,6 +54,7 @@
     <nav class="tabs" id="tabs">
         <a href="/" data-path="/">ホーム</a>
         <a href="/library" data-path="/library">Library</a>
+        <a href="/statistics" data-path="/statistics">統計</a>
         <a href="/achievements" data-path="/achievements">実績</a>
         <a href="/calendar" data-path="/calendar">カレンダー</a>
         <a href="/goals" data-path="/goals">目標</a>

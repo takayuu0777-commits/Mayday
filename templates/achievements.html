@@ -8,14 +8,30 @@
         <span class="pill">{{ stats.achievements }} 達成</span>
     </div>
 
-    <p class="muted">
-        達成済み・未達成が一目で分かるコンパクト一覧です。
-    </p>
+    <div class="rank-summary">
+        {% for rank in [
+            {"name":"ブロンズ","key":"bronze","icon":"🥉"},
+            {"name":"シルバー","key":"silver","icon":"🥈"},
+            {"name":"ゴールド","key":"gold","icon":"🥇"},
+            {"name":"ダイヤモンド","key":"diamond","icon":"💎"},
+            {"name":"レジェンド","key":"legend","icon":"👑"}
+        ] %}
+            {% set items = achievements | selectattr("rank", "equalto", rank.name) | list %}
+            {% set unlocked = items | selectattr("unlocked") | list %}
+
+            <div class="rank-chip rank-{{ rank.key }}">
+                <span>{{ rank.icon }}</span>
+                <strong>{{ unlocked|length }}</strong>
+            </div>
+        {% endfor %}
+    </div>
 </section>
 
 <section class="card">
     <div class="achievement-filter-row">
-        <a href="/achievements" class="{% if selected_group == 'all' %}active-filter{% endif %}">すべて</a>
+        <a href="/achievements" class="{% if selected_group == 'all' %}active-filter{% endif %}">
+            すべて
+        </a>
 
         {% for category in categories %}
             <a href="/achievements/group/{{ category.name }}" class="{% if selected_group == category.name %}active-filter{% endif %}">
@@ -26,24 +42,54 @@
 </section>
 
 <section class="card">
-    <div class="achievement-text-list">
+    <div class="achievement-flat-list">
+
         {% for achievement in achievements %}
-            <a class="achievement-text-item {% if achievement.unlocked %}unlocked{% endif %}"
-               href="/achievements/{{ achievement.id }}">
 
-                <div>
-                    {% if achievement.unlocked %}
-                        <strong>✅ {{ achievement.name }}</strong>
-                    {% else %}
-                        <strong>□ {{ achievement.name }}</strong>
-                    {% endif %}
+        <a
+            href="/achievements/{{ achievement.id }}"
+            class="achievement-flat-item rank-{{ achievement.rank_key }} {% if achievement.unlocked %}unlocked{% endif %}"
+        >
+            <div
+                class="achievement-progress-bg"
+                style="width: {{ achievement.progress.percent }}%;"
+            ></div>
 
-                    <small>{{ achievement.description }}</small>
+            <div class="achievement-main-line">
+                <span class="achievement-icon">
+                    {{ achievement.icon }}
+                </span>
+
+                <div class="achievement-text">
+                    <strong>
+                        {% if achievement.unlocked %}
+                            ✅ {{ achievement.name }}
+                        {% else %}
+                            □ {{ achievement.name }}
+                        {% endif %}
+                    </strong>
+
+                    <small>
+                        {{ achievement.description }}
+                    </small>
                 </div>
 
-                <span>{{ achievement.progress.current }} / {{ achievement.progress.target }}</span>
-            </a>
+                <div class="achievement-right">
+                    <span class="rank-label">
+                        {{ achievement.rank }}
+                    </span>
+
+                    <small>
+                        {{ achievement.progress.current }}
+                        /
+                        {{ achievement.progress.target }}
+                    </small>
+                </div>
+            </div>
+        </a>
+
         {% endfor %}
+
     </div>
 </section>
 

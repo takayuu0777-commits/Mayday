@@ -1,6 +1,22 @@
-from datetime import datetime
+from datetime import datetime, date
 from collections import defaultdict
+import calendar as cal
+
 from modules.database import connect
+
+
+CATEGORY_ICONS = {
+    "学習": "📚",
+    "仕事": "💼",
+    "メディア": "🎬",
+    "健康": "💪",
+    "買い物": "🛒",
+    "その他": "✦"
+}
+
+
+def get_icon(category):
+    return CATEGORY_ICONS.get(category or "その他", "✦")
 
 
 def fetch_data():
@@ -25,78 +41,145 @@ def fetch_data():
     return dict(data)
 
 
-def calendar_icons():
-    data = fetch_data()
-    result = {}
-
-    for date_key, logs in data.items():
-        icons = []
-
-        for log in logs:
-            category = log["category"] or "その他"
-
-            if category == "学習":
-                icons.append("📚")
-            elif category == "仕事":
-                icons.append("💼")
-            elif category == "メディア":
-                icons.append("🎬")
-            elif category == "健康":
-                icons.append("💪")
-            elif category == "買い物":
-                icons.append("🛒")
-            else:
-                icons.append("✦")
-
-        result[date_key] = icons[:4]
-
-    return result
-
-
-def fetch_life_events():
+def fetch_memos():
     conn = connect()
     c = conn.cursor()
 
     c.execute("""
-    CREATE TABLE IF NOT EXISTS life_events (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT,
-        event_date TEXT,
-        description TEXT
-    )
-    """)
-
-    c.execute("""
     SELECT *
-    FROM life_events
-    ORDER BY event_date DESC
+    FROM calendar_memos
+    ORDER BY date_key DESC, created_at DESC
     """)
 
     rows = c.fetchall()
     conn.close()
-    return rows
+
+    data = defaultdict(list)
+
+    for row in rows:
+        data[row["date_key"]].append(row)
+
+    return dict(data)
 
 
-def add_life_event(title, event_date, description):
-    title = (title or "").strip()
-    event_date = (event_date or "").strip()
-    description = (description or "").strip()
+def add_calendar_memo(date_key, text, icon="📝"):
+    date_key = (date_key or "").strip()
+    text = (text or "").strip()
+    icon = (icon or "📝").strip()
 
-    if not title or not event_date:
+    if not date_key or not text:
         return
 
     conn = connect()
     c = conn.cursor()
 
     c.execute("""
-    INSERT INTO life_events
-    (title, event_date, description)
-    VALUES (?, ?, ?)
+    INSERT INTO calendar_memos
+    (date_key, text, icon, created_at)
+    VALUES (?, ?, ?, ?)
     """, (
-        title,
-        event_date,
-        description
+        date_key,
+        text,
+        icon,
+        datetime.now().isoformat()
     ))
 
     conn.commit()
     conn.close()
+
+
+def calendar_icons():
+    logs = fetch_data()
+    memos = fetch_memos()
+    result = {}
+
+    for date_key, items in logs.items():
+        icons = []
+
+        for log in items:
+            icons.append(get_icon(log["category"]))
+
+        result[date_key] = icons[:4]
+
+    for date_key, items in memos.items():
+        if date_key not in result:
+            result[date_key] = []
+
+        for memo in items:
+            result[date_key].append(memo["icon"])
+
+        result[date_key] = result[date_key][:4]
+
+    return result
+
+
+def month_calendar(year=None, month=None):
+    today = date.today()
+
+    year = int(year or today.year)
+    month = int(month or today.month)
+
+    month_days = cal.Calendar(firstweekday=0).monthdatescalendar(year, month)
+    icons = calendar_icons()
+
+    weeks = []
+
+    for week in month_days:
+        week_items = []
+
+        for day in week:
+            date_key = day.strftime("%Y-%m-%d")
+
+            week_items.append({
+                "date": day,
+                "date_key": date_key,
+                "day": day.day,
+                "is_current_month": day.month == month,
+                "is_today": day == today,
+                "icons": icons.get(date_key, [])
+            })
+
+        weeks.append(week_items)
+
+    prev_month = month - 1
+    prev_year = year
+
+    if prev_month == 0:
+        prev_month = 12
+        prev_year -= 1
+
+    next_month = month + 1
+    next_year = year
+
+    if next_month == 13:
+        next_month = 1
+        next_year += 1
+
+    return {
+        "year": year,
+        "month": month,
+        "weeks": weeks,
+        "prev_year": prev_year,
+        "prev_month": prev_month,
+        "next_year": next_year,
+        "next_month": next_month
+    }
+
+
+def day_detail(date_key):
+    logs = fetch_data().get(date_key, [])
+    memos = fetch_memos().get(date_key, [])
+
+    return {
+        "date_key": date_key,
+        "logs": logs,
+        "memos": memos
+    }
+
+
+def fetch_life_events():
+    return []
+
+
+def add_life_event(title, event_date, description):
+    return

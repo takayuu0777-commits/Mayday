@@ -2,6 +2,8 @@
 
 {% block content %}
 
+<form method="post" action="/settings">
+
 <section class="card">
     <div class="section-head">
         <h2>⚙️ 設定</h2>
@@ -9,47 +11,109 @@
     </div>
 </section>
 
-<form method="post" action="/settings">
-
 <section class="card">
+
     <h2>🎨 テーマ</h2>
 
     <div class="theme-grid">
-        {% for theme_item in themes %}
-            <label class="theme-card">
-                <input
-                    type="radio"
-                    name="theme"
-                    value="{{ theme_item.class }}"
-                    {% if current_theme == theme_item.class %}checked{% endif %}
-                >
 
-                <div>
-                    <strong>{{ theme_item.name }}</strong>
-                    <small>{{ theme_item.description }}</small>
-                    <small>無料</small>
-                </div>
-            </label>
+        {% for theme_item in themes %}
+
+        <label class="theme-card">
+
+            <input
+                type="radio"
+                name="theme"
+                value="{{ theme_item.class }}"
+                {% if current_theme == theme_item.class %}
+                checked
+                {% endif %}
+            >
+
+            <div class="theme-preview {{ theme_item.class }}"></div>
+
+            <div>
+                <strong>
+                    {{ theme_item.name }}
+                </strong>
+
+                <small>
+                    {{ theme_item.description }}
+                </small>
+            </div>
+
+        </label>
+
         {% endfor %}
+
     </div>
+
 </section>
 
 <section class="card">
-    <h2>⚙️ 任意カテゴリ</h2>
-    <p class="muted">使うものだけONにします。ONにした項目だけ今後ホーム・実績・入力欄に表示します。</p>
+
+    <h2>👤 プロフィール</h2>
 
     <div class="setting-list">
-        {% for category in categories %}
-            <label class="setting-row">
-                <span>{{ category.icon }} {{ category.name }}</span>
-                <input type="checkbox" name="{{ category.id }}" {% if category.enabled %}checked{% endif %}>
-            </label>
-        {% endfor %}
+
+        <a class="setting-row" href="/profile">
+            <span>👤 プロフィール編集</span>
+            <span>></span>
+        </a>
+
+        <div class="setting-row">
+            <span>🏆 称号</span>
+            <span>{{ profile.title }}</span>
+        </div>
+
+        <div class="setting-row">
+            <span>{{ profile.icon }} アイコン</span>
+            <span>設定済み</span>
+        </div>
+
     </div>
+
 </section>
 
 <section class="card">
-    <button>設定を保存する ✨</button>
+
+    <h2>⚙️ 任意カテゴリ</h2>
+
+    <p class="muted">
+        ONにした項目のみホーム・実績・入力欄に表示されます。
+    </p>
+
+    <div class="setting-list">
+
+        {% for category in categories %}
+
+        <label class="setting-row">
+
+            <span>
+                {{ category.icon }}
+                {{ category.name }}
+            </span>
+
+            <input
+                type="checkbox"
+                name="{{ category.id }}"
+                {% if category.enabled %}
+                checked
+                {% endif %}
+            >
+
+        </label>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<section class="card">
+    <button>
+        設定を保存する ✨
+    </button>
 </section>
 
 </form>

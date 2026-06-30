@@ -11,6 +11,14 @@ def connect():
     return conn
 
 
+def add_column_if_missing(cursor, table, column, definition):
+    cursor.execute(f"PRAGMA table_info({table})")
+    columns = [row["name"] for row in cursor.fetchall()]
+
+    if column not in columns:
+        cursor.execute(f"ALTER TABLE {table} ADD COLUMN {column} {definition}")
+
+
 def init():
     conn = connect()
     c = conn.cursor()
@@ -65,6 +73,35 @@ def init():
     """)
 
     c.execute("""
+    CREATE TABLE IF NOT EXISTS todos (
+        id TEXT PRIMARY KEY,
+        title TEXT,
+        priority TEXT DEFAULT 'middle',
+        deadline TEXT,
+        done INTEGER DEFAULT 0,
+        created_at TEXT
+    )
+    """)
+
+    c.execute("""
+    CREATE TABLE IF NOT EXISTS calendar_memos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date_key TEXT,
+        text TEXT,
+        icon TEXT DEFAULT '📝',
+        created_at TEXT
+    )
+    """)
+
+    c.execute("""
+    CREATE TABLE IF NOT EXISTS prefectures (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT UNIQUE,
+        status TEXT DEFAULT 'none'
+    )
+    """)
+
+    c.execute("""
     CREATE TABLE IF NOT EXISTS profile (
         id INTEGER PRIMARY KEY,
         title TEXT DEFAULT '無称号',
@@ -94,6 +131,11 @@ def init():
         unlocked_at TEXT
     )
     """)
+
+    add_column_if_missing(c, "library", "rating", "INTEGER DEFAULT 0")
+    add_column_if_missing(c, "goals", "goal_type", "TEXT DEFAULT '短期'")
+    add_column_if_missing(c, "profile", "background", "TEXT DEFAULT 'default'")
+    add_column_if_missing(c, "profile", "bio", "TEXT DEFAULT ''")
 
     conn.commit()
     conn.close()

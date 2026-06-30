@@ -5,30 +5,75 @@
 <section class="card">
     <div class="section-head">
         <h2>🛍 ショップ</h2>
-        <span class="pill">無料開放中</span>
+        <span class="pill">全テーマ無料開放中</span>
     </div>
 
     <p class="muted">
-        Version2.7では、テーマはすべて無料で試せます。
+        Version2.8では全テーマを無料で利用できます。
     </p>
 </section>
 
 <section class="card">
     <h2>🎨 テーマ一覧</h2>
 
-    <div class="list-grid">
+    <div class="theme-preview-grid">
+
         {% for theme in themes %}
-            <div class="list-card shop-card">
-                <strong>{{ theme.name }}</strong>
-                <small>{{ theme.description }}</small>
-                <small>無料</small>
+
+        <div class="theme-preview-card">
+
+            <div class="theme-preview {{ theme.class }}">
             </div>
+
+            <strong>{{ theme.name }}</strong>
+
+            <small>
+                {{ theme.description }}
+            </small>
+
+            <span class="free-badge">
+                無料
+            </span>
+
+        </div>
+
         {% endfor %}
+
     </div>
 </section>
 
 <section class="card">
-    <a class="card-link" href="/settings">設定でテーマを変更する</a>
+    <h2>🏷 今後追加予定</h2>
+
+    <div class="setting-list">
+
+        <div class="setting-row">
+            <span>👤 アイコン</span>
+            <small>準備中</small>
+        </div>
+
+        <div class="setting-row">
+            <span>🏆 称号</span>
+            <small>準備中</small>
+        </div>
+
+        <div class="setting-row">
+            <span>🖼 背景</span>
+            <small>準備中</small>
+        </div>
+
+        <div class="setting-row">
+            <span>✨ 起動演出</span>
+            <small>準備中</small>
+        </div>
+
+    </div>
+</section>
+
+<section class="card">
+    <a class="card-link" href="/settings">
+        設定画面でテーマを変更する →
+    </a>
 </section>
 
 {% endblock %}

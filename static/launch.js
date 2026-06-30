@@ -1,27 +1,22 @@
 document.addEventListener("DOMContentLoaded", () => {
     const launch = document.getElementById("launch-screen");
 
-    if (!launch) {
-        return;
-    }
+    if (!launch) return;
 
-    const alreadySeen = sessionStorage.getItem("secondBrainLaunchSeen");
+    const alreadyPlayed = sessionStorage.getItem("launchPlayed");
 
-    if (alreadySeen) {
+    if (alreadyPlayed) {
         launch.style.display = "none";
         return;
     }
 
-    setTimeout(() => {
-        launch.classList.add("ready");
-    }, 2600);
-
     launch.addEventListener("click", () => {
-        sessionStorage.setItem("secondBrainLaunchSeen", "true");
-        launch.classList.add("hide");
+        launch.classList.add("launch-enter");
+
+        sessionStorage.setItem("launchPlayed", "1");
 
         setTimeout(() => {
             launch.style.display = "none";
-        }, 900);
+        }, 1200);
     });
 });
