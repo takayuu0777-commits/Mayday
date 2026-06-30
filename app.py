@@ -424,6 +424,23 @@ def shopping():
         theme=session["theme"]
     )
 
+
+@app.route("/weather")
+def weather():
+    return render_template(
+        "weather_detail.html",
+        weather={
+            "city": "大阪市港区",
+            "temperature": "--℃",
+            "description": "天気取得準備中",
+            "rain": "--%"
+        },
+        profile=get_profile(),
+        stats=life_stats(),
+        theme=session["theme"]
+    )
+
+
 if __name__ == "__main__":
     init()
 

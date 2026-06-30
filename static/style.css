@@ -1512,3 +1512,93 @@ body{
     font-size:12px;
     font-weight:700;
 }
+
+/* ==========================
+   LAUNCH SCREEN
+========================== */
+
+#launch-screen{
+    position:fixed;
+    inset:0;
+    z-index:99999;
+    background:
+        radial-gradient(circle at center,
+        #181818 0%,
+        #090909 50%,
+        #000000 100%);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+}
+
+.launch-content{
+    text-align:center;
+    z-index:2;
+    cursor:pointer;
+}
+
+.launch-mark{
+    font-size:100px;
+    color:#d4af37;
+    text-shadow:
+        0 0 10px #d4af37,
+        0 0 25px #d4af37,
+        0 0 50px #d4af37;
+    margin-bottom:20px;
+}
+
+.launch-content h1{
+    color:#f5e7a1;
+    font-size:42px;
+    margin:0;
+    letter-spacing:4px;
+}
+
+.launch-content p{
+    color:#999;
+    margin-top:8px;
+}
+
+.launch-day{
+    margin-top:20px;
+    color:#d4af37;
+    font-size:18px;
+}
+
+.launch-content span{
+    display:block;
+    margin-top:40px;
+    color:#bbb;
+    animation:blink 2s infinite;
+}
+
+.launch-glow{
+    position:absolute;
+    width:240px;
+    height:240px;
+    border-radius:50%;
+    background:rgba(212,175,55,.3);
+    filter:blur(90px);
+}
+
+.launch-enter .launch-mark{
+    transform:scale(25);
+    opacity:0;
+    transition:all .5s ease;
+}
+
+.launch-enter{
+    opacity:0;
+    transition:.5s ease;
+}
+
+@keyframes blink{
+    0%,100%{
+        opacity:.3;
+    }
+
+    50%{
+        opacity:1;
+    }
+}

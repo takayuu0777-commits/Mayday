@@ -1,22 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
     const launch = document.getElementById("launch-screen");
 
-    if (!launch) return;
-
-    const alreadyPlayed = sessionStorage.getItem("launchPlayed");
-
-    if (alreadyPlayed) {
-        launch.style.display = "none";
+    if (!launch) {
         return;
     }
+
+    launch.style.display = "flex";
 
     launch.addEventListener("click", () => {
         launch.classList.add("launch-enter");
 
-        sessionStorage.setItem("launchPlayed", "1");
-
         setTimeout(() => {
             launch.style.display = "none";
-        }, 1200);
+        }, 500);
     });
 });
