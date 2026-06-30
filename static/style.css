@@ -1602,3 +1602,135 @@ body{
         opacity:1;
     }
 }
+
+.launch-glow{
+    z-index:0;
+}
+
+.launch-content{
+    position:relative;
+    z-index:10;
+}
+
+.launch-content *{
+    opacity:1 !important;
+    visibility:visible !important;
+}
+
+.weather-card,
+.weather-card *{
+    color:#f8fafc !important;
+}
+
+.weather-card a{
+    text-decoration:none;
+}
+
+.weather-home-card,
+.weather-home-card *,
+.weather-card,
+.weather-card *{
+    color:#f8fafc !important;
+    text-decoration:none !important;
+}
+
+.weather-home-card{
+    display:block;
+}
+
+/* ==========================
+   LAUNCH FIX FINAL
+========================== */
+
+#launch-screen{
+    position:fixed !important;
+    inset:0 !important;
+    width:100vw !important;
+    height:100vh !important;
+    z-index:999999 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    background:
+        radial-gradient(circle at center,
+        rgba(212,175,55,.22) 0%,
+        rgba(10,10,10,1) 42%,
+        #000 100%) !important;
+    overflow:hidden !important;
+    opacity:1;
+}
+
+.launch-glow{
+    position:absolute !important;
+    width:280px !important;
+    height:280px !important;
+    border-radius:999px !important;
+    background:rgba(212,175,55,.35) !important;
+    filter:blur(80px) !important;
+    z-index:1 !important;
+}
+
+.launch-content{
+    position:relative !important;
+    z-index:5 !important;
+    text-align:center !important;
+    display:block !important;
+    opacity:1 !important;
+    visibility:visible !important;
+}
+
+.launch-mark{
+    display:block !important;
+    font-size:86px !important;
+    line-height:1 !important;
+    color:#d4af37 !important;
+    text-shadow:
+        0 0 12px rgba(212,175,55,.95),
+        0 0 32px rgba(212,175,55,.75),
+        0 0 70px rgba(212,175,55,.45) !important;
+    margin-bottom:18px !important;
+}
+
+.launch-content h1{
+    display:block !important;
+    color:#f5e7a1 !important;
+    font-size:34px !important;
+    margin:0 !important;
+    letter-spacing:4px !important;
+}
+
+.launch-content p{
+    display:block !important;
+    color:#d6c57a !important;
+    margin:10px 0 0 !important;
+    font-size:13px !important;
+    letter-spacing:2px !important;
+}
+
+.launch-day{
+    display:block !important;
+    margin-top:18px !important;
+    color:#d4af37 !important;
+    font-size:15px !important;
+    font-weight:800 !important;
+}
+
+.launch-content span{
+    display:block !important;
+    margin-top:32px !important;
+    color:#f8fafc !important;
+    font-size:13px !important;
+    letter-spacing:2px !important;
+}
+
+#launch-screen.launch-enter{
+    opacity:0 !important;
+    transform:scale(1.08) !important;
+    transition:.6s ease !important;
+    pointer-events:none !important;
+}
+
+#launch-screen.launch-enter .launch-mark{
+    transform:scale(20) !important;
+    transition:.6s ease !important;
+}

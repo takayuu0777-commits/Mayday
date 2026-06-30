@@ -2,9 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
     <title>Second Brain OS</title>
 
@@ -85,14 +83,6 @@ if (tabs) {
             (path !== "/" && currentPath.startsWith(path))
         ) {
             link.classList.add("active-tab");
-
-            setTimeout(() => {
-                link.scrollIntoView({
-                    behavior: "smooth",
-                    inline: "center",
-                    block: "nearest"
-                });
-            }, 100);
         }
     });
 }
