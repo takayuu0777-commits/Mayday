@@ -1734,3 +1734,273 @@ body{
     transform:scale(20) !important;
     transition:.6s ease !important;
 }
+
+/* ==========================
+   VERSION 2.9 STEP1
+========================== */
+
+#launch-screen{
+    background:
+        radial-gradient(circle at center,
+        rgba(212,175,55,.18) 0%,
+        rgba(5,5,5,1) 42%,
+        #000 100%) !important;
+}
+
+.launch-content{
+    opacity:0;
+    transform:translateY(10px) scale(.98);
+    transition:opacity 1s ease, transform 1s ease;
+}
+
+.launch-ready .launch-content{
+    opacity:1 !important;
+    transform:translateY(0) scale(1);
+}
+
+#launch-screen.launch-enter{
+    opacity:0 !important;
+    transform:scale(1.08) !important;
+    transition:.7s ease !important;
+    pointer-events:none !important;
+}
+
+#launch-screen.launch-enter .launch-mark{
+    transform:scale(20) !important;
+    transition:.7s ease !important;
+}
+
+.calendar-month-nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+}
+
+.calendar-month-nav a{
+    color:#f8fafc;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:800;
+    padding:8px 12px;
+    border-radius:999px;
+    background:rgba(255,255,255,.08);
+}
+
+.iphone-calendar{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:6px;
+}
+
+.calendar-week-head{
+    text-align:center;
+    font-size:12px;
+    opacity:.65;
+    font-weight:800;
+}
+
+.iphone-day{
+    min-height:58px;
+    padding:7px;
+    border-radius:14px;
+    background:rgba(255,255,255,.06);
+    color:#f8fafc;
+    text-decoration:none;
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+.iphone-day strong{
+    font-size:13px;
+}
+
+.iphone-day.today{
+    border:1px solid rgba(212,175,55,.65);
+}
+
+.iphone-day.selected{
+    background:rgba(212,175,55,.22);
+}
+
+.muted-day{
+    opacity:.35;
+}
+
+.calendar-icons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:2px;
+    font-size:11px;
+}
+
+@media(max-width:760px){
+    .iphone-day{
+        min-height:48px;
+        padding:5px;
+    }
+
+    .calendar-icons{
+        font-size:10px;
+    }
+}
+
+/* ==========================
+   VERSION 2.9 STATISTICS COMPACT
+========================== */
+
+.stats-compact-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+}
+
+.stat-compact-box{
+    padding:12px;
+    border-radius:16px;
+    background:rgba(255,255,255,.07);
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    text-align:center;
+}
+
+.stat-compact-box span{
+    font-size:18px;
+}
+
+.stat-compact-box strong{
+    font-size:20px;
+}
+
+.stat-compact-box small{
+    font-size:11px;
+    opacity:.65;
+}
+
+.library-stat-compact,
+.todo-stat-compact{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+.library-stat-compact div,
+.todo-stat-compact div{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding:12px;
+    border-radius:14px;
+    background:rgba(255,255,255,.07);
+}
+
+.library-stat-compact span,
+.todo-stat-compact span{
+    font-size:13px;
+}
+
+.library-stat-compact strong,
+.todo-stat-compact strong{
+    font-size:18px;
+}
+
+@media(max-width:760px){
+    .stats-compact-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .library-stat-compact,
+    .todo-stat-compact{
+        grid-template-columns:1fr;
+    }
+}
+
+/* ==========================
+   VERSION 2.9 SETTINGS
+========================== */
+
+.category-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+    gap:10px;
+}
+
+.category-chip{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:12px;
+    border-radius:14px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.08);
+    cursor:pointer;
+}
+
+.category-chip input{
+    width:auto;
+}
+
+.category-chip span{
+    font-size:13px;
+    font-weight:700;
+}
+
+/* ==========================
+   VERSION 2.9 ACHIEVEMENTS
+========================== */
+
+.achievement-flat-item{
+    color:#f8fafc !important;
+    text-decoration:none !important;
+}
+
+.achievement-flat-item strong{
+    color:#f8fafc !important;
+}
+
+.achievement-flat-item small{
+    color:rgba(248,250,252,.72) !important;
+}
+
+.rank-label{
+    color:#f8fafc !important;
+}
+
+.achievement-filter-row a{
+    color:#f8fafc !important;
+    text-decoration:none !important;
+}
+
+.active-filter{
+    background:rgba(212,175,55,.22);
+    border-radius:999px;
+    padding:8px 14px;
+}
+
+.real-japan-map{
+    width:100%;
+    max-width:700px;
+    display:block;
+    margin:auto;
+}
+
+.pref-list{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.pref-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+}
+
+.pref-row select{
+    width:180px;
+}

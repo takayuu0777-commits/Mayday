@@ -338,6 +338,18 @@ def statistics():
         theme=session["theme"]
     )
 
+@app.route("/japan-map")
+def japan_map():
+    return render_template(
+        "japan-map.html",
+        prefectures=fetch_prefectures(),
+        japan_progress=japan_progress(),
+        status_options=STATUS_OPTIONS,
+        profile=get_profile(),
+        stats=life_stats(),
+        theme=session["theme"]
+    )
+
 
 @app.route("/statistics/prefecture/update", methods=["POST"])
 def prefecture_update():
@@ -429,12 +441,7 @@ def shopping():
 def weather():
     return render_template(
         "weather_detail.html",
-        weather={
-            "city": "大阪市港区",
-            "temperature": "--℃",
-            "description": "天気取得準備中",
-            "rain": "--%"
-        },
+        weather=weather_summary(),
         profile=get_profile(),
         stats=life_stats(),
         theme=session["theme"]

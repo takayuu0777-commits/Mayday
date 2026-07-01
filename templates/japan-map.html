@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="card">
+
+    <div class="section-head">
+        <h2>🗾 日本制覇マップ</h2>
+        <span class="pill">{{ japan_progress.percent }}%</span>
+    </div>
+
+    <p class="muted">
+        住んだ・泊まった・遊んだ・通過した都道府県を記録できます。
+    </p>
+
+    <div class="japan-progress-line">
+        <strong>{{ japan_progress.visited }} / {{ japan_progress.total }}</strong>
+        <span>都道府県達成</span>
+    </div>
+
+</section>
+
+<section class="card">
+
+    <img
+        src="/static/japan-map.svg"
+        class="real-japan-map"
+    >
+
+</section>
+
+<section class="card">
+
+    <h2>📍 都道府県一覧</h2>
+
+    <div class="pref-list">
+
+        {% for pref in prefectures %}
+
+        <form
+            method="post"
+            action="/statistics/prefecture/update"
+            class="pref-row"
+        >
+
+            <input
+                type="hidden"
+                name="name"
+                value="{{ pref.name }}"
+            >
+
+            <span>
+                {{ pref.name }}
+            </span>
+
+            <select
+                name="status"
+                onchange="this.form.submit()"
+            >
+                {% for key, item in status_options.items() %}
+                    <option
+                        value="{{ key }}"
+                        {% if pref.status == key %}
+                        selected
+                        {% endif %}
+                    >
+                        {{ item.icon }} {{ item.label }}
+                    </option>
+                {% endfor %}
+            </select>
+
+        </form>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}

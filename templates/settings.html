@@ -12,15 +12,11 @@
 </section>
 
 <section class="card">
-
     <h2>🎨 テーマ</h2>
 
     <div class="theme-grid">
-
         {% for theme_item in themes %}
-
         <label class="theme-card">
-
             <input
                 type="radio"
                 name="theme"
@@ -33,29 +29,18 @@
             <div class="theme-preview {{ theme_item.class }}"></div>
 
             <div>
-                <strong>
-                    {{ theme_item.name }}
-                </strong>
-
-                <small>
-                    {{ theme_item.description }}
-                </small>
+                <strong>{{ theme_item.name }}</strong>
+                <small>{{ theme_item.description }}</small>
             </div>
-
         </label>
-
         {% endfor %}
-
     </div>
-
 </section>
 
 <section class="card">
-
     <h2>👤 プロフィール</h2>
 
     <div class="setting-list">
-
         <a class="setting-row" href="/profile">
             <span>👤 プロフィール編集</span>
             <span>></span>
@@ -70,30 +55,19 @@
             <span>{{ profile.icon }} アイコン</span>
             <span>設定済み</span>
         </div>
-
     </div>
-
 </section>
 
 <section class="card">
-
     <h2>⚙️ 任意カテゴリ</h2>
 
     <p class="muted">
         ONにした項目のみホーム・実績・入力欄に表示されます。
     </p>
 
-    <div class="setting-list">
-
+    <div class="category-grid">
         {% for category in categories %}
-
-        <label class="setting-row">
-
-            <span>
-                {{ category.icon }}
-                {{ category.name }}
-            </span>
-
+        <label class="category-chip">
             <input
                 type="checkbox"
                 name="{{ category.id }}"
@@ -102,12 +76,13 @@
                 {% endif %}
             >
 
+            <span>
+                {{ category.icon }}
+                {{ category.name }}
+            </span>
         </label>
-
         {% endfor %}
-
     </div>
-
 </section>
 
 <section class="card">

@@ -6,6 +6,11 @@ DB_PATH = os.environ.get("DB_PATH", "brain.sqlite")
 
 
 def connect():
+    db_dir = os.path.dirname(DB_PATH)
+
+    if db_dir:
+        os.makedirs(db_dir, exist_ok=True)
+
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
@@ -136,6 +141,7 @@ def init():
     add_column_if_missing(c, "goals", "goal_type", "TEXT DEFAULT '短期'")
     add_column_if_missing(c, "profile", "background", "TEXT DEFAULT 'default'")
     add_column_if_missing(c, "profile", "bio", "TEXT DEFAULT ''")
+    add_column_if_missing(c, "profile", "coins", "INTEGER DEFAULT 0")
 
     conn.commit()
     conn.close()
