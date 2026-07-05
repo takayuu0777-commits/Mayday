@@ -2004,3 +2004,16 @@ body{
 .pref-row select{
     width:180px;
 }
+
+/* ==========================
+   LAUNCH TOUCH BLOCK FIX
+========================== */
+
+#launch-screen.launch-enter{
+    pointer-events:none !important;
+}
+
+.launch-hidden{
+    display:none !important;
+    pointer-events:none !important;
+}

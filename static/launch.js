@@ -8,12 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const launchDone = sessionStorage.getItem("secondBrainLaunchDone");
 
     if (launchDone === "yes") {
-        launch.style.display = "none";
-        launch.style.opacity = "0";
+        launch.remove();
         return;
     }
-
-    sessionStorage.setItem("secondBrainLaunchDone", "yes");
 
     launch.style.display = "flex";
     launch.style.opacity = "1";
@@ -24,10 +21,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 100);
 
     launch.addEventListener("click", function () {
+        sessionStorage.setItem("secondBrainLaunchDone", "yes");
         launch.classList.add("launch-enter");
 
         setTimeout(function () {
-            launch.style.display = "none";
+            launch.remove();
         }, 700);
     });
 });

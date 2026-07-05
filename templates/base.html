@@ -19,6 +19,7 @@
 
 <body class="{{ theme }}">
 
+{% if request.path == "/" %}
 <div id="launch-screen">
     <div class="launch-glow"></div>
 
@@ -34,6 +35,7 @@
         <span>Tap to Enter</span>
     </div>
 </div>
+{% endif %}
 
 <header>
     <div class="title-row">
