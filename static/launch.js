@@ -5,24 +5,25 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    const alreadyOpened = sessionStorage.getItem("secondBrainLaunchDone");
+    const launchDone = sessionStorage.getItem("secondBrainLaunchDone");
 
-    if (alreadyOpened) {
+    if (launchDone === "yes") {
         launch.style.display = "none";
+        launch.style.opacity = "0";
         return;
     }
 
-    launch.classList.remove("launch-enter");
+    sessionStorage.setItem("secondBrainLaunchDone", "yes");
+
     launch.style.display = "flex";
     launch.style.opacity = "1";
+    launch.classList.remove("launch-enter");
 
     setTimeout(function () {
         launch.classList.add("launch-ready");
     }, 100);
 
     launch.addEventListener("click", function () {
-        sessionStorage.setItem("secondBrainLaunchDone", "1");
-
         launch.classList.add("launch-enter");
 
         setTimeout(function () {
