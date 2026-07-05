@@ -15,9 +15,9 @@ class PostgresCursor:
         self.cursor = cursor
 
     def execute(self, query, params=None):
-    query = query.replace("?", "%s")
-    self.cursor.execute(query, params or ())
-    return self
+        query = query.replace("?", "%s")
+        self.cursor.execute(query, params or ())
+        return self
 
     def fetchone(self):
         return self.cursor.fetchone()
