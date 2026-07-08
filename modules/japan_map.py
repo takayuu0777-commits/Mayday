@@ -1,4 +1,4 @@
-from modules.database import connect
+from modules.database import connect, is_postgres
 
 
 PREFECTURES = [
@@ -28,11 +28,19 @@ def ensure_prefectures():
     c = conn.cursor()
 
     for name in PREFECTURES:
-        c.execute("""
-        INSERT OR IGNORE INTO prefectures
-        (name, status)
-        VALUES (?, 'none')
-        """, (name,))
+        if is_postgres():
+            c.execute("""
+            INSERT INTO prefectures
+            (name, status)
+            VALUES (?, 'none')
+            ON CONFLICT (name) DO NOTHING
+            """, (name,))
+        else:
+            c.execute("""
+            INSERT OR IGNORE INTO prefectures
+            (name, status)
+            VALUES (?, 'none')
+            """, (name,))
 
     conn.commit()
     conn.close()
