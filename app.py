@@ -70,16 +70,17 @@ def give_login_bonus():
     conn = connect()
     c = conn.cursor()
 
-    c.execute("SELECT date_key FROM login_days WHERE date_key = ?", (today,))
-    exists = c.fetchone()
+    c.execute("""
+    INSERT INTO login_days
+    (date_key, created_at)
+    VALUES (?, ?)
+    ON CONFLICT (date_key) DO NOTHING
+    """, (
+        today,
+        datetime.now().isoformat()
+    ))
 
-    if not exists:
-        c.execute("""
-        INSERT INTO login_days
-        (date_key, created_at)
-        VALUES (?, ?)
-        """, (today, datetime.now().isoformat()))
-
+    if c.rowcount == 1:
         c.execute("""
         UPDATE profile
         SET coins = coins + 1
@@ -92,7 +93,6 @@ def give_login_bonus():
 
 @app.before_request
 def before():
-    init()
 
     if "theme" not in session:
         session["theme"] = "gold"
@@ -100,7 +100,9 @@ def before():
     if not is_owned(session["theme"]):
         session["theme"] = "gold"
 
-    give_login_bonus()
+    if not session.get("login_checked"):
+        give_login_bonus()
+        session["login_checked"] = True
 
 
 @app.route("/")
@@ -448,8 +450,10 @@ def weather():
     )
 
 
+# アプリ起動時に1回だけDB初期化
+init()
+
 if __name__ == "__main__":
-    init()
 
     port = int(os.environ.get("PORT", 10000))
 

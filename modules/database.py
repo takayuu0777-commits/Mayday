@@ -25,6 +25,10 @@ class PostgresCursor:
     def fetchall(self):
         return self.cursor.fetchall()
 
+    @property
+    def rowcount(self):
+        return self.cursor.rowcount
+
 
 class PostgresConnection:
     def __init__(self, conn):
