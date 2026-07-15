@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="auth-page">
+
+    <div class="card auth-card">
+
+        <div class="auth-heading">
+            <span class="auth-mark">✦</span>
+
+            <div>
+                <span class="sub">SECOND BRAIN</span>
+                <h1>ログイン</h1>
+            </div>
+        </div>
+
+        <p class="muted">
+            自分専用のSecond Brainへ入ります。
+        </p>
+
+        {% if error %}
+            <div class="auth-error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form
+            method="post"
+            action="/login"
+            class="auth-form"
+        >
+
+            <label>
+                <span>メールアドレス</span>
+
+                <input
+                    type="email"
+                    name="email"
+                    required
+                    autocomplete="email"
+                    placeholder="example@email.com"
+                    value="{{ email or '' }}"
+                >
+            </label>
+
+            <label>
+                <span>パスワード</span>
+
+                <input
+                    type="password"
+                    name="password"
+                    required
+                    autocomplete="current-password"
+                    placeholder="8文字以上"
+                >
+            </label>
+
+            <button type="submit">
+                ログインする
+            </button>
+
+        </form>
+
+        <div class="auth-switch">
+            <span>アカウントを持っていませんか？</span>
+
+            <a href="/register">
+                新規登録
+            </a>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}s

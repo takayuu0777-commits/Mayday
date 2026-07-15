@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="auth-page">
+
+    <div class="card auth-card">
+
+        <div class="auth-heading">
+            <span class="auth-mark">✦</span>
+
+            <div>
+                <span class="sub">CREATE SECOND BRAIN</span>
+                <h1>新規登録</h1>
+            </div>
+        </div>
+
+        <p class="muted">
+            あなた専用の記録領域を作成します。
+        </p>
+
+        {% if error %}
+            <div class="auth-error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form
+            method="post"
+            action="/register"
+            class="auth-form"
+        >
+
+            <label>
+                <span>名前</span>
+
+                <input
+                    type="text"
+                    name="name"
+                    required
+                    autocomplete="name"
+                    placeholder="表示名"
+                    value="{{ name or '' }}"
+                >
+            </label>
+
+            <label>
+                <span>メールアドレス</span>
+
+                <input
+                    type="email"
+                    name="email"
+                    required
+                    autocomplete="email"
+                    placeholder="example@email.com"
+                    value="{{ email or '' }}"
+                >
+            </label>
+
+            <label>
+                <span>パスワード</span>
+
+                <input
+                    type="password"
+                    name="password"
+                    required
+                    minlength="8"
+                    autocomplete="new-password"
+                    placeholder="8文字以上"
+                >
+            </label>
+
+            <label>
+                <span>パスワード確認</span>
+
+                <input
+                    type="password"
+                    name="password_confirm"
+                    required
+                    minlength="8"
+                    autocomplete="new-password"
+                    placeholder="もう一度入力"
+                >
+            </label>
+
+            <button type="submit">
+                アカウントを作成する ✨
+            </button>
+
+        </form>
+
+        <div class="auth-switch">
+            <span>すでにアカウントがありますか？</span>
+
+            <a href="/login">
+                ログイン
+            </a>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

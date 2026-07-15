@@ -1,94 +1,278 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
 
     <title>Second Brain OS</title>
 
-    <link rel="stylesheet" href="/static/style.css">
-    <link rel="manifest" href="/static/manifest.json">
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
 
-    <meta name="theme-color" content="#050505">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Second Brain">
+    <link
+        rel="manifest"
+        href="/static/manifest.json"
+    >
 
-    <link rel="apple-touch-icon" href="/static/icon-192.png">
+    <meta
+        name="theme-color"
+        content="#050505"
+    >
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="black-translucent"
+    >
+
+    <meta
+        name="apple-mobile-web-app-title"
+        content="Second Brain"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="/static/icon-192.png"
+    >
 </head>
+
 
 <body class="{{ theme }}">
 
-{% if request.path == "/" %}
+{% set is_auth_page = request.path in ["/login", "/register"] %}
+
+
+<!-- ==========================
+     起動画面
+========================== -->
+
+{% if request.path == "/" and current_user %}
+
 <div id="launch-screen">
+
     <div class="launch-glow"></div>
 
     <div class="launch-content">
-        <div class="launch-mark">◈</div>
-        <h1>Second Brain</h1>
-        <p>Personal Life OS</p>
+
+        <div class="launch-mark">
+            ◈
+        </div>
+
+        <h1>
+            Second Brain
+        </h1>
+
+        <p>
+            Personal Life OS
+        </p>
 
         {% if stats %}
-            <div class="launch-day">DAY {{ stats.login }}</div>
+            <div class="launch-day">
+                DAY {{ stats.login }}
+            </div>
         {% endif %}
 
-        <span>Tap to Enter</span>
+        <span>
+            Tap to Enter
+        </span>
+
     </div>
+
 </div>
+
 {% endif %}
 
+
+<!-- ==========================
+     通常ヘッダー
+========================== -->
+
+{% if not is_auth_page and current_user %}
+
 <header>
+
     <div class="title-row">
-        <div class="title">◈ Second Brain</div>
+
+        <div class="title">
+            ◈ Second Brain
+        </div>
 
         {% if profile and stats %}
+
         <div class="top-mini-stats">
-            <span>🏆 {{ stats.achievements }}</span>
-            <span>📚 {{ stats.library }}</span>
-            <span>🪙 {{ profile.coins }}</span>
-            <span>📅 {{ stats.login }}</span>
+
+            <span>
+                🏆 {{ stats.achievements }}
+            </span>
+
+            <span>
+                📚 {{ stats.library }}
+            </span>
+
+            <span>
+                🪙 {{ profile.coins }}
+            </span>
+
+            <span>
+                📅 {{ stats.login }}
+            </span>
+
         </div>
+
         {% endif %}
+
     </div>
 
-    <nav class="tabs" id="tabs">
-        <a href="/" data-path="/">ホーム</a>
-        <a href="/library" data-path="/library">Library</a>
-        <a href="/statistics" data-path="/statistics">統計</a>
-        <a href="/achievements" data-path="/achievements">実績</a>
-        <a href="/calendar" data-path="/calendar">カレンダー</a>
-        <a href="/goals" data-path="/goals">目標</a>
-        <a href="/shop" data-path="/shop">ショップ</a>
-        <a href="/settings" data-path="/settings">設定</a>
+
+    <div class="header-user-area">
+
+        <div class="header-user-name">
+
+            <span>
+                👤
+            </span>
+
+            <strong>
+                {{ current_user.name }}
+            </strong>
+
+        </div>
+
+        <a
+            href="/logout"
+            class="header-logout-button"
+        >
+            ログアウト
+        </a>
+
+    </div>
+
+
+    <nav
+        class="tabs"
+        id="tabs"
+    >
+
+        <a
+            href="/"
+            data-path="/"
+        >
+            ホーム
+        </a>
+
+        <a
+            href="/library"
+            data-path="/library"
+        >
+            Library
+        </a>
+
+        <a
+            href="/statistics"
+            data-path="/statistics"
+        >
+            統計
+        </a>
+
+        <a
+            href="/achievements"
+            data-path="/achievements"
+        >
+            実績
+        </a>
+
+        <a
+            href="/calendar"
+            data-path="/calendar"
+        >
+            カレンダー
+        </a>
+
+        <a
+            href="/goals"
+            data-path="/goals"
+        >
+            目標
+        </a>
+
+        <a
+            href="/shop"
+            data-path="/shop"
+        >
+            ショップ
+        </a>
+
+        <a
+            href="/settings"
+            data-path="/settings"
+        >
+            設定
+        </a>
+
     </nav>
+
 </header>
 
-<main>
+{% endif %}
+
+
+<!-- ==========================
+     メイン画面
+========================== -->
+
+<main class="{% if is_auth_page %}auth-main{% endif %}">
+
     {% block content %}
     {% endblock %}
+
 </main>
+
+
+{% if not is_auth_page %}
 
 <script src="/static/launch.js"></script>
 
 <script>
-const currentPath = window.location.pathname;
-const tabs = document.getElementById("tabs");
+document.addEventListener("DOMContentLoaded", function () {
+    const currentPath = window.location.pathname;
+    const tabs = document.getElementById("tabs");
 
-if (tabs) {
+    if (!tabs) {
+        return;
+    }
+
     const links = tabs.querySelectorAll("a");
 
-    links.forEach(link => {
+    links.forEach(function (link) {
         const path = link.dataset.path;
 
-        if (
+        const isActive =
             currentPath === path ||
-            (path !== "/" && currentPath.startsWith(path))
-        ) {
+            (
+                path !== "/" &&
+                currentPath.startsWith(path)
+            );
+
+        if (isActive) {
             link.classList.add("active-tab");
         }
     });
-}
+});
 </script>
 
+{% endif %}
+
 </body>
+
 </html>

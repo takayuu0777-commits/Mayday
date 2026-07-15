@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+
 from modules.database import connect
 
 
@@ -7,13 +8,13 @@ def classify(text):
     if "仕事" in text:
         return "仕事"
 
-    if "勉強" in text or "学習" in text or "読書" in text:
+    if any(word in text for word in ["勉強", "学習", "読書"]):
         return "学習"
 
-    if "映画" in text or "漫画" in text or "アニメ" in text or "ゲーム" in text:
+    if any(word in text for word in ["映画", "漫画", "アニメ", "ゲーム"]):
         return "メディア"
 
-    if "買い物" in text or "購入" in text:
+    if any(word in text for word in ["買い物", "購入"]):
         return "買い物"
 
     if "目標" in text:
@@ -23,38 +24,60 @@ def classify(text):
 
 
 def summarize(text):
-    return text[:40]
+    return (text or "")[:40]
 
 
-def add_coin(amount):
+def add_coin(user_id, amount):
+    if not user_id:
+        return False
+
     conn = connect()
     c = conn.cursor()
 
     c.execute("""
-    UPDATE profile
+    UPDATE user_profiles
     SET coins = coins + ?
-    WHERE id = 1
-    """, (amount,))
+    WHERE user_id = ?
+    """, (
+        amount,
+        user_id
+    ))
 
     conn.commit()
     conn.close()
 
+    return True
 
-def save(text):
-    conn = connect()
-    c = conn.cursor()
+
+def save(user_id, text):
+    clean_text = (text or "").strip()
+
+    if not user_id or not clean_text:
+        return False
 
     now = datetime.now()
 
+    conn = connect()
+    c = conn.cursor()
+
     c.execute("""
     INSERT INTO logs
-    (id, text, category, summary, created_at, date_key)
-    VALUES (?, ?, ?, ?, ?, ?)
+    (
+        id,
+        user_id,
+        text,
+        category,
+        summary,
+        created_at,
+        date_key
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?)
     """, (
         str(uuid.uuid4()),
-        text,
-        classify(text),
-        summarize(text),
+        user_id,
+        clean_text,
+        classify(clean_text),
+        summarize(clean_text),
         now.isoformat(),
         now.strftime("%Y-%m-%d")
     ))
@@ -62,15 +85,26 @@ def save(text):
     conn.commit()
     conn.close()
 
-    add_coin(1)
+    add_coin(user_id, 1)
+
+    return True
 
 
-def fetch_all():
+def fetch_all(user_id):
+    if not user_id:
+        return []
+
     conn = connect()
     c = conn.cursor()
 
-    c.execute("SELECT * FROM logs ORDER BY created_at DESC")
-    rows = c.fetchall()
+    c.execute("""
+    SELECT *
+    FROM logs
+    WHERE user_id = ?
+    ORDER BY created_at DESC
+    """, (user_id,))
 
+    rows = c.fetchall()
     conn.close()
+
     return rows

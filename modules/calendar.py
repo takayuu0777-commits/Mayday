@@ -42,16 +42,23 @@ def get_icon(category):
     )
 
 
-def normalize_year_month(year=None, month=None):
+def normalize_year_month(
+    year=None,
+    month=None
+):
     today = date.today()
 
     try:
-        selected_year = int(year or today.year)
+        selected_year = int(
+            year or today.year
+        )
     except (TypeError, ValueError):
         selected_year = today.year
 
     try:
-        selected_month = int(month or today.month)
+        selected_month = int(
+            month or today.month
+        )
     except (TypeError, ValueError):
         selected_month = today.month
 
@@ -65,14 +72,29 @@ def normalize_year_month(year=None, month=None):
 
 
 def month_range(year, month):
-    start_date = date(year, month, 1)
+    start_date = date(
+        year,
+        month,
+        1
+    )
 
     if month == 12:
-        next_month = date(year + 1, 1, 1)
+        next_month = date(
+            year + 1,
+            1,
+            1
+        )
     else:
-        next_month = date(year, month + 1, 1)
+        next_month = date(
+            year,
+            month + 1,
+            1
+        )
 
-    end_date = next_month - timedelta(days=1)
+    end_date = (
+        next_month -
+        timedelta(days=1)
+    )
 
     return (
         start_date.strftime("%Y-%m-%d"),
@@ -80,7 +102,14 @@ def month_range(year, month):
     )
 
 
-def fetch_data(start_date=None, end_date=None):
+def fetch_data(
+    user_id,
+    start_date=None,
+    end_date=None
+):
+    if not user_id:
+        return {}
+
     conn = connect()
     c = conn.cursor()
 
@@ -94,10 +123,16 @@ def fetch_data(start_date=None, end_date=None):
             created_at,
             date_key
         FROM logs
-        WHERE date_key >= ?
+        WHERE user_id = ?
+          AND date_key >= ?
           AND date_key <= ?
         ORDER BY created_at DESC
-        """, (start_date, end_date))
+        """, (
+            user_id,
+            start_date,
+            end_date
+        ))
+
     else:
         c.execute("""
         SELECT
@@ -108,8 +143,9 @@ def fetch_data(start_date=None, end_date=None):
             created_at,
             date_key
         FROM logs
+        WHERE user_id = ?
         ORDER BY created_at DESC
-        """)
+        """, (user_id,))
 
     rows = c.fetchall()
     conn.close()
@@ -117,10 +153,16 @@ def fetch_data(start_date=None, end_date=None):
     data = defaultdict(list)
 
     for row in rows:
-        created_at = row["created_at"] or ""
+        created_at = (
+            row["created_at"] or ""
+        )
+
         date_key = row["date_key"]
 
-        if not date_key and len(created_at) >= 10:
+        if (
+            not date_key
+            and len(created_at) >= 10
+        ):
             date_key = created_at[:10]
 
         if date_key:
@@ -129,7 +171,14 @@ def fetch_data(start_date=None, end_date=None):
     return dict(data)
 
 
-def fetch_memos(start_date=None, end_date=None):
+def fetch_memos(
+    user_id,
+    start_date=None,
+    end_date=None
+):
+    if not user_id:
+        return {}
+
     conn = connect()
     c = conn.cursor()
 
@@ -142,10 +191,18 @@ def fetch_memos(start_date=None, end_date=None):
             icon,
             created_at
         FROM calendar_memos
-        WHERE date_key >= ?
+        WHERE user_id = ?
+          AND date_key >= ?
           AND date_key <= ?
-        ORDER BY date_key DESC, created_at DESC
-        """, (start_date, end_date))
+        ORDER BY
+            date_key DESC,
+            created_at DESC
+        """, (
+            user_id,
+            start_date,
+            end_date
+        ))
+
     else:
         c.execute("""
         SELECT
@@ -155,8 +212,11 @@ def fetch_memos(start_date=None, end_date=None):
             icon,
             created_at
         FROM calendar_memos
-        ORDER BY date_key DESC, created_at DESC
-        """)
+        WHERE user_id = ?
+        ORDER BY
+            date_key DESC,
+            created_at DESC
+        """, (user_id,))
 
     rows = c.fetchall()
     conn.close()
@@ -172,16 +232,36 @@ def fetch_memos(start_date=None, end_date=None):
     return dict(data)
 
 
-def add_calendar_memo(date_key, text, icon="📝"):
-    clean_date_key = (date_key or "").strip()
-    clean_text = (text or "").strip()
-    clean_icon = (icon or "📝").strip()
+def add_calendar_memo(
+    user_id,
+    date_key,
+    text,
+    icon="📝"
+):
+    clean_date_key = (
+        date_key or ""
+    ).strip()
 
-    if not clean_date_key or not clean_text:
+    clean_text = (
+        text or ""
+    ).strip()
+
+    clean_icon = (
+        icon or "📝"
+    ).strip()
+
+    if (
+        not user_id
+        or not clean_date_key
+        or not clean_text
+    ):
         return False
 
     try:
-        datetime.strptime(clean_date_key, "%Y-%m-%d")
+        datetime.strptime(
+            clean_date_key,
+            "%Y-%m-%d"
+        )
     except ValueError:
         return False
 
@@ -198,9 +278,16 @@ def add_calendar_memo(date_key, text, icon="📝"):
 
     c.execute("""
     INSERT INTO calendar_memos
-    (date_key, text, icon, created_at)
-    VALUES (?, ?, ?, ?)
+    (
+        user_id,
+        date_key,
+        text,
+        icon,
+        created_at
+    )
+    VALUES (?, ?, ?, ?, ?)
     """, (
+        user_id,
         clean_date_key,
         clean_text,
         clean_icon,
@@ -213,8 +300,11 @@ def add_calendar_memo(date_key, text, icon="📝"):
     return True
 
 
-def delete_calendar_memo(memo_id):
-    if not memo_id:
+def delete_calendar_memo(
+    user_id,
+    memo_id
+):
+    if not user_id or not memo_id:
         return False
 
     conn = connect()
@@ -223,30 +313,53 @@ def delete_calendar_memo(memo_id):
     c.execute("""
     DELETE FROM calendar_memos
     WHERE id = ?
-    """, (memo_id,))
+      AND user_id = ?
+    """, (
+        memo_id,
+        user_id
+    ))
+
+    deleted = c.rowcount == 1
 
     conn.commit()
     conn.close()
 
-    return True
+    return deleted
 
 
-def build_calendar_icons(logs, memos):
+def build_calendar_icons(
+    logs,
+    memos
+):
     result = {}
 
-    all_dates = set(logs.keys()) | set(memos.keys())
+    all_dates = (
+        set(logs.keys())
+        |
+        set(memos.keys())
+    )
 
     for date_key in all_dates:
         icons = []
 
-        for log in logs.get(date_key, []):
-            icon = get_icon(log["category"])
+        for log in logs.get(
+            date_key,
+            []
+        ):
+            icon = get_icon(
+                log["category"]
+            )
 
             if icon not in icons:
                 icons.append(icon)
 
-        for memo in memos.get(date_key, []):
-            icon = memo["icon"] or "📝"
+        for memo in memos.get(
+            date_key,
+            []
+        ):
+            icon = (
+                memo["icon"] or "📝"
+            )
 
             if icon not in icons:
                 icons.append(icon)
@@ -256,22 +369,16 @@ def build_calendar_icons(logs, memos):
     return result
 
 
-def calendar_icons(year=None, month=None):
-    selected_year, selected_month = normalize_year_month(year, month)
-    start_date, end_date = month_range(selected_year, selected_month)
-
-    logs = fetch_data(start_date, end_date)
-    memos = fetch_memos(start_date, end_date)
-
-    return build_calendar_icons(logs, memos)
-
-
-def month_calendar(year=None, month=None):
-    today = date.today()
-
-    selected_year, selected_month = normalize_year_month(
-        year,
-        month
+def calendar_icons(
+    user_id,
+    year=None,
+    month=None
+):
+    selected_year, selected_month = (
+        normalize_year_month(
+            year,
+            month
+        )
     )
 
     start_date, end_date = month_range(
@@ -279,15 +386,70 @@ def month_calendar(year=None, month=None):
         selected_month
     )
 
-    logs = fetch_data(start_date, end_date)
-    memos = fetch_memos(start_date, end_date)
-    icons = build_calendar_icons(logs, memos)
+    logs = fetch_data(
+        user_id,
+        start_date,
+        end_date
+    )
 
-    calendar_builder = cal.Calendar(firstweekday=0)
+    memos = fetch_memos(
+        user_id,
+        start_date,
+        end_date
+    )
 
-    month_days = calendar_builder.monthdatescalendar(
+    return build_calendar_icons(
+        logs,
+        memos
+    )
+
+
+def month_calendar(
+    user_id,
+    year=None,
+    month=None
+):
+    today = date.today()
+
+    selected_year, selected_month = (
+        normalize_year_month(
+            year,
+            month
+        )
+    )
+
+    start_date, end_date = month_range(
         selected_year,
         selected_month
+    )
+
+    logs = fetch_data(
+        user_id,
+        start_date,
+        end_date
+    )
+
+    memos = fetch_memos(
+        user_id,
+        start_date,
+        end_date
+    )
+
+    icons = build_calendar_icons(
+        logs,
+        memos
+    )
+
+    calendar_builder = cal.Calendar(
+        firstweekday=0
+    )
+
+    month_days = (
+        calendar_builder
+        .monthdatescalendar(
+            selected_year,
+            selected_month
+        )
     )
 
     weeks = []
@@ -296,34 +458,50 @@ def month_calendar(year=None, month=None):
         week_items = []
 
         for day in week:
-            date_key = day.strftime("%Y-%m-%d")
+            date_key = day.strftime(
+                "%Y-%m-%d"
+            )
 
             week_items.append({
                 "date": day,
                 "date_key": date_key,
                 "day": day.day,
                 "is_current_month": (
-                    day.month == selected_month
+                    day.month ==
+                    selected_month
                 ),
-                "is_today": day == today,
-                "icons": icons.get(date_key, [])
+                "is_today": (
+                    day == today
+                ),
+                "icons": icons.get(
+                    date_key,
+                    []
+                )
             })
 
         weeks.append(week_items)
 
     if selected_month == 1:
-        prev_year = selected_year - 1
+        prev_year = (
+            selected_year - 1
+        )
         prev_month = 12
     else:
         prev_year = selected_year
-        prev_month = selected_month - 1
+        prev_month = (
+            selected_month - 1
+        )
 
     if selected_month == 12:
-        next_year = selected_year + 1
+        next_year = (
+            selected_year + 1
+        )
         next_month = 1
     else:
         next_year = selected_year
-        next_month = selected_month + 1
+        next_month = (
+            selected_month + 1
+        )
 
     return {
         "year": selected_year,
@@ -333,13 +511,21 @@ def month_calendar(year=None, month=None):
         "prev_month": prev_month,
         "next_year": next_year,
         "next_month": next_month,
-        "today_key": today.strftime("%Y-%m-%d")
+        "today_key": today.strftime(
+            "%Y-%m-%d"
+        )
     }
 
 
-def day_detail(date_key):
+def day_detail(
+    user_id,
+    date_key
+):
     clean_date_key = (
-        date_key or date.today().strftime("%Y-%m-%d")
+        date_key
+        or date.today().strftime(
+            "%Y-%m-%d"
+        )
     ).strip()
 
     try:
@@ -347,19 +533,33 @@ def day_detail(date_key):
             clean_date_key,
             "%Y-%m-%d"
         ).date()
+
     except ValueError:
         selected_date = date.today()
-        clean_date_key = selected_date.strftime("%Y-%m-%d")
+
+        clean_date_key = (
+            selected_date.strftime(
+                "%Y-%m-%d"
+            )
+        )
 
     logs = fetch_data(
+        user_id,
         clean_date_key,
         clean_date_key
-    ).get(clean_date_key, [])
+    ).get(
+        clean_date_key,
+        []
+    )
 
     memos = fetch_memos(
+        user_id,
         clean_date_key,
         clean_date_key
-    ).get(clean_date_key, [])
+    ).get(
+        clean_date_key,
+        []
+    )
 
     weekday_names = [
         "月曜日",
@@ -376,22 +576,35 @@ def day_detail(date_key):
         "year": selected_date.year,
         "month": selected_date.month,
         "day": selected_date.day,
-        "weekday": weekday_names[selected_date.weekday()],
+        "weekday": weekday_names[
+            selected_date.weekday()
+        ],
         "display_date": (
             f"{selected_date.year}年"
             f"{selected_date.month}月"
             f"{selected_date.day}日"
         ),
-        "is_today": selected_date == date.today(),
+        "is_today": (
+            selected_date ==
+            date.today()
+        ),
         "logs": logs,
         "memos": memos,
-        "item_count": len(logs) + len(memos)
+        "item_count": (
+            len(logs) +
+            len(memos)
+        )
     }
 
 
-def fetch_life_events():
+def fetch_life_events(user_id):
     return []
 
 
-def add_life_event(title, event_date, description):
+def add_life_event(
+    user_id,
+    title,
+    event_date,
+    description
+):
     return False

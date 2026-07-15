@@ -1,12 +1,22 @@
 import uuid
-from datetime import datetime, date
+from datetime import date, datetime
+
 from modules.database import connect
 
 
 PRIORITIES = {
-    "high": {"label": "高", "icon": "🔴"},
-    "middle": {"label": "中", "icon": "🟡"},
-    "low": {"label": "低", "icon": "🟢"}
+    "high": {
+        "label": "高",
+        "icon": "🔴"
+    },
+    "middle": {
+        "label": "中",
+        "icon": "🟡"
+    },
+    "low": {
+        "label": "低",
+        "icon": "🟢"
+    }
 }
 
 
@@ -15,26 +25,39 @@ def days_left(deadline):
         return ""
 
     try:
-        target = datetime.strptime(deadline, "%Y-%m-%d").date()
-        diff = (target - date.today()).days
+        target = datetime.strptime(
+            deadline,
+            "%Y-%m-%d"
+        ).date()
 
-        if diff > 0:
-            return f"あと{diff}日"
-        if diff == 0:
+        difference = (
+            target - date.today()
+        ).days
+
+        if difference > 0:
+            return f"あと{difference}日"
+
+        if difference == 0:
             return "今日まで"
+
         return "期限切れ"
-    except Exception:
+
+    except (TypeError, ValueError):
         return ""
 
 
-def fetch_todos(limit=None):
+def fetch_todos(user_id, limit=None):
+    if not user_id:
+        return []
+
     conn = connect()
     c = conn.cursor()
 
     sql = """
     SELECT *
     FROM todos
-    WHERE done = 0
+    WHERE user_id = ?
+      AND done = 0
     ORDER BY
         CASE priority
             WHEN 'high' THEN 1
@@ -46,45 +69,86 @@ def fetch_todos(limit=None):
         created_at DESC
     """
 
+    params = [user_id]
+
     if limit:
         sql += " LIMIT ?"
-        rows = c.execute(sql, (limit,)).fetchall()
-    else:
-        rows = c.execute(sql).fetchall()
+        params.append(limit)
 
+    c.execute(
+        sql,
+        tuple(params)
+    )
+
+    rows = c.fetchall()
     conn.close()
+
     return rows
 
 
-def add_todo(title, priority, deadline):
-    title = (title or "").strip()
+def add_todo(
+    user_id,
+    title,
+    priority,
+    deadline
+):
+    clean_title = (
+        title or ""
+    ).strip()
 
-    if not title:
-        return
+    clean_deadline = (
+        deadline or ""
+    ).strip()
+
+    if not user_id or not clean_title:
+        return False
 
     if priority not in PRIORITIES:
         priority = "middle"
+
+    if clean_deadline:
+        try:
+            datetime.strptime(
+                clean_deadline,
+                "%Y-%m-%d"
+            )
+        except ValueError:
+            clean_deadline = ""
 
     conn = connect()
     c = conn.cursor()
 
     c.execute("""
     INSERT INTO todos
-    (id, title, priority, deadline, done, created_at)
-    VALUES (?, ?, ?, ?, 0, ?)
-    """, (
-        str(uuid.uuid4()),
+    (
+        id,
+        user_id,
         title,
         priority,
         deadline,
+        done,
+        created_at
+    )
+    VALUES (?, ?, ?, ?, ?, 0, ?)
+    """, (
+        str(uuid.uuid4()),
+        user_id,
+        clean_title,
+        priority,
+        clean_deadline,
         datetime.now().isoformat()
     ))
 
     conn.commit()
     conn.close()
 
+    return True
 
-def complete_todo(todo_id):
+
+def complete_todo(user_id, todo_id):
+    if not user_id or not todo_id:
+        return False
+
     conn = connect()
     c = conn.cursor()
 
@@ -92,15 +156,29 @@ def complete_todo(todo_id):
     UPDATE todos
     SET done = 1
     WHERE id = ?
-    """, (todo_id,))
+      AND user_id = ?
+    """, (
+        todo_id,
+        user_id
+    ))
+
+    updated = c.rowcount == 1
 
     conn.commit()
     conn.close()
 
+    return updated
+
 
 def priority_icon(priority):
-    return PRIORITIES.get(priority, PRIORITIES["middle"])["icon"]
+    return PRIORITIES.get(
+        priority,
+        PRIORITIES["middle"]
+    )["icon"]
 
 
 def priority_label(priority):
-    return PRIORITIES.get(priority, PRIORITIES["middle"])["label"]
+    return PRIORITIES.get(
+        priority,
+        PRIORITIES["middle"]
+    )["label"]
