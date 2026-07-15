@@ -2017,3 +2017,794 @@ body{
     display:none !important;
     pointer-events:none !important;
 }
+
+/* ==========================
+   VERSION 2.9 JAPAN MAP FINAL
+========================== */
+
+.japan-map-card{
+    overflow:hidden;
+}
+
+.japan-map-container{
+    width:100%;
+    min-height:320px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.japan-map-container svg{
+    display:block;
+    width:100%;
+    max-width:760px;
+    height:auto;
+    margin:0 auto;
+    overflow:visible;
+}
+
+.japan-map-container .prefecture-area{
+    cursor:pointer;
+    outline:none;
+    transition:
+        fill .2s ease,
+        opacity .2s ease,
+        filter .2s ease,
+        transform .2s ease;
+}
+
+.japan-map-container .prefecture-area:hover{
+    opacity:.88;
+    filter:brightness(1.18);
+}
+
+.japan-map-container .prefecture-area:focus{
+    filter:
+        brightness(1.2)
+        drop-shadow(0 0 6px rgba(255,255,255,.75));
+}
+
+/* 未訪問 */
+
+.japan-map-container .status-none path,
+.japan-map-container .status-none polygon,
+.japan-map-container .status-none polyline,
+.japan-map-container .status-none rect{
+    fill:#475569 !important;
+    stroke:#cbd5e1 !important;
+    stroke-width:.8 !important;
+}
+
+/* 通過した */
+
+.japan-map-container .status-passed path,
+.japan-map-container .status-passed polygon,
+.japan-map-container .status-passed polyline,
+.japan-map-container .status-passed rect{
+    fill:#22c55e !important;
+    stroke:#bbf7d0 !important;
+    stroke-width:1 !important;
+}
+
+/* 遊んだ */
+
+.japan-map-container .status-visited path,
+.japan-map-container .status-visited polygon,
+.japan-map-container .status-visited polyline,
+.japan-map-container .status-visited rect{
+    fill:#3b82f6 !important;
+    stroke:#bfdbfe !important;
+    stroke-width:1 !important;
+}
+
+/* 泊まった */
+
+.japan-map-container .status-stayed path,
+.japan-map-container .status-stayed polygon,
+.japan-map-container .status-stayed polyline,
+.japan-map-container .status-stayed rect{
+    fill:#ef4444 !important;
+    stroke:#fecaca !important;
+    stroke-width:1 !important;
+}
+
+/* 住んだ */
+
+.japan-map-container .status-lived path,
+.japan-map-container .status-lived polygon,
+.japan-map-container .status-lived polyline,
+.japan-map-container .status-lived rect{
+    fill:#d4af37 !important;
+    stroke:#fff1a8 !important;
+    stroke-width:1.2 !important;
+    filter:drop-shadow(0 0 4px rgba(212,175,55,.55));
+}
+
+/* 都道府県一覧 */
+
+.pref-row-name{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-width:0;
+}
+
+.pref-number{
+    width:32px;
+    height:32px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:10px;
+    background:rgba(255,255,255,.09);
+    font-size:11px;
+    font-weight:800;
+    opacity:.75;
+}
+
+.pref-row-name strong{
+    font-size:14px;
+}
+
+.pref-row select{
+    width:180px;
+    margin:0;
+    padding:11px 13px;
+    border-radius:14px;
+}
+
+/* 凡例 */
+
+.japan-legend .jp-none{
+    background:#475569;
+    color:#f8fafc;
+}
+
+.japan-legend .jp-passed{
+    background:#22c55e;
+    color:#052e16;
+}
+
+.japan-legend .jp-visited{
+    background:#3b82f6;
+    color:#eff6ff;
+}
+
+.japan-legend .jp-stayed{
+    background:#ef4444;
+    color:#fff1f2;
+}
+
+.japan-legend .jp-lived{
+    background:#d4af37;
+    color:#171717;
+}
+
+/* スマホ */
+
+@media(max-width:760px){
+
+    .japan-map-container{
+        min-height:240px;
+    }
+
+    .japan-map-container svg{
+        width:112%;
+        max-width:none;
+    }
+
+    .japan-map-card{
+        padding:12px;
+    }
+
+    .pref-row{
+        flex-direction:row;
+        align-items:center;
+        padding:10px;
+    }
+
+    .pref-row-name{
+        flex:1;
+    }
+
+    .pref-row select{
+        width:145px;
+        min-width:145px;
+        font-size:13px;
+        padding:10px;
+    }
+
+    .pref-number{
+        width:28px;
+        height:28px;
+        border-radius:9px;
+        font-size:10px;
+    }
+
+    .pref-row-name strong{
+        font-size:13px;
+    }
+}
+
+@media(max-width:430px){
+
+    .pref-row{
+        flex-direction:column;
+        align-items:stretch;
+        gap:9px;
+    }
+
+    .pref-row select{
+        width:100%;
+        min-width:0;
+    }
+}
+
+/* ==========================
+   JAPAN MAP STATUS MODAL
+========================== */
+
+body.modal-open{
+    overflow:hidden;
+}
+
+.prefecture-modal{
+    position:fixed;
+    inset:0;
+    z-index:9999999;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    padding:
+        20px
+        16px
+        calc(20px + env(safe-area-inset-bottom));
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition:
+        opacity .2s ease,
+        visibility .2s ease;
+}
+
+.prefecture-modal.open{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+}
+
+.prefecture-modal-backdrop{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.72);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+}
+
+.prefecture-modal-panel{
+    position:relative;
+    z-index:1;
+    width:100%;
+    max-width:520px;
+    padding:22px;
+    border-radius:28px;
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(212,175,55,.16),
+            transparent 38%
+        ),
+        #111318;
+    border:1px solid rgba(255,255,255,.14);
+    box-shadow:0 30px 90px rgba(0,0,0,.65);
+    transform:translateY(30px);
+    transition:transform .25s ease;
+}
+
+.prefecture-modal.open .prefecture-modal-panel{
+    transform:translateY(0);
+}
+
+.prefecture-modal-close{
+    position:absolute;
+    top:12px;
+    right:14px;
+    width:38px;
+    height:38px;
+    margin:0;
+    padding:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#f8fafc !important;
+    font-size:24px;
+    line-height:1;
+    background:rgba(255,255,255,.09) !important;
+    box-shadow:none !important;
+}
+
+.prefecture-modal-heading{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding-right:44px;
+    margin-bottom:20px;
+}
+
+.prefecture-modal-icon{
+    width:52px;
+    height:52px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:18px;
+    font-size:27px;
+    background:rgba(212,175,55,.14);
+    border:1px solid rgba(212,175,55,.24);
+}
+
+.prefecture-modal-heading small{
+    display:block;
+    margin-bottom:4px;
+    opacity:.6;
+}
+
+.prefecture-modal-heading h2{
+    margin:0;
+    font-size:23px;
+}
+
+.prefecture-status-options{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+.prefecture-status-button{
+    width:100%;
+    min-height:64px;
+    margin:0;
+    padding:12px;
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:10px;
+    color:#f8fafc !important;
+    background:rgba(255,255,255,.07) !important;
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:18px;
+    box-shadow:none !important;
+    transition:
+        transform .15s ease,
+        border-color .15s ease,
+        background .15s ease;
+}
+
+.prefecture-status-button span{
+    font-size:21px;
+}
+
+.prefecture-status-button strong{
+    font-size:13px;
+}
+
+.prefecture-status-button:active{
+    transform:scale(.97);
+}
+
+.prefecture-status-button.selected{
+    border-color:#d4af37;
+    background:rgba(212,175,55,.17) !important;
+    box-shadow:
+        inset 0 0 0 1px rgba(212,175,55,.24) !important;
+}
+
+.prefecture-status-button:disabled{
+    opacity:.55;
+    cursor:wait;
+}
+
+.prefecture-save-message{
+    min-height:22px;
+    margin:15px 0 0;
+    text-align:center;
+    font-size:13px;
+    font-weight:800;
+}
+
+.prefecture-save-message.success{
+    color:#86efac;
+}
+
+.prefecture-save-message.error{
+    color:#fca5a5;
+}
+
+@media(min-width:761px){
+
+    .prefecture-modal{
+        align-items:center;
+    }
+}
+
+@media(max-width:430px){
+
+    .prefecture-modal-panel{
+        padding:20px 16px;
+        border-radius:26px;
+    }
+
+    .prefecture-status-options{
+        grid-template-columns:1fr;
+        max-height:380px;
+        overflow-y:auto;
+    }
+
+    .prefecture-status-button{
+        min-height:54px;
+    }
+}
+
+/* ==========================
+   JAPAN MAP TAP FIX
+========================== */
+
+.japan-map-container .prefecture-area{
+    cursor:pointer;
+}
+
+.japan-map-container .prefecture-area:hover,
+.japan-map-container .prefecture-area:focus,
+.japan-map-container .prefecture-area:active{
+    opacity:.82;
+    filter:brightness(1.2);
+}
+
+/* SVGの配置用transformは絶対に変更しない */
+
+body.modal-open .japan-map-container{
+    pointer-events:none;
+}
+
+.prefecture-modal{
+    z-index:2147483647 !important;
+}
+
+.prefecture-modal-backdrop{
+    pointer-events:auto;
+}
+
+.prefecture-modal-panel,
+.prefecture-modal-panel *{
+    pointer-events:auto;
+}
+
+/* ==========================
+   JAPAN MAP FLOATING POPUP
+========================== */
+
+.prefecture-modal{
+    --popup-x:50vw;
+    --popup-y:50vh;
+
+    position:fixed;
+    inset:0;
+    z-index:2147483647;
+    display:block;
+    padding:0;
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+}
+
+.prefecture-modal.open{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+}
+
+.prefecture-modal-backdrop{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.28);
+    backdrop-filter:blur(2px);
+    -webkit-backdrop-filter:blur(2px);
+}
+
+.prefecture-modal-panel{
+    position:fixed;
+    left:var(--popup-x);
+    top:var(--popup-y);
+
+    width:min(360px, calc(100vw - 24px));
+    max-height:calc(100vh - 24px);
+    overflow-y:auto;
+
+    padding:20px;
+    margin:0;
+
+    border-radius:24px;
+
+    transform:
+        translateX(-50%)
+        translateY(8px)
+        scale(.96);
+
+    opacity:0;
+
+    transition:
+        transform .18s ease,
+        opacity .18s ease;
+}
+
+.prefecture-modal.open
+.prefecture-modal-panel{
+    transform:
+        translateX(-50%)
+        translateY(0)
+        scale(1);
+
+    opacity:1;
+}
+
+.prefecture-status-options{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+}
+
+.prefecture-status-button{
+    min-height:54px;
+}
+
+@media(max-width:430px){
+
+    .prefecture-modal-panel{
+        width:calc(100vw - 20px);
+        padding:17px;
+        border-radius:22px;
+    }
+
+    .prefecture-status-options{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .prefecture-status-button{
+        min-height:50px;
+        padding:9px;
+    }
+
+    .prefecture-status-button span{
+        font-size:18px;
+    }
+
+    .prefecture-status-button strong{
+        font-size:12px;
+    }
+}
+
+/* ==========================
+   VERSION 2.9 CALENDAR FINAL
+========================== */
+
+.calendar-header-card{
+    background:
+        radial-gradient(circle at top right,rgba(212,175,55,.16),transparent 38%),
+        rgba(255,255,255,.07);
+}
+
+.calendar-current-month{
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+}
+
+.calendar-current-month strong{
+    font-size:13px;
+    opacity:.65;
+}
+
+.calendar-current-month span{
+    font-size:22px;
+    font-weight:800;
+}
+
+.calendar-quick-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-top:14px;
+}
+
+.calendar-today-button{
+    flex-shrink:0;
+    color:#111;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:800;
+    padding:8px 12px;
+    border-radius:999px;
+    background:linear-gradient(135deg,#facc15,#f59e0b);
+}
+
+.calendar-main-card{
+    overflow:hidden;
+}
+
+.calendar-week-head.saturday{
+    color:#93c5fd;
+}
+
+.calendar-week-head.sunday{
+    color:#fca5a5;
+}
+
+.calendar-day-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.today-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#d4af37;
+    box-shadow:0 0 8px rgba(212,175,55,.8);
+}
+
+.selected-day-card{
+    background:
+        radial-gradient(circle at top right,rgba(59,130,246,.14),transparent 38%),
+        rgba(255,255,255,.07);
+}
+
+.selected-day-title{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+}
+
+.selected-day-title strong{
+    font-size:22px;
+}
+
+.selected-day-title span{
+    font-size:13px;
+    opacity:.65;
+}
+
+.calendar-memo-form{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.calendar-memo-input-row{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:10px;
+}
+
+.calendar-memo-input-row button{
+    margin:0;
+    white-space:nowrap;
+}
+
+.calendar-timeline,
+.calendar-memo-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.calendar-timeline-item,
+.calendar-memo-item{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    padding:14px;
+    border-radius:18px;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.calendar-timeline-icon,
+.calendar-memo-icon{
+    width:42px;
+    height:42px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:14px;
+    background:rgba(255,255,255,.09);
+    font-size:20px;
+}
+
+.calendar-timeline-content,
+.calendar-memo-content{
+    flex:1;
+    min-width:0;
+}
+
+.calendar-timeline-head{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.calendar-timeline-content p,
+.calendar-memo-content p{
+    margin:6px 0;
+    line-height:1.65;
+    overflow-wrap:anywhere;
+}
+
+.calendar-timeline-content small,
+.calendar-memo-content small{
+    opacity:.6;
+}
+
+.calendar-summary{
+    display:block;
+    margin-top:6px;
+}
+
+.calendar-empty-state{
+    text-align:center;
+    padding:22px 10px;
+    opacity:.65;
+}
+
+.calendar-empty-state span{
+    display:block;
+    font-size:28px;
+}
+
+.calendar-empty-state p{
+    margin:8px 0 0;
+}
+
+/* スマホ */
+
+@media(max-width:760px){
+
+    .calendar-quick-row{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .calendar-memo-input-row{
+        grid-template-columns:1fr;
+    }
+
+    .calendar-memo-input-row button{
+        width:100%;
+    }
+
+    .selected-day-title{
+        align-items:flex-start;
+        flex-direction:column;
+        gap:4px;
+    }
+
+    .selected-day-title strong{
+        font-size:19px;
+    }
+
+    .calendar-timeline-item,
+    .calendar-memo-item{
+        padding:12px;
+    }
+
+    .calendar-timeline-icon,
+    .calendar-memo-icon{
+        width:38px;
+        height:38px;
+        font-size:18px;
+    }
+}

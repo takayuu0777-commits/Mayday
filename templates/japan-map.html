@@ -3,78 +3,165 @@
 {% block content %}
 
 <section class="card">
-
     <div class="section-head">
         <h2>🗾 日本制覇マップ</h2>
-        <span class="pill">{{ japan_progress.percent }}%</span>
+
+        <span class="pill" id="japan-percent">
+            {{ japan_progress.percent }}%
+        </span>
     </div>
 
     <p class="muted">
-        住んだ・泊まった・遊んだ・通過した都道府県を記録できます。
+        地図上の都道府県をタップして、訪問状態を登録できます。
     </p>
 
     <div class="japan-progress-line">
-        <strong>{{ japan_progress.visited }} / {{ japan_progress.total }}</strong>
+        <strong>
+            <span id="japan-visited">
+                {{ japan_progress.visited }}
+            </span>
+            /
+            <span id="japan-total">
+                {{ japan_progress.total }}
+            </span>
+        </strong>
+
         <span>都道府県達成</span>
     </div>
 
+    <div class="japan-legend">
+        <span class="jp-lived">🏠 住んだ</span>
+        <span class="jp-stayed">🛏 泊まった</span>
+        <span class="jp-visited">🎒 遊んだ</span>
+        <span class="jp-passed">🚄 通過した</span>
+        <span class="jp-none">⬜ 未訪問</span>
+    </div>
 </section>
 
-<section class="card">
-
-    <img
-        src="/static/japan-map.svg"
-        class="real-japan-map"
+<section class="card japan-map-card">
+    <div
+        id="japan-map-container"
+        class="japan-map-container"
+        aria-live="polite"
     >
-
+        <p class="muted">
+            日本地図を読み込んでいます…
+        </p>
+    </div>
 </section>
 
 <section class="card">
+    <div class="section-head">
+        <h2>📍 都道府県の状態</h2>
+        <span class="pill">47 Prefectures</span>
+    </div>
 
-    <h2>📍 都道府県一覧</h2>
+    <p class="muted">
+        一覧からも状態を変更できます。
+    </p>
 
     <div class="pref-list">
-
         {% for pref in prefectures %}
-
         <form
             method="post"
             action="/statistics/prefecture/update"
             class="pref-row"
         >
-
             <input
                 type="hidden"
                 name="name"
                 value="{{ pref.name }}"
             >
 
-            <span>
-                {{ pref.name }}
-            </span>
+            <div class="pref-row-name">
+                <span class="pref-number">
+                    {{ "%02d"|format(pref.code) }}
+                </span>
+
+                <strong>{{ pref.name }}</strong>
+            </div>
 
             <select
                 name="status"
+                data-prefecture="{{ pref.name }}"
+                aria-label="{{ pref.name }}の状態"
                 onchange="this.form.submit()"
             >
                 {% for key, item in status_options.items() %}
-                    <option
-                        value="{{ key }}"
-                        {% if pref.status == key %}
-                        selected
-                        {% endif %}
-                    >
-                        {{ item.icon }} {{ item.label }}
-                    </option>
+                <option
+                    value="{{ key }}"
+                    {% if pref.status == key %}selected{% endif %}
+                >
+                    {{ item.icon }} {{ item.label }}
+                </option>
                 {% endfor %}
             </select>
-
         </form>
-
         {% endfor %}
-
     </div>
-
 </section>
+
+<div
+    id="prefecture-modal"
+    class="prefecture-modal"
+    aria-hidden="true"
+>
+    <div
+        class="prefecture-modal-backdrop"
+        data-close-modal
+    ></div>
+
+    <section
+        class="prefecture-modal-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="prefecture-modal-title"
+    >
+        <button
+            type="button"
+            class="prefecture-modal-close"
+            data-close-modal
+            aria-label="閉じる"
+        >
+            ×
+        </button>
+
+        <div class="prefecture-modal-heading">
+            <span class="prefecture-modal-icon">🗾</span>
+
+            <div>
+                <small>都道府県の状態</small>
+
+                <h2 id="prefecture-modal-title">
+                    都道府県
+                </h2>
+            </div>
+        </div>
+
+        <div class="prefecture-status-options">
+            {% for key, item in status_options.items() %}
+            <button
+                type="button"
+                class="prefecture-status-button status-choice-{{ key }}"
+                data-status="{{ key }}"
+            >
+                <span>{{ item.icon }}</span>
+                <strong>{{ item.label }}</strong>
+            </button>
+            {% endfor %}
+        </div>
+
+        <p
+            id="prefecture-save-message"
+            class="prefecture-save-message"
+        ></p>
+    </section>
+</div>
+
+<script id="prefecture-data" type="application/json">
+{{ prefectures | tojson }}
+</script>
+
+<script src="/static/japan-map.js"></script>
 
 {% endblock %}

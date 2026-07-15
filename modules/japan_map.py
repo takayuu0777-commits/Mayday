@@ -90,14 +90,34 @@ def fetch_prefectures(force_refresh=False):
     c = conn.cursor()
 
     rows = c.execute("""
-    SELECT *
+    SELECT id, name, status
     FROM prefectures
-    ORDER BY id ASC
     """).fetchall()
 
     conn.close()
 
-    _prefecture_cache = [dict(row) for row in rows]
+    rows_by_name = {
+        row["name"]: {
+            "id": row["id"],
+            "name": row["name"],
+            "status": row["status"]
+        }
+        for row in rows
+    }
+
+    _prefecture_cache = []
+
+    for code, name in enumerate(PREFECTURES, start=1):
+        row = rows_by_name.get(name)
+
+        if row:
+            row["code"] = code
+            row["status_label"] = STATUS_OPTIONS.get(
+                row["status"],
+                STATUS_OPTIONS["none"]
+            )["label"]
+
+            _prefecture_cache.append(row)
 
     return _prefecture_cache
 
@@ -105,11 +125,11 @@ def fetch_prefectures(force_refresh=False):
 def update_prefecture(name, status):
     global _prefecture_cache
 
-    if status not in STATUS_OPTIONS:
-        status = "none"
-
     if name not in PREFECTURES:
         return False
+
+    if status not in STATUS_OPTIONS:
+        status = "none"
 
     conn = connect()
     c = conn.cursor()

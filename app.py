@@ -326,13 +326,16 @@ def stats():
 
 @app.route("/statistics")
 def statistics():
+    prefectures = fetch_prefectures()
+    progress = japan_progress(prefectures)
+
     return render_template(
         "statistics.html",
         basic_stats=basic_statistics(),
         library_stats=library_statistics(),
         todo_stats=todo_statistics(),
-        prefectures=fetch_prefectures(),
-        japan_progress=japan_progress(),
+        prefectures=prefectures,
+        japan_progress=progress,
         status_options=STATUS_OPTIONS,
         status_data=status_data,
         stats=life_stats(),
@@ -342,10 +345,13 @@ def statistics():
 
 @app.route("/japan-map")
 def japan_map():
+    prefectures = fetch_prefectures()
+    progress = japan_progress(prefectures)
+
     return render_template(
         "japan-map.html",
-        prefectures=fetch_prefectures(),
-        japan_progress=japan_progress(),
+        prefectures=prefectures,
+        japan_progress=progress,
         status_options=STATUS_OPTIONS,
         profile=get_profile(),
         stats=life_stats(),
@@ -360,7 +366,7 @@ def prefecture_update():
         request.form.get("status")
     )
 
-    return redirect("/statistics")
+    return redirect("/japan-map")
 
 
 @app.route("/shop")

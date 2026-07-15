@@ -2,26 +2,75 @@
 
 {% block content %}
 
-<section class="card">
+<!-- ==========================
+     月の見出し・前月次月
+========================== -->
+
+<section class="card calendar-header-card">
+
     <div class="section-head">
-        <h2>📅 カレンダー</h2>
-        <span class="pill">{{ calendar_data.year }}年{{ calendar_data.month }}月</span>
+        <div>
+            <span class="sub">LIFE CALENDAR</span>
+            <h2>📅 カレンダー</h2>
+        </div>
+
+        <span class="pill">
+            {{ calendar_data.year }}年{{ calendar_data.month }}月
+        </span>
     </div>
 
     <div class="calendar-month-nav">
-        <a href="/calendar?year={{ calendar_data.prev_year }}&month={{ calendar_data.prev_month }}">
+
+        <a
+            href="/calendar?year={{ calendar_data.prev_year }}&month={{ calendar_data.prev_month }}"
+            aria-label="前の月へ"
+        >
             ← 前月
         </a>
 
-        <strong>{{ calendar_data.year }} / {{ calendar_data.month }}</strong>
+        <div class="calendar-current-month">
+            <strong>
+                {{ calendar_data.year }}
+            </strong>
 
-        <a href="/calendar?year={{ calendar_data.next_year }}&month={{ calendar_data.next_month }}">
+            <span>
+                {{ calendar_data.month }}月
+            </span>
+        </div>
+
+        <a
+            href="/calendar?year={{ calendar_data.next_year }}&month={{ calendar_data.next_month }}"
+            aria-label="次の月へ"
+        >
             次月 →
         </a>
+
     </div>
+
+    <div class="calendar-quick-row">
+
+        <a
+            href="/calendar"
+            class="calendar-today-button"
+        >
+            今日へ戻る
+        </a>
+
+        <span class="muted">
+            日付を選ぶと、その日の記録を確認できます。
+        </span>
+
+    </div>
+
 </section>
 
-<section class="card">
+
+<!-- ==========================
+     月間カレンダー
+========================== -->
+
+<section class="card calendar-main-card">
+
     <div class="iphone-calendar">
 
         <div class="calendar-week-head">月</div>
@@ -29,85 +78,315 @@
         <div class="calendar-week-head">水</div>
         <div class="calendar-week-head">木</div>
         <div class="calendar-week-head">金</div>
-        <div class="calendar-week-head">土</div>
-        <div class="calendar-week-head">日</div>
+        <div class="calendar-week-head saturday">土</div>
+        <div class="calendar-week-head sunday">日</div>
 
         {% for week in calendar_data.weeks %}
             {% for day in week %}
+
                 <a
                     href="/calendar?year={{ calendar_data.year }}&month={{ calendar_data.month }}&date={{ day.date_key }}"
-                    class="iphone-day {% if not day.is_current_month %}muted-day{% endif %} {% if day.is_today %}today{% endif %} {% if selected_day.date_key == day.date_key %}selected{% endif %}"
+                    class="
+                        iphone-day
+                        {% if not day.is_current_month %}muted-day{% endif %}
+                        {% if day.is_today %}today{% endif %}
+                        {% if selected_day.date_key == day.date_key %}selected{% endif %}
+                    "
+                    aria-label="{{ day.date_key }}"
                 >
-                    <strong>{{ day.day }}</strong>
+
+                    <div class="calendar-day-top">
+
+                        <strong>
+                            {{ day.day }}
+                        </strong>
+
+                        {% if day.is_today %}
+                            <span class="today-dot"></span>
+                        {% endif %}
+
+                    </div>
 
                     <div class="calendar-icons">
+
                         {% for icon in day.icons %}
                             <span>{{ icon }}</span>
                         {% endfor %}
+
                     </div>
+
                 </a>
+
             {% endfor %}
         {% endfor %}
 
     </div>
+
 </section>
 
-<section class="card">
+
+<!-- ==========================
+     選択日の概要
+========================== -->
+
+<section class="card selected-day-card">
+
     <div class="section-head">
-        <h2>📝 {{ selected_day.date_key }}</h2>
-        <span class="pill">日付メモ</span>
+
+        <div>
+            <span class="sub">
+                SELECTED DAY
+            </span>
+
+            <h2>
+                {% if selected_day.is_today %}
+                    ✨ 今日
+                {% else %}
+                    📌 選択した日
+                {% endif %}
+            </h2>
+        </div>
+
+        <span class="pill">
+            {{ selected_day.item_count }}件
+        </span>
+
     </div>
 
-    <form method="post" action="/calendar/memo/add" class="stack-form">
-        <input type="hidden" name="date_key" value="{{ selected_day.date_key }}">
-        <input type="hidden" name="year" value="{{ calendar_data.year }}">
-        <input type="hidden" name="month" value="{{ calendar_data.month }}">
+    <div class="selected-day-title">
 
-        <select name="icon">
-            <option value="📝">📝 メモ</option>
-            <option value="📚">📚 学習</option>
-            <option value="🎬">🎬 メディア</option>
-            <option value="🚴">🚴 運動</option>
-            <option value="✈️">✈️ 旅行</option>
-            <option value="🏆">🏆 達成</option>
-            <option value="💼">💼 仕事</option>
-            <option value="💡">💡 発見</option>
-        </select>
+        <strong>
+            {{ selected_day.display_date }}
+        </strong>
 
-        <textarea name="text" placeholder="この日に残したい出来事や過去の思い出を書く"></textarea>
+        <span>
+            {{ selected_day.weekday }}
+        </span>
 
-        <button>この日にメモを追加する</button>
-    </form>
+    </div>
+
 </section>
 
+
+<!-- ==========================
+     メモ追加
+========================== -->
+
+<section class="card calendar-memo-form-card">
+
+    <div class="section-head">
+        <h2>✍️ この日にメモを追加</h2>
+        <span class="pill">Memory</span>
+    </div>
+
+    <form
+        method="post"
+        action="/calendar/memo/add"
+        class="calendar-memo-form"
+    >
+
+        <input
+            type="hidden"
+            name="date_key"
+            value="{{ selected_day.date_key }}"
+        >
+
+        <input
+            type="hidden"
+            name="year"
+            value="{{ calendar_data.year }}"
+        >
+
+        <input
+            type="hidden"
+            name="month"
+            value="{{ calendar_data.month }}"
+        >
+
+        <div class="calendar-memo-input-row">
+
+            <select
+                name="icon"
+                aria-label="メモのアイコン"
+            >
+                <option value="📝">📝 メモ</option>
+                <option value="📚">📚 学習</option>
+                <option value="🎬">🎬 メディア</option>
+                <option value="🚴">🚴 運動</option>
+                <option value="✈️">✈️ 旅行</option>
+                <option value="🏆">🏆 達成</option>
+                <option value="💼">💼 仕事</option>
+                <option value="💡">💡 発見</option>
+                <option value="🍽️">🍽️ 食事</option>
+                <option value="👥">👥 人</option>
+                <option value="📍">📍 場所</option>
+            </select>
+
+            <button type="submit">
+                追加する ✨
+            </button>
+
+        </div>
+
+        <textarea
+            name="text"
+            required
+            placeholder="この日の出来事・予定・思い出を書きましょう"
+        ></textarea>
+
+    </form>
+
+</section>
+
+
+<!-- ==========================
+     この日の人生ログ
+========================== -->
+
 <section class="card">
-    <h2>この日の記録</h2>
+
+    <div class="section-head">
+        <h2>📖 この日の記録</h2>
+
+        <span class="pill">
+            {{ selected_day.logs|length }}件
+        </span>
+    </div>
 
     {% if selected_day.logs %}
-        {% for log in selected_day.logs %}
-            <div class="log-item">
-                <p>{{ log.text }}</p>
-                <small>{{ log.category }} / {{ log.created_at[:10] }}</small>
-            </div>
-        {% endfor %}
+
+        <div class="calendar-timeline">
+
+            {% for log in selected_day.logs %}
+
+                <article class="calendar-timeline-item">
+
+                    <div class="calendar-timeline-icon">
+                        {% if log.category == "学習" %}
+                            📚
+                        {% elif log.category == "仕事" %}
+                            💼
+                        {% elif log.category == "メディア" %}
+                            🎬
+                        {% elif log.category == "健康" %}
+                            💪
+                        {% elif log.category == "買い物" %}
+                            🛒
+                        {% elif log.category == "思考" %}
+                            💡
+                        {% elif log.category == "場所" %}
+                            📍
+                        {% elif log.category == "人" %}
+                            👥
+                        {% else %}
+                            ✦
+                        {% endif %}
+                    </div>
+
+                    <div class="calendar-timeline-content">
+
+                        <div class="calendar-timeline-head">
+
+                            <strong>
+                                {{ log.category or "その他" }}
+                            </strong>
+
+                            <small>
+                                {% if log.created_at and log.created_at|length >= 16 %}
+                                    {{ log.created_at[11:16] }}
+                                {% endif %}
+                            </small>
+
+                        </div>
+
+                        <p>
+                            {{ log.text }}
+                        </p>
+
+                        {% if log.summary %}
+                            <small class="calendar-summary">
+                                {{ log.summary }}
+                            </small>
+                        {% endif %}
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
     {% else %}
-        <p class="muted">この日の記録はありません。</p>
+
+        <div class="calendar-empty-state">
+            <span>📖</span>
+            <p>この日の人生ログはありません。</p>
+        </div>
+
     {% endif %}
+
 </section>
 
+
+<!-- ==========================
+     この日のメモ
+========================== -->
+
 <section class="card">
-    <h2>この日のメモ</h2>
+
+    <div class="section-head">
+        <h2>📝 この日のメモ</h2>
+
+        <span class="pill">
+            {{ selected_day.memos|length }}件
+        </span>
+    </div>
 
     {% if selected_day.memos %}
-        {% for memo in selected_day.memos %}
-            <div class="log-item">
-                <strong>{{ memo.icon }} {{ memo.created_at[:10] }}</strong>
-                <p>{{ memo.text }}</p>
-            </div>
-        {% endfor %}
+
+        <div class="calendar-memo-list">
+
+            {% for memo in selected_day.memos %}
+
+                <article class="calendar-memo-item">
+
+                    <div class="calendar-memo-icon">
+                        {{ memo.icon }}
+                    </div>
+
+                    <div class="calendar-memo-content">
+
+                        <p>
+                            {{ memo.text }}
+                        </p>
+
+                        <small>
+                            {% if memo.created_at and memo.created_at|length >= 16 %}
+                                {{ memo.created_at[:10] }}
+                                {{ memo.created_at[11:16] }}
+                            {% else %}
+                                {{ selected_day.date_key }}
+                            {% endif %}
+                        </small>
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
     {% else %}
-        <p class="muted">この日のメモはありません。</p>
+
+        <div class="calendar-empty-state">
+            <span>📝</span>
+            <p>この日のメモはありません。</p>
+        </div>
+
     {% endif %}
+
 </section>
 
 {% endblock %}
