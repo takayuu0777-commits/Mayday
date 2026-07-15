@@ -10,20 +10,50 @@ PREFECTURES = [
     "滋賀県", "京都府", "大阪府", "兵庫県", "奈良県", "和歌山県",
     "鳥取県", "島根県", "岡山県", "広島県", "山口県",
     "徳島県", "香川県", "愛媛県", "高知県",
-    "福岡県", "佐賀県", "長崎県", "熊本県", "大分県", "宮崎県", "鹿児島県", "沖縄県"
+    "福岡県", "佐賀県", "長崎県", "熊本県", "大分県", "宮崎県",
+    "鹿児島県", "沖縄県"
 ]
 
 
 STATUS_OPTIONS = {
-    "none": {"label": "未訪問", "icon": "⬜", "class": "jp-none"},
-    "passed": {"label": "通過した", "icon": "🚄", "class": "jp-passed"},
-    "visited": {"label": "遊んだ", "icon": "🎒", "class": "jp-visited"},
-    "stayed": {"label": "泊まった", "icon": "🛏", "class": "jp-stayed"},
-    "lived": {"label": "住んだ", "icon": "🏠", "class": "jp-lived"}
+    "none": {
+        "label": "未訪問",
+        "icon": "⬜",
+        "class": "jp-none"
+    },
+    "passed": {
+        "label": "通過した",
+        "icon": "🚄",
+        "class": "jp-passed"
+    },
+    "visited": {
+        "label": "遊んだ",
+        "icon": "🎒",
+        "class": "jp-visited"
+    },
+    "stayed": {
+        "label": "泊まった",
+        "icon": "🛏",
+        "class": "jp-stayed"
+    },
+    "lived": {
+        "label": "住んだ",
+        "icon": "🏠",
+        "class": "jp-lived"
+    }
 }
 
 
+_prefectures_initialized = False
+_prefecture_cache = None
+
+
 def ensure_prefectures():
+    global _prefectures_initialized
+
+    if _prefectures_initialized:
+        return
+
     conn = connect()
     c = conn.cursor()
 
@@ -45,9 +75,16 @@ def ensure_prefectures():
     conn.commit()
     conn.close()
 
+    _prefectures_initialized = True
 
-def fetch_prefectures():
+
+def fetch_prefectures(force_refresh=False):
+    global _prefecture_cache
+
     ensure_prefectures()
+
+    if _prefecture_cache is not None and not force_refresh:
+        return _prefecture_cache
 
     conn = connect()
     c = conn.cursor()
@@ -59,12 +96,20 @@ def fetch_prefectures():
     """).fetchall()
 
     conn.close()
-    return rows
+
+    _prefecture_cache = [dict(row) for row in rows]
+
+    return _prefecture_cache
 
 
 def update_prefecture(name, status):
+    global _prefecture_cache
+
     if status not in STATUS_OPTIONS:
         status = "none"
+
+    if name not in PREFECTURES:
+        return False
 
     conn = connect()
     c = conn.cursor()
@@ -78,21 +123,32 @@ def update_prefecture(name, status):
     conn.commit()
     conn.close()
 
+    _prefecture_cache = None
 
-def japan_progress():
-    rows = fetch_prefectures()
+    return True
 
-    visited = [
-        row for row in rows
+
+def japan_progress(rows=None):
+    if rows is None:
+        rows = fetch_prefectures()
+
+    visited_count = sum(
+        1
+        for row in rows
         if row["status"] != "none"
-    ]
+    )
+
+    total = len(PREFECTURES)
 
     return {
-        "visited": len(visited),
-        "total": 47,
-        "percent": int((len(visited) / 47) * 100)
+        "visited": visited_count,
+        "total": total,
+        "percent": int((visited_count / total) * 100)
     }
 
 
 def status_data(status):
-    return STATUS_OPTIONS.get(status, STATUS_OPTIONS["none"])
+    return STATUS_OPTIONS.get(
+        status,
+        STATUS_OPTIONS["none"]
+    )
