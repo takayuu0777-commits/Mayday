@@ -3099,3 +3099,231 @@ body.modal-open .japan-map-container{
         width:100%;
     }
 }
+
+/* ==========================
+   VERSION 2.9 WEATHER FINAL
+========================== */
+
+.weather-detail-hero{
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(56,189,248,.22),
+            transparent 42%
+        ),
+        rgba(255,255,255,.07);
+}
+
+.weather-current-main{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    margin:16px 0 20px;
+}
+
+.weather-current-icon{
+    width:92px;
+    height:92px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:28px;
+    font-size:52px;
+    background:rgba(255,255,255,.09);
+    border:1px solid rgba(255,255,255,.12);
+}
+
+.weather-current-text{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+.weather-current-temperature{
+    font-size:42px;
+    line-height:1;
+}
+
+.weather-current-text span{
+    font-size:17px;
+    font-weight:800;
+}
+
+.weather-current-text small{
+    opacity:.65;
+}
+
+.weather-detail-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.weather-detail-grid div{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    padding:13px;
+    border-radius:16px;
+    background:rgba(255,255,255,.07);
+}
+
+.weather-detail-grid span{
+    font-size:12px;
+    opacity:.7;
+}
+
+.weather-detail-grid strong{
+    font-size:18px;
+}
+
+.weather-error-message{
+    padding:11px 13px;
+    border-radius:14px;
+    color:#fecaca;
+    background:rgba(239,68,68,.13);
+    border:1px solid rgba(239,68,68,.24);
+    font-size:13px;
+}
+
+.weather-hourly-scroll{
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    padding:2px 0 8px;
+    scroll-snap-type:x proximity;
+}
+
+.weather-hour-card{
+    min-width:94px;
+    padding:13px 10px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:7px;
+    border-radius:18px;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.09);
+    scroll-snap-align:start;
+}
+
+.weather-hour-card > strong{
+    font-size:12px;
+    opacity:.72;
+}
+
+.weather-hour-icon{
+    font-size:27px;
+}
+
+.weather-hour-card b{
+    font-size:16px;
+}
+
+.weather-hour-card small{
+    font-size:11px;
+    opacity:.65;
+}
+
+.weather-weekly-list{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+}
+
+.weather-week-row{
+    display:grid;
+    grid-template-columns:minmax(90px,1fr) 42px 110px 72px;
+    align-items:center;
+    gap:10px;
+    padding:13px;
+    border-radius:17px;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.weather-week-day{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+}
+
+.weather-week-day small{
+    opacity:.62;
+}
+
+.weather-week-icon{
+    text-align:center;
+    font-size:25px;
+}
+
+.weather-week-temperature{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.weather-week-temperature strong{
+    color:#fca5a5;
+}
+
+.weather-week-temperature span{
+    color:#93c5fd;
+}
+
+.weather-week-rain{
+    text-align:right;
+    opacity:.7;
+}
+
+@media(max-width:760px){
+
+    .weather-detail-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .weather-current-icon{
+        width:74px;
+        height:74px;
+        border-radius:23px;
+        font-size:42px;
+    }
+
+    .weather-current-temperature{
+        font-size:34px;
+    }
+
+    .weather-week-row{
+        grid-template-columns:minmax(78px,1fr) 34px 92px;
+    }
+
+    .weather-week-rain{
+        grid-column:1 / -1;
+        text-align:right;
+        margin-top:-5px;
+    }
+}
+
+@media(max-width:390px){
+
+    .weather-current-main{
+        align-items:flex-start;
+    }
+
+    .weather-detail-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .weather-week-row{
+        grid-template-columns:1fr 36px;
+    }
+
+    .weather-week-temperature{
+        justify-content:flex-start;
+    }
+
+    .weather-week-rain{
+        grid-column:auto;
+    }
+}

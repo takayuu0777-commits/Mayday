@@ -2,42 +2,200 @@
 
 {% block content %}
 
-<section class="card weather-card">
+<section class="card weather-detail-hero">
 
     <div class="section-head">
-        <h2>🌤 天気詳細</h2>
-        <span class="pill">Weather</span>
+
+        <div>
+            <span class="sub">CURRENT WEATHER</span>
+            <h2>🌤️ 天気詳細</h2>
+        </div>
+
+        <span class="pill">
+            {{ weather.updated_at }} 更新
+        </span>
+
     </div>
 
-    <div class="simple-row">
-        <span>地域</span>
-        <strong>{{ weather.city }}</strong>
+    <div class="weather-current-main">
+
+        <div class="weather-current-icon">
+            {{ weather.icon }}
+        </div>
+
+        <div class="weather-current-text">
+
+            <strong class="weather-current-temperature">
+                {{ weather.temperature }}
+            </strong>
+
+            <span>
+                {{ weather.description }}
+            </span>
+
+            <small>
+                📍 {{ weather.city }}
+            </small>
+
+        </div>
+
     </div>
 
-    <div class="simple-row">
-        <span>現在気温</span>
-        <strong>{{ weather.temperature }}</strong>
+    {% if weather.is_error %}
+
+        <p class="weather-error-message">
+            天気を取得できなかったため、代替表示になっています。
+        </p>
+
+    {% endif %}
+
+    <div class="weather-detail-grid">
+
+        <div>
+            <span>🌡️ 体感温度</span>
+            <strong>{{ weather.feels_like }}</strong>
+        </div>
+
+        <div>
+            <span>🔺 最高気温</span>
+            <strong>{{ weather.high }}</strong>
+        </div>
+
+        <div>
+            <span>🔻 最低気温</span>
+            <strong>{{ weather.low }}</strong>
+        </div>
+
+        <div>
+            <span>☔ 降水確率</span>
+            <strong>{{ weather.rain }}</strong>
+        </div>
+
+        <div>
+            <span>💧 湿度</span>
+            <strong>{{ weather.humidity }}</strong>
+        </div>
+
+        <div>
+            <span>🌬️ 風速</span>
+            <strong>{{ weather.wind }}</strong>
+        </div>
+
     </div>
 
-    <div class="simple-row">
-        <span>天気</span>
-        <strong>{{ weather.description }}</strong>
+</section>
+
+
+<section class="card">
+
+    <div class="section-head">
+
+        <div>
+            <span class="sub">HOURLY FORECAST</span>
+            <h2>🕒 24時間予報</h2>
+        </div>
+
+        <span class="pill">
+            Hourly
+        </span>
+
     </div>
 
-    <div class="simple-row">
-        <span>降水確率</span>
-        <strong>{{ weather.rain }}</strong>
+    {% if hourly %}
+
+        <div class="weather-hourly-scroll">
+
+            {% for item in hourly %}
+
+                <article class="weather-hour-card">
+
+                    <strong>
+                        {{ item.time }}
+                    </strong>
+
+                    <span class="weather-hour-icon">
+                        {{ item.icon }}
+                    </span>
+
+                    <b>
+                        {{ item.temperature }}
+                    </b>
+
+                    <small>
+                        ☔ {{ item.rain }}
+                    </small>
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <p class="muted">
+            時間別予報を取得できませんでした。
+        </p>
+
+    {% endif %}
+
+</section>
+
+
+<section class="card">
+
+    <div class="section-head">
+
+        <div>
+            <span class="sub">WEEKLY FORECAST</span>
+            <h2>📅 7日間予報</h2>
+        </div>
+
+        <span class="pill">
+            Weekly
+        </span>
+
     </div>
 
-    <div class="simple-row">
-        <span>最高気温</span>
-        <strong>{{ weather.high }}</strong>
-    </div>
+    {% if weekly %}
 
-    <div class="simple-row">
-        <span>最低気温</span>
-        <strong>{{ weather.low }}</strong>
-    </div>
+        <div class="weather-weekly-list">
+
+            {% for item in weekly %}
+
+                <article class="weather-week-row">
+
+                    <div class="weather-week-day">
+                        <strong>{{ item.day }}</strong>
+                        <small>{{ item.condition }}</small>
+                    </div>
+
+                    <span class="weather-week-icon">
+                        {{ item.icon }}
+                    </span>
+
+                    <div class="weather-week-temperature">
+                        <strong>{{ item.high }}</strong>
+                        <span>{{ item.low }}</span>
+                    </div>
+
+                    <small class="weather-week-rain">
+                        ☔ {{ item.rain }}
+                    </small>
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <p class="muted">
+            週間予報を取得できませんでした。
+        </p>
+
+    {% endif %}
 
 </section>
 

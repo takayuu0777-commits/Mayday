@@ -449,6 +449,8 @@ def weather():
     return render_template(
         "weather_detail.html",
         weather=weather_summary(),
+        hourly=hourly_forecast(),
+        weekly=weekly_forecast(),
         profile=get_profile(),
         stats=life_stats(),
         theme=session["theme"]
