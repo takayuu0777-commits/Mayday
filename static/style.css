@@ -2951,3 +2951,151 @@ body.modal-open .japan-map-container{
         text-align:left;
     }
 }
+
+/* ==========================
+   VERSION 2.9 LIBRARY DETAIL
+========================== */
+
+.library-detail-hero{
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(212,175,55,.19),
+            transparent 40%
+        ),
+        rgba(255,255,255,.07);
+}
+
+.library-detail-rating{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-top:12px;
+}
+
+.library-detail-rating span{
+    font-size:22px;
+    letter-spacing:3px;
+}
+
+.library-detail-rating small{
+    opacity:.65;
+}
+
+.library-created-date{
+    margin:12px 0 0;
+    font-size:12px;
+    opacity:.58;
+}
+
+.library-edit-form{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+}
+
+.library-edit-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.library-form-field{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.library-form-field > span{
+    font-size:12px;
+    font-weight:800;
+    opacity:.7;
+}
+
+.library-form-field textarea{
+    min-height:180px;
+    line-height:1.7;
+}
+
+.library-save-button{
+    width:100%;
+    margin-top:2px;
+}
+
+.library-detail-actions{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:14px;
+    padding:16px 20px;
+}
+
+.library-back-button{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    color:#f8fafc;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:800;
+    padding:11px 16px;
+    border-radius:999px;
+    background:rgba(255,255,255,.09);
+    border:1px solid rgba(255,255,255,.1);
+}
+
+.library-detail-actions form{
+    margin:0;
+}
+
+.library-delete-button{
+    width:auto;
+    margin:0;
+    color:#fff !important;
+    background:
+        linear-gradient(
+            135deg,
+            #dc2626,
+            #f97316
+        ) !important;
+}
+
+.library-not-found{
+    text-align:center;
+}
+
+@media(max-width:760px){
+
+    .library-edit-grid{
+        grid-template-columns:1fr;
+    }
+
+    .library-detail-actions{
+        flex-direction:row;
+        padding:14px;
+    }
+
+    .library-back-button,
+    .library-delete-button{
+        font-size:12px;
+        padding:10px 13px;
+    }
+
+    .library-detail-rating span{
+        font-size:19px;
+    }
+}
+
+@media(max-width:390px){
+
+    .library-detail-actions{
+        align-items:stretch;
+        flex-direction:column;
+    }
+
+    .library-back-button,
+    .library-detail-actions form,
+    .library-delete-button{
+        width:100%;
+    }
+}

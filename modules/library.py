@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+
 from modules.database import connect
 
 
@@ -19,44 +20,40 @@ GENRES = [
 def normalize_genre(genre):
     if genre in GENRES:
         return genre
+
     return "その他"
 
 
 def safe_rating(value):
     try:
         rating = int(value)
-    except Exception:
+    except (TypeError, ValueError):
         return 0
 
-    if rating < 0:
-        return 0
-
-    if rating > 5:
-        return 5
-
-    return rating
+    return max(0, min(5, rating))
 
 
 def add_coin(amount):
     conn = connect()
     c = conn.cursor()
 
-    c.execute(
-        "UPDATE profile SET coins = coins + ? WHERE id = 1",
-        (amount,)
-    )
+    c.execute("""
+    UPDATE profile
+    SET coins = coins + ?
+    WHERE id = 1
+    """, (amount,))
 
     conn.commit()
     conn.close()
 
 
 def add_item(title, genre="その他", rating=0, review=""):
-    title = (title or "").strip()
-    genre = normalize_genre(genre)
-    rating = safe_rating(rating)
-    review = (review or "").strip()
+    clean_title = (title or "").strip()
+    clean_genre = normalize_genre(genre)
+    clean_rating = safe_rating(rating)
+    clean_review = (review or "").strip()
 
-    if not title:
+    if not clean_title:
         return None
 
     item_id = str(uuid.uuid4())
@@ -71,13 +68,13 @@ def add_item(title, genre="その他", rating=0, review=""):
     VALUES (?, ?, ?, ?, ?)
     """, (
         item_id,
-        title,
-        genre,
-        rating,
+        clean_title,
+        clean_genre,
+        clean_rating,
         now
     ))
 
-    if review:
+    if clean_review:
         c.execute("""
         INSERT INTO reviews
         (id, library_id, text, created_at)
@@ -85,7 +82,7 @@ def add_item(title, genre="その他", rating=0, review=""):
         """, (
             str(uuid.uuid4()),
             item_id,
-            review,
+            clean_review,
             now
         ))
 
@@ -97,94 +94,162 @@ def add_item(title, genre="その他", rating=0, review=""):
     return item_id
 
 
-def update_item(item_id, title, genre, rating):
-    title = (title or "").strip()
-    genre = normalize_genre(genre)
-    rating = safe_rating(rating)
+def update_item(item_id, title, genre, rating, review=None):
+    clean_title = (title or "").strip()
+    clean_genre = normalize_genre(genre)
+    clean_rating = safe_rating(rating)
 
-    if not title:
-        return
+    if not item_id or not clean_title:
+        return False
 
     conn = connect()
     c = conn.cursor()
 
     c.execute("""
     UPDATE library
-    SET title = ?,
+    SET
+        title = ?,
         genre = ?,
         rating = ?
     WHERE id = ?
     """, (
-        title,
-        genre,
-        rating,
+        clean_title,
+        clean_genre,
+        clean_rating,
         item_id
     ))
 
+    if review is not None:
+        clean_review = (review or "").strip()
+
+        c.execute("""
+        SELECT id
+        FROM reviews
+        WHERE library_id = ?
+        ORDER BY created_at DESC
+        """, (item_id,))
+
+        review_rows = c.fetchall()
+
+        if clean_review:
+            now = datetime.now().isoformat()
+
+            if review_rows:
+                main_review_id = review_rows[0]["id"]
+
+                c.execute("""
+                UPDATE reviews
+                SET
+                    text = ?,
+                    created_at = ?
+                WHERE id = ?
+                """, (
+                    clean_review,
+                    now,
+                    main_review_id
+                ))
+
+                for old_review in review_rows[1:]:
+                    c.execute("""
+                    DELETE FROM reviews
+                    WHERE id = ?
+                    """, (old_review["id"],))
+
+            else:
+                c.execute("""
+                INSERT INTO reviews
+                (id, library_id, text, created_at)
+                VALUES (?, ?, ?, ?)
+                """, (
+                    str(uuid.uuid4()),
+                    item_id,
+                    clean_review,
+                    now
+                ))
+
+        else:
+            c.execute("""
+            DELETE FROM reviews
+            WHERE library_id = ?
+            """, (item_id,))
+
     conn.commit()
     conn.close()
+
+    return True
 
 
 def delete_item(item_id):
+    if not item_id:
+        return False
+
     conn = connect()
     c = conn.cursor()
 
-    c.execute("DELETE FROM reviews WHERE library_id = ?", (item_id,))
-    c.execute("DELETE FROM library WHERE id = ?", (item_id,))
+    c.execute("""
+    DELETE FROM reviews
+    WHERE library_id = ?
+    """, (item_id,))
+
+    c.execute("""
+    DELETE FROM library
+    WHERE id = ?
+    """, (item_id,))
 
     conn.commit()
     conn.close()
+
+    return True
 
 
 def add_review(item_id, text, rating=None):
-    text = (text or "").strip()
-    rating = safe_rating(rating)
+    clean_text = (text or "").strip()
 
-    if not text:
-        return
+    if not clean_text:
+        return False
 
-    conn = connect()
-    c = conn.cursor()
+    current_item = fetch_item(item_id)
 
-    c.execute("""
-    INSERT INTO reviews
-    (id, library_id, text, created_at)
-    VALUES (?, ?, ?, ?)
-    """, (
-        str(uuid.uuid4()),
+    if not current_item:
+        return False
+
+    selected_rating = (
+        safe_rating(rating)
+        if rating not in (None, "")
+        else current_item["rating"]
+    )
+
+    result = update_item(
         item_id,
-        text,
-        datetime.now().isoformat()
-    ))
+        current_item["title"],
+        current_item["genre"],
+        selected_rating,
+        clean_text
+    )
 
-    c.execute("""
-    UPDATE library
-    SET rating = ?
-    WHERE id = ?
-    """, (
-        rating,
-        item_id
-    ))
+    if result:
+        add_coin(2)
 
-    conn.commit()
-    conn.close()
-
-    add_coin(2)
+    return result
 
 
 def fetch_grouped():
     conn = connect()
     c = conn.cursor()
 
-    c.execute("SELECT * FROM library ORDER BY title ASC")
-    rows = c.fetchall()
+    c.execute("""
+    SELECT *
+    FROM library
+    ORDER BY title ASC
+    """)
 
+    rows = c.fetchall()
     conn.close()
 
-    data = {}
-
-    for genre in GENRES:
-        data[genre] = []
+    data = {
+        genre: []
+        for genre in GENRES
+    }
 
     for row in rows:
         genre = normalize_genre(row["genre"])
@@ -197,14 +262,19 @@ def fetch_item(item_id):
     conn = connect()
     c = conn.cursor()
 
-    c.execute("SELECT * FROM library WHERE id = ?", (item_id,))
-    item = c.fetchone()
+    c.execute("""
+    SELECT *
+    FROM library
+    WHERE id = ?
+    """, (item_id,))
 
+    item = c.fetchone()
     conn.close()
+
     return item
 
 
-def fetch_reviews(item_id):
+def fetch_review(item_id):
     conn = connect()
     c = conn.cursor()
 
@@ -213,9 +283,19 @@ def fetch_reviews(item_id):
     FROM reviews
     WHERE library_id = ?
     ORDER BY created_at DESC
+    LIMIT 1
     """, (item_id,))
 
-    rows = c.fetchall()
-
+    review = c.fetchone()
     conn.close()
-    return rows
+
+    return review
+
+
+def fetch_reviews(item_id):
+    review = fetch_review(item_id)
+
+    if review:
+        return [review]
+
+    return []

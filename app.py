@@ -9,7 +9,7 @@ from modules.search import search_logs
 from modules.library import (
     fetch_grouped,
     fetch_item,
-    fetch_reviews,
+    fetch_review,
     add_item,
     update_item,
     delete_item,
@@ -175,13 +175,12 @@ def library_add():
 
     return redirect("/library")
 
-
 @app.route("/library/item/<item_id>")
 def library_detail(item_id):
     return render_template(
         "library-detail.html",
         item=fetch_item(item_id),
-        reviews=fetch_reviews(item_id),
+        review=fetch_review(item_id),
         genres=GENRES,
         stats=life_stats(),
         profile=get_profile(),
@@ -195,7 +194,8 @@ def library_update(item_id):
         item_id,
         request.form.get("title"),
         request.form.get("genre"),
-        request.form.get("rating", 0)
+        request.form.get("rating", 0),
+        request.form.get("review", "")
     )
 
     return redirect(f"/library/item/{item_id}")

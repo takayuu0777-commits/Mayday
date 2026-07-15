@@ -4,88 +4,184 @@
 
 {% if item %}
 
-<section class="card">
+<section class="card library-detail-hero">
+
     <div class="section-head">
-        <h2>📚 {{ item.title }}</h2>
-        <span class="pill">{{ item.genre }}</span>
+
+        <div>
+            <span class="sub">LIBRARY DETAIL</span>
+            <h2>📚 {{ item.title }}</h2>
+        </div>
+
+        <span class="pill">
+            {{ item.genre }}
+        </span>
+
     </div>
 
-    {% if item.rating and item.rating|int > 0 %}
-        <p>{{ "⭐" * item.rating|int }}</p>
-    {% else %}
-        <p class="muted">未評価</p>
+    <div class="library-detail-rating">
+
+        {% if item.rating and item.rating|int > 0 %}
+            <span>{{ "⭐" * item.rating|int }}</span>
+            <small>{{ item.rating }} / 5</small>
+        {% else %}
+            <span class="muted">☆ 未評価</span>
+        {% endif %}
+
+    </div>
+
+    {% if item.created_at %}
+        <p class="library-created-date">
+            追加日：{{ item.created_at[:10] }}
+        </p>
     {% endif %}
+
 </section>
 
+
 <section class="card">
-    <h2>✏️ 編集</h2>
 
-    <form method="post" action="/library/item/{{ item.id }}/update" class="stack-form">
-        <input name="title" value="{{ item.title }}">
+    <div class="section-head">
+        <h2>✏️ 作品を編集</h2>
+        <span class="pill">Edit</span>
+    </div>
 
-        <select name="genre">
-            {% for genre in genres %}
-                <option value="{{ genre }}" {% if item.genre == genre %}selected{% endif %}>
-                    {{ genre }}
-                </option>
-            {% endfor %}
-        </select>
+    <form
+        method="post"
+        action="/library/item/{{ item.id }}/update"
+        class="library-edit-form"
+    >
 
-        <select name="rating">
-            <option value="0">未評価</option>
-            {% for n in [1,2,3,4,5] %}
-                <option value="{{ n }}" {% if item.rating == n %}selected{% endif %}>
-                    {{ "⭐" * n }}
-                </option>
-            {% endfor %}
-        </select>
+        <label class="library-form-field">
 
-        <button>保存する</button>
+            <span>作品名</span>
+
+            <input
+                name="title"
+                value="{{ item.title }}"
+                required
+                placeholder="作品名"
+            >
+
+        </label>
+
+        <div class="library-edit-grid">
+
+            <label class="library-form-field">
+
+                <span>ジャンル</span>
+
+                <select name="genre">
+
+                    {% for genre in genres %}
+
+                        <option
+                            value="{{ genre }}"
+                            {% if item.genre == genre %}selected{% endif %}
+                        >
+                            {{ genre }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </label>
+
+            <label class="library-form-field">
+
+                <span>評価</span>
+
+                <select name="rating">
+
+                    <option
+                        value="0"
+                        {% if not item.rating or item.rating|int == 0 %}selected{% endif %}
+                    >
+                        ☆ 未評価
+                    </option>
+
+                    {% for n in [1,2,3,4,5] %}
+
+                        <option
+                            value="{{ n }}"
+                            {% if item.rating|int == n %}selected{% endif %}
+                        >
+                            {{ "⭐" * n }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </label>
+
+        </div>
+
+        <label class="library-form-field">
+
+            <span>感想</span>
+
+            <textarea
+                name="review"
+                placeholder="作品を見て感じたことや、残しておきたい感想を書きましょう"
+            >{% if review %}{{ review.text }}{% endif %}</textarea>
+
+        </label>
+
+        <button
+            type="submit"
+            class="library-save-button"
+        >
+            変更を保存する ✨
+        </button>
+
     </form>
+
 </section>
 
-<section class="card">
-    <h2>✍️ 感想を書く</h2>
 
-    <form method="post" action="/library/item/{{ item.id }}/review" class="stack-form">
-        <select name="rating">
-            <option value="">評価は変更しない</option>
-            {% for n in [1,2,3,4,5] %}
-                <option value="{{ n }}">{{ "⭐" * n }}</option>
-            {% endfor %}
-        </select>
+<section class="card library-detail-actions">
 
-        <textarea name="text" placeholder="感想を書きましょう"></textarea>
-        <button>感想を追加する ✨</button>
+    <a
+        href="/library"
+        class="library-back-button"
+    >
+        ← Libraryへ戻る
+    </a>
+
+    <form
+        method="post"
+        action="/library/item/{{ item.id }}/delete"
+        onsubmit="return confirm('この作品を削除しますか？');"
+    >
+        <button
+            type="submit"
+            class="danger-button library-delete-button"
+        >
+            削除する
+        </button>
     </form>
-</section>
 
-<section class="card">
-    <h2>📖 感想一覧</h2>
-
-    {% if reviews %}
-        {% for review in reviews %}
-            <div class="log-item">
-                <p>{{ review.text }}</p>
-                <small>{{ review.created_at[:10] }}</small>
-            </div>
-        {% endfor %}
-    {% else %}
-        <p class="muted">まだ感想はありません。</p>
-    {% endif %}
-</section>
-
-<section class="card">
-    <form method="post" action="/library/item/{{ item.id }}/delete">
-        <button class="danger-button">削除する</button>
-    </form>
 </section>
 
 {% else %}
 
-<section class="card">
-    <h2>作品が見つかりません</h2>
-    <a class="card-link" href="/library">Libraryへ戻る</a>
+<section class="card library-not-found">
+
+    <h2>📚 作品が見つかりません</h2>
+
+    <p class="muted">
+        削除されたか、存在しない作品です。
+    </p>
+
+    <a
+        class="card-link"
+        href="/library"
+    >
+        ← Libraryへ戻る
+    </a>
+
 </section>
 
 {% endif %}
