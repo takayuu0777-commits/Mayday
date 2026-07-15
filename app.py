@@ -40,7 +40,7 @@ from modules.todo import (
     days_left
 )
 from modules.weather import weather_summary, hourly_forecast, weekly_forecast
-from modules.statistics import basic_statistics, library_statistics, todo_statistics
+from modules.statistics import fetch_statistics
 from modules.japan_map import (
     fetch_prefectures,
     update_prefecture,
@@ -326,18 +326,17 @@ def stats():
 
 @app.route("/statistics")
 def statistics():
+    statistics_data = fetch_statistics()
     prefectures = fetch_prefectures()
     progress = japan_progress(prefectures)
 
     return render_template(
         "statistics.html",
-        basic_stats=basic_statistics(),
-        library_stats=library_statistics(),
-        todo_stats=todo_statistics(),
-        prefectures=prefectures,
+        basic_stats=statistics_data["basic_stats"],
+        library_stats=statistics_data["library_stats"],
+        todo_stats=statistics_data["todo_stats"],
+        category_stats=statistics_data["category_stats"],
         japan_progress=progress,
-        status_options=STATUS_OPTIONS,
-        status_data=status_data,
         stats=life_stats(),
         profile=get_profile(),
         theme=session["theme"]

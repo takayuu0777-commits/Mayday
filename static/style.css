@@ -2808,3 +2808,146 @@ body.modal-open .japan-map-container{
         font-size:18px;
     }
 }
+
+/* ==========================
+   VERSION 2.9 STATISTICS FINAL
+========================== */
+
+.statistics-hero-card{
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(212,175,55,.18),
+            transparent 38%
+        ),
+        rgba(255,255,255,.07);
+}
+
+.stat-compact-icon{
+    font-size:22px !important;
+}
+
+.statistics-category-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+.statistics-category-item{
+    padding:13px;
+    border-radius:16px;
+    background:rgba(255,255,255,.06);
+}
+
+.statistics-category-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom:9px;
+    font-size:13px;
+}
+
+.statistics-progress-track{
+    width:100%;
+    height:9px;
+    overflow:hidden;
+    border-radius:999px;
+    background:rgba(255,255,255,.11);
+}
+
+.statistics-progress-value{
+    height:100%;
+    min-width:0;
+    border-radius:999px;
+    background:
+        linear-gradient(
+            135deg,
+            #d4af37,
+            #facc15
+        );
+    transition:width .5s ease;
+}
+
+.library-stat-item{
+    min-height:52px;
+}
+
+.japan-stat-card{
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(59,130,246,.16),
+            transparent 38%
+        ),
+        rgba(255,255,255,.07);
+}
+
+.japan-stat-main{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+.japan-stat-number{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+}
+
+.japan-stat-number strong{
+    font-size:36px;
+}
+
+.japan-stat-number span{
+    opacity:.65;
+    font-size:14px;
+}
+
+.japan-stat-progress{
+    height:12px;
+}
+
+.statistics-open-button{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    align-self:flex-start;
+    color:#111;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:800;
+    padding:10px 15px;
+    border-radius:999px;
+    background:
+        linear-gradient(
+            135deg,
+            #facc15,
+            #f59e0b
+        );
+}
+
+.todo-stat-progress{
+    margin-top:14px;
+    height:11px;
+}
+
+.statistics-progress-label{
+    margin:10px 0 0;
+    text-align:right;
+}
+
+@media(max-width:760px){
+
+    .japan-stat-number strong{
+        font-size:30px;
+    }
+
+    .statistics-open-button{
+        width:100%;
+    }
+
+    .statistics-progress-label{
+        text-align:left;
+    }
+}

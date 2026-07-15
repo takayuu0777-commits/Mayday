@@ -2,72 +2,245 @@
 
 {% block content %}
 
-<section class="card">
+<section class="card statistics-hero-card">
+
     <div class="section-head">
-        <h2>📊 統計</h2>
-        <span class="pill">Life Stats</span>
+        <div>
+            <span class="sub">LIFE ANALYSIS</span>
+            <h2>📊 統計</h2>
+        </div>
+
+        <span class="pill">Version 2.9</span>
     </div>
+
+    <p class="muted">
+        Second Brainに記録された人生データを一覧で確認できます。
+    </p>
 
     <div class="stats-compact-grid">
+
         {% for item in basic_stats %}
+
         <div class="stat-compact-box">
-            <span>{{ item.icon }}</span>
-            <strong>{{ item.value }}</strong>
-            <small>{{ item.label }}</small>
+
+            <span class="stat-compact-icon">
+                {{ item.icon }}
+            </span>
+
+            <strong>
+                {{ item.value }}
+            </strong>
+
+            <small>
+                {{ item.label }}
+            </small>
+
         </div>
+
         {% endfor %}
+
     </div>
+
 </section>
 
+
 <section class="card">
+
     <div class="section-head">
-        <h2>📚 Library統計</h2>
-        <span class="pill">作品</span>
+        <div>
+            <span class="sub">LIBRARY</span>
+            <h2>📚 Library統計</h2>
+        </div>
+
+        <span class="pill">
+            {{ basic_stats[1].value }}作品
+        </span>
     </div>
 
     <div class="library-stat-compact">
+
         {% for item in library_stats %}
-            <div>
-                <span>{{ item.icon }} {{ item.label }}</span>
-                <strong>{{ item.value }}</strong>
-            </div>
+
+        <div class="library-stat-item">
+
+            <span>
+                {{ item.icon }}
+                {{ item.label }}
+            </span>
+
+            <strong>
+                {{ item.value }}
+            </strong>
+
+        </div>
+
         {% endfor %}
+
     </div>
+
 </section>
 
+
 <section class="card">
+
     <div class="section-head">
-        <h2>🗾 日本制覇</h2>
-        <span class="pill">{{ japan_progress.percent }}%</span>
+        <div>
+            <span class="sub">LOG CATEGORY</span>
+            <h2>🧠 記録カテゴリ</h2>
+        </div>
+
+        <span class="pill">
+            上位{{ category_stats|length }}件
+        </span>
     </div>
 
-    <div class="japan-progress-line">
-        <strong>{{ japan_progress.visited }} / {{ japan_progress.total }}</strong>
-        <span>都道府県</span>
+    {% if category_stats %}
+
+    <div class="statistics-category-list">
+
+        {% set max_count = category_stats[0].count %}
+
+        {% for item in category_stats %}
+
+        <div class="statistics-category-item">
+
+            <div class="statistics-category-head">
+
+                <span>
+                    {{ item.name }}
+                </span>
+
+                <strong>
+                    {{ item.count }}
+                </strong>
+
+            </div>
+
+            <div class="statistics-progress-track">
+
+                <div
+                    class="statistics-progress-value"
+                    style="width:
+                    {% if max_count > 0 %}
+                        {{ ((item.count / max_count) * 100)|int }}%
+                    {% else %}
+                        0%
+                    {% endif %}
+                    "
+                ></div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
     </div>
 
-    <a class="card-link" href="/japan-map">
-        日本制覇マップを開く →
-    </a>
+    {% else %}
+
+    <p class="muted">
+        まだカテゴリ別の記録はありません。
+    </p>
+
+    {% endif %}
+
 </section>
 
-<section class="card">
+
+<section class="card japan-stat-card">
+
     <div class="section-head">
-        <h2>📌 ToDo統計</h2>
-        <span class="pill">Task</span>
+
+        <div>
+            <span class="sub">JAPAN JOURNEY</span>
+            <h2>🗾 日本制覇</h2>
+        </div>
+
+        <span class="pill">
+            {{ japan_progress.percent }}%
+        </span>
+
+    </div>
+
+    <div class="japan-stat-main">
+
+        <div class="japan-stat-number">
+
+            <strong>
+                {{ japan_progress.visited }}
+            </strong>
+
+            <span>
+                / {{ japan_progress.total }} 都道府県
+            </span>
+
+        </div>
+
+        <div class="statistics-progress-track japan-stat-progress">
+
+            <div
+                class="statistics-progress-value"
+                style="width:{{ japan_progress.percent }}%"
+            ></div>
+
+        </div>
+
+        <a
+            class="statistics-open-button"
+            href="/japan-map"
+        >
+            日本制覇マップを開く →
+        </a>
+
+    </div>
+
+</section>
+
+
+<section class="card">
+
+    <div class="section-head">
+
+        <div>
+            <span class="sub">TASK PROGRESS</span>
+            <h2>📌 ToDo統計</h2>
+        </div>
+
+        <span class="pill">
+            {{ todo_stats.percent }}%
+        </span>
+
     </div>
 
     <div class="todo-stat-compact">
+
         <div>
-            <span>完了済み</span>
+            <span>✅ 完了済み</span>
             <strong>{{ todo_stats.done }}</strong>
         </div>
 
         <div>
-            <span>未完了</span>
+            <span>📌 未完了</span>
             <strong>{{ todo_stats.active }}</strong>
         </div>
+
     </div>
+
+    <div class="statistics-progress-track todo-stat-progress">
+
+        <div
+            class="statistics-progress-value"
+            style="width:{{ todo_stats.percent }}%"
+        ></div>
+
+    </div>
+
+    <p class="muted statistics-progress-label">
+        全{{ todo_stats.total }}件中、
+        {{ todo_stats.done }}件完了
+    </p>
+
 </section>
 
 {% endblock %}
